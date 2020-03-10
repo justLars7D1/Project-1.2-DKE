@@ -1,1 +1,4 @@
 .idea/
+Code/out
+*.class
+*.iml
