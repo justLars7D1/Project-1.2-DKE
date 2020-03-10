@@ -1,4 +1,4 @@
-package edu.dke.project12.ui;
+package project12.ui;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

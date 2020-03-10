@@ -4,7 +4,7 @@ sourceCompatibility = 1.13
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = ["../core/assets"]
 
-project.ext.mainClassName = "edu.dke.project12.ui.desktop.DesktopLauncher"
+project.ext.mainClassName = "project12.ui.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets")
 
 task run(dependsOn: classes, type: JavaExec) {
