@@ -31,5 +31,5 @@ public class Application extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
-	
+
 }
