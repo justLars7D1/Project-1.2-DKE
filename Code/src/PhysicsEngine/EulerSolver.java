@@ -1,5 +1,15 @@
 package PhysicsEngine;
 
 class EulerSolver implements PhysicsEngine {
-    //void set_step_size(double h);
+
+    private double stepSize;
+
+    public EulerSolver() {
+        this.stepSize = 0.01;
+    }
+
+    public void set_step_size(double h) {
+        this.stepSize = h;
+    }
+
 }
