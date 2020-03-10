@@ -1,4 +1,9 @@
 .idea/
+.gradle/
+gradle/
 Code/out
 *.class
 *.iml
+*.gradle
+*.bat
+gradlew
