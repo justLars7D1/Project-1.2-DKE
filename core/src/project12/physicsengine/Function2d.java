@@ -1,4 +1,4 @@
-package edu.dke.project12.physicsengine;
+package project12.physicsengine;
 
 interface Function2d {
     double evaluate(Vector2d p);

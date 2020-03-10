@@ -1,4 +1,4 @@
-package edu.dke.project12.gameelements;
+package project12.gameelements;
 
 class PuttingSimulator {
 //    public PuttingSimulator(PuttingCourse, PhysicsEngine);
