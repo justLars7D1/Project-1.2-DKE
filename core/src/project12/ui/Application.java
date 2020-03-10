@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Application extends ApplicationAdapter {
+
 	SpriteBatch batch;
 	Texture img;
 	
@@ -30,4 +31,5 @@ public class Application extends ApplicationAdapter {
 		batch.dispose();
 		img.dispose();
 	}
+	
 }
