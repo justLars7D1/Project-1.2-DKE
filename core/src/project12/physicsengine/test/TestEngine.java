@@ -9,12 +9,12 @@ public class TestEngine {
         Function2d f = new Function2d() {
             @Override
             public double evaluate(Vector2d p) {
-                return Math.sin(p.get_x())*Math.sin(p.get_y());
+                return Math.sin(p.get_x()) + Math.pow(p.get_y(), 2);
             }
 
             @Override
             public Vector2d gradient(Vector2d p) {
-                double h = 0.000000000000000000000000000000000001;
+                double h = Math.pow(10, -5);
                 double zphx = evaluate(new Vector2d(p.get_x()+h, p.get_y()));
                 double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+h));
                 double z = evaluate(p);
@@ -22,7 +22,7 @@ public class TestEngine {
             }
         };
 
-        System.out.println(f.gradient(new Vector2d(0, 0)));
+        System.out.println(f.gradient(new Vector2d(1,-1)));
 
     }
 }
