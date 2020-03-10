@@ -1,4 +1,4 @@
-package PhysicsEngine;
+package edu.dke.project12.physicsengine;
 
 public class Vector2d {
 

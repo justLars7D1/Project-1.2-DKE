@@ -1,6 +1,6 @@
-Project 1.2 DKE - Putting
+# Project 1.2 DKE - Putting
 
-Group Members
+#### Group Members
   - Lars Quaedvlieg
   - Luigi Antolini
   - Adaia Grundland

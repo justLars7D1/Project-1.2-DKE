@@ -1,6 +1,4 @@
-package GameElements;
-
-import PhysicsEngine.Vector2d;
+package edu.dke.project12.gameelements;
 
 class PuttingCourse {
 //    public PuttingCourse(Function2d height, Vector2d flag, Vector2d start);

@@ -1,6 +1,4 @@
-package GameElements;
-
-import PhysicsEngine.Vector2d;
+package edu.dke.project12.gameelements;
 
 class PuttingSimulator {
 //    public PuttingSimulator(PuttingCourse, PhysicsEngine);
