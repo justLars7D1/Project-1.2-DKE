@@ -56,8 +56,14 @@ class PuttingSimulator {
      */
     public void take_shot(Vector2d initial_ball_velocity) {
         // Code for taking the shot (so using the provided physics engine and course)
+        Vector2d ballVelocity = initial_ball_velocity.copy();
+        final double deltaT = Math.pow(10, -2);
+        final double comparisonError = 0.1;
         // Keep computing for a small delta t while the velocity is not 0
-        // Calculate acceleration, etc...
+        while(ballVelocity.get_x() >= comparisonError && ballVelocity.get_y() >= comparisonError) {
+            // Calculate acceleration, etc...
+            
+        }
     }
 
 }

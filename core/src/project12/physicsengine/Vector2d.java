@@ -37,4 +37,18 @@ public class Vector2d extends Vector {
         return coords[1];
     }
 
+    /**
+     * Return a copy of the normalized version of a vector
+     * @return Normalized vector
+     */
+    public Vector2d getNormalized() {
+        Vector2d v = copy();
+        v.normalize();
+        return v;
+    }
+
+    public Vector2d copy() {
+        return new Vector2d(get_x(), get_y());
+    }
+
 }
