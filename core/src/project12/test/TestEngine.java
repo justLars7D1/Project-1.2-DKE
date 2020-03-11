@@ -1,4 +1,4 @@
-package project12.physicsengine.test;
+package project12.test;
 
 import project12.physicsengine.CourseFunction;
 import project12.physicsengine.Vector2d;
