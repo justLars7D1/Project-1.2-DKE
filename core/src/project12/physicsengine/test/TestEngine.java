@@ -3,7 +3,11 @@ package project12.physicsengine.test;
 import project12.physicsengine.CourseFunction;
 import project12.physicsengine.Vector2d;
 
+/**
+ * Meant for testing the mathematical formulas (change to JUnit later)
+ */
 public class TestEngine {
+
     public static void main(String[] args) {
 
         CourseFunction f = new CourseFunction();

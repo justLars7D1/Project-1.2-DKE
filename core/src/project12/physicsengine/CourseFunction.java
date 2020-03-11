@@ -1,8 +1,8 @@
 package project12.physicsengine;
 
-import project12.physicsengine.Function2d;
-import project12.physicsengine.Vector2d;
-
+/**
+ * Represents a function of the course
+ */
 public class CourseFunction implements Function2d {
 
     //TODO: Maybe change add this to the function: 0.1 * |x| * |y|
@@ -17,13 +17,40 @@ public class CourseFunction implements Function2d {
     //      e       |   Shifting the function to the right in the y direction
     //      f       |   Shifting the function higher in the z direction
 
+    /**
+     * Amplitude
+     */
     private double a = 0.4;
+    /**
+     * Period scaling factor x
+     */
     private double b = 1;
+    /**
+     * Shifting x factor
+     */
     private double c = 0;
+    /**
+     * Period scaling factor y
+     */
     private double d = 1;
+    /**
+     * Shifting y factor
+     */
     private double e = 0;
+    /**
+     * Shifting z factor
+     */
     private double f = 1;
 
+    /**
+     * Constructor
+     * @param a Amplitude
+     * @param b Period scaling factor x
+     * @param c Shifting x factor
+     * @param d Period scaling factor y
+     * @param e Shifting y factor
+     * @param f Shifting z factor
+     */
     public CourseFunction(double a, double b, double c, double d, double e, double f) {
         this.a = a;
         this.b = b;
@@ -33,9 +60,17 @@ public class CourseFunction implements Function2d {
         this.f = f;
     }
 
+    /**
+     * Default constructor
+     */
     public CourseFunction() {
     }
 
+    /**
+     * Evaluates the function
+     * @param p The (x,y)-coordinate
+     * @return The z-coordinate
+     */
     @Override
         public double evaluate(Vector2d p) {
             double x = p.get_x();
@@ -43,7 +78,12 @@ public class CourseFunction implements Function2d {
             return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
         }
 
-        @Override
+    /**
+     * Compute the gradient at a point of the function
+     * @param p The (x,y)-coordinate
+     * @return The gradient
+     */
+    @Override
         public Vector2d gradient(Vector2d p) {
             double z = evaluate(p);
             double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));

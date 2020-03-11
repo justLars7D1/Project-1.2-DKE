@@ -1,30 +1,54 @@
 package project12.physicsengine;
 
+/**
+ * Abstract notion of an n-dimensional vector
+ */
 public abstract class Vector {
 
+    /**
+     * The vector coordinates
+     */
     protected double[] coords;
 
+    /**
+     * Constructor
+     * @param coords All coordinates of the vector
+     */
     protected Vector(double ... coords) {
         this.coords = coords;
     }
 
-    public void normalize() {
-        double normalizationFactor = 0;
+    /**
+     * Calculate the magnitude of the vector
+     * @return The magnitude
+     */
+    public double magnitude() {
+        double magnitude = 0;
         for (double coord: coords) {
-            normalizationFactor += Math.pow(coord, 2);
+            magnitude += Math.pow(coord, 2);
         }
-        normalizationFactor = Math.sqrt(normalizationFactor);
+        magnitude = Math.sqrt(magnitude);
+        return magnitude;
+    }
 
-        if (normalizationFactor != 0) {
+    /**
+     * Normalize the vector
+     */
+    public void normalize() {
+        double magnitude = magnitude();
+        if (magnitude != 0) {
             for (int i = 0; i < coords.length; i++) {
-                coords[i] /= normalizationFactor;
+                coords[i] /= magnitude;
             }
         } else {
             System.out.println("Normalization failed!");
         }
-
     }
 
+    /**
+     * Gets the string representation of the vector
+     * @return The string representation of the vector
+     */
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder("(");
