@@ -1,4 +1,4 @@
 package project12.physicsengine;
 
-interface PhysicsEngine {
+public interface PhysicsEngine {
 }

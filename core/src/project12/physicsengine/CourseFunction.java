@@ -1,0 +1,54 @@
+package project12.physicsengine;
+
+import project12.physicsengine.Function2d;
+import project12.physicsengine.Vector2d;
+
+public class CourseFunction implements Function2d {
+
+    //TODO: Maybe change add this to the function: 0.1 * |x| * |y|
+
+    //  We have a function in the format of h(x,y) =  a *sin(b(x-c)) * sin(d(y-e)) + f
+    //  Where a, b, c, d, e, f and g are user specified variables with the following definitions
+    //  Constant    |                       Definition
+    //      a       |   The amplitude of the function (scaling the height)
+    //      b       |   The period scaling of the function in the x direction (period = 2*pi / b)
+    //      c       |   Shifting the function to the right in the x direction
+    //      d       |   The period scaling of the function in the y direction (period = 2*pi / b)
+    //      e       |   Shifting the function to the right in the y direction
+    //      f       |   Shifting the function higher in the z direction
+
+    private double a = 0.4;
+    private double b = 1;
+    private double c = 0;
+    private double d = 1;
+    private double e = 0;
+    private double f = 1;
+
+    public CourseFunction(double a, double b, double c, double d, double e, double f) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+    }
+
+    public CourseFunction() {
+    }
+
+    @Override
+        public double evaluate(Vector2d p) {
+            double x = p.get_x();
+            double y = p.get_y();
+            return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
+        }
+
+        @Override
+        public Vector2d gradient(Vector2d p) {
+            double z = evaluate(p);
+            double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
+            double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
+            return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
+        }
+
+}

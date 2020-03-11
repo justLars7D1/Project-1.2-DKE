@@ -1,28 +1,16 @@
 package project12.physicsengine.test;
 
-import project12.physicsengine.Function2d;
+import project12.physicsengine.CourseFunction;
 import project12.physicsengine.Vector2d;
 
 public class TestEngine {
     public static void main(String[] args) {
 
-        Function2d f = new Function2d() {
-            @Override
-            public double evaluate(Vector2d p) {
-                return Math.sin(p.get_x()) + Math.pow(p.get_y(), 2);
-            }
+        CourseFunction f = new CourseFunction();
 
-            @Override
-            public Vector2d gradient(Vector2d p) {
-                double h = Math.pow(10, -5);
-                double zphx = evaluate(new Vector2d(p.get_x()+h, p.get_y()));
-                double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+h));
-                double z = evaluate(p);
-                return new Vector2d((zphx-z)/h, (zphy-z)/h);
-            }
-        };
-
-        System.out.println(f.gradient(new Vector2d(1,-1)));
+        Vector2d gradient = f.gradient(new Vector2d(1,0));
+        //gradient.normalize();
+        System.out.println(gradient);
 
     }
 }
