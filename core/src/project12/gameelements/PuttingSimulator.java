@@ -3,6 +3,9 @@ package project12.gameelements;
 import project12.physicsengine.*;
 import project12.physicsengine.engines.EulerSolver;
 import project12.physicsengine.engines.VerletSolver;
+import project12.physicsengine.functions.CourseFunction;
+import project12.physicsengine.functions.Function2d;
+import project12.physicsengine.functions.FunctionParser;
 
 /**
  * Represents a simulation of the Crazy Putting! game
@@ -104,7 +107,7 @@ class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new CourseFunction();
+        Function2d courseFunction = new FunctionParser("-0.01 * x + 0.003 * x ^ 2 + 0.04 * y");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
@@ -112,6 +115,9 @@ class PuttingSimulator {
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
+        //Expected results with CourseFunction():   (7.890192765686016 7.890192765689748)
+        //Results with replicated FunctionParser(): (7.890192765686016 7.890192765689748)
+        //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
         Vector2d ballVelocity = new Vector2d(4.273, 4.273);
         simulator.take_shot(ballVelocity);
 

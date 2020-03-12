@@ -1,4 +1,6 @@
-package project12.physicsengine;
+package project12.physicsengine.functions;
+
+import project12.physicsengine.Vector2d;
 
 /**
  * Represents a function of the course
@@ -84,11 +86,11 @@ public class CourseFunction implements Function2d {
      * @return The gradient
      */
     @Override
-        public Vector2d gradient(Vector2d p) {
-            double z = evaluate(p);
-            double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
-            double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
-            return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
-        }
+    public Vector2d gradient(Vector2d p) {
+        double z = evaluate(p);
+        double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
+        double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
+        return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
+    }
 
 }

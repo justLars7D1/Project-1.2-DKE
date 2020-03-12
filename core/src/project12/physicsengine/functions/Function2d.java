@@ -1,4 +1,6 @@
-package project12.physicsengine;
+package project12.physicsengine.functions;
+
+import project12.physicsengine.Vector2d;
 
 /**
  * A collective term of all implemented course functions

@@ -1,6 +1,6 @@
 package project12.gameelements;
 
-import project12.physicsengine.Function2d;
+import project12.physicsengine.functions.Function2d;
 import project12.physicsengine.Vector2d;
 
 /**

@@ -1,8 +1,14 @@
-package project12.test;
+package project12.physicsengine.functions;
+
+import project12.physicsengine.Vector2d;
 
 import java.util.*;
 
-public class FunctionParser {
+/**
+ * Represents any function in string form that can be put in by the user. It will automatically converted to an
+ * actual mathematical function
+ */
+public class FunctionParser implements Function2d {
 
     //Enum with precedences
     private enum Operator {
@@ -17,7 +23,7 @@ public class FunctionParser {
     }
 
     //Map with precedences
-    private static HashMap<String, Operator> ops = new HashMap<>() {{
+    private static final HashMap<String, Operator> ops = new HashMap<>() {{
         put("sin", Operator.function);
         put("cos", Operator.function);
         put("tan", Operator.function);
@@ -28,13 +34,19 @@ public class FunctionParser {
         put("+", Operator.addition);
     }};
 
-    //Check if the current operator has a higher precedence
-    private static boolean hasHigherPrecedence(String operator, String sub) {
-        return (ops.containsKey(sub) && ops.get(sub).precedence >= ops.get(operator).precedence);
+    //Actual function
+    private String function;
+    //Reverse polish order representation
+    private String[] reversePolishOrder;
+
+    //Constructor
+    public FunctionParser(String function) {
+        this.function = function;
+        this.reversePolishOrder = getReversePolishOrder(function).toLowerCase().split(" ");
     }
 
     //Get the reverse polish notation of an equation
-    public static String postfix(String infix) {
+    private static String getReversePolishOrder(String infix) {
 
         //Build an output string and a stack for the operations
         StringBuilder output = new StringBuilder();
@@ -70,41 +82,46 @@ public class FunctionParser {
 
     }
 
-    public static void main(String[] args) {
-        String[] polish = postfix("e ^ x").toLowerCase().split(" ");
-        System.out.println(Arrays.toString(polish));
-        System.out.println(eval(polish, 234, 0));
-    }
+    /**
+     * Evaluates the function
+     * @param p The (x,y)-coordinate
+     * @return The z-coordinate
+     */
+    @Override
+    public double evaluate(Vector2d p) {
+        double xVal = p.get_x();
+        double yVal = p.get_y();
+        //The polish notation in an arraylist, so we can manipulate it later
+        ArrayList<String> pol = new ArrayList<>(Arrays.asList(reversePolishOrder));
+        pol.removeAll(Arrays.asList("", null));
 
-    public static double eval(String[] polish, double xVal, double yVal) {
-        double result = 0;
-        ArrayList<String> pol = new ArrayList<>(Arrays.asList(polish));
-        int i = polish.length-1;
-        while(i >= 0) {
-
-            //If the operation is finished
-            if (pol.size() == 1) {
-                result = Double.parseDouble(pol.get(0));
-                break;
-            }
+        int i = pol.size()-1;
+        //While there are still calculations to compute
+        while(pol.size() != 1) {
 
             // If the value is an operator sine, cosine or tangent, and there is a number before it, execute it
             if (ops.containsKey(pol.get(i)) && !ops.containsKey(pol.get(i-1)) && (pol.get(i).equals("sin") || pol.get(i).equals("cos") || pol.get(i).equals("tan"))) {
+
+                //Parse the values correctly to doubles first and compute the value
                 if (pol.get(i-1).equals("x")) pol.set(i-1, String.valueOf(xVal));
                 else if (pol.get(i-1).equals("y")) pol.set(i-1, String.valueOf(yVal));
                 double valToEval = (pol.get(i-1).equals("e")) ? Math.E: Double.parseDouble(pol.get(i-1));
                 double value = executeOp(pol.get(i), valToEval, 0);
+
+                //Remove the old values and place the new value in the correct position of the arraylist
                 pol.remove(i);
                 pol.remove(i-1);
                 pol.add(i-1, String.valueOf(value));
 
+                //Update the index for the next best operation to perform
                 while(i < pol.size() && !ops.containsKey(pol.get(i))) i++;
 
 //                System.out.println(pol + " : " + i);
 
-                // Else if it's an operator, but not one of the previous ones and there are two number in front, execute it
+            // Else if it's an operator, but not one of the previous ones and there are two number in front, execute it
             } else if (ops.containsKey(pol.get(i)) && !ops.containsKey(pol.get(i-1)) && !ops.containsKey(pol.get(i-2))) {
 
+                //Parse the values correctly to doubles first and compute the value
                 if (pol.get(i-1).equals("x")) pol.set(i-1, String.valueOf(xVal));
                 else if (pol.get(i-1).equals("y")) pol.set(i-1, String.valueOf(yVal));
                 if (pol.get(i-2).equals("x")) pol.set(i-2, String.valueOf(xVal));
@@ -112,11 +129,14 @@ public class FunctionParser {
                 double valToEval1 = (pol.get(i-1).equals("e")) ? Math.E: Double.parseDouble(pol.get(i-1));
                 double valToEval2 = (pol.get(i-2).equals("e")) ? Math.E: Double.parseDouble(pol.get(i-2));
                 double value = executeOp(pol.get(i), valToEval2, valToEval1);
+
+                //Update the index for the next best operation to perform
                 pol.remove(i);
                 pol.remove(i-1);
                 pol.remove(i-2);
                 pol.add(i-2, String.valueOf(value));
 
+                //Update the index for the next best operation to perform
                 i--;
                 while(i < pol.size() && !ops.containsKey(pol.get(i))) i++;
 
@@ -129,8 +149,22 @@ public class FunctionParser {
 
         }
 
-        return result;
+        //Return the result
+        return Double.parseDouble(pol.get(0));
 
+    }
+
+    /**
+     * Compute the gradient at a point of the function
+     * @param p The (x,y)-coordinate
+     * @return The gradient
+     */
+    @Override
+    public Vector2d gradient(Vector2d p) {
+        double z = evaluate(p);
+        double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
+        double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
+        return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
     }
 
     private static double executeOp(String operation, double v1, double v2) {
@@ -162,6 +196,11 @@ public class FunctionParser {
                 break;
         }
         return val;
+    }
+
+    //Check if the current operator has a higher precedence
+    private static boolean hasHigherPrecedence(String operator, String sub) {
+        return (ops.containsKey(sub) && ops.get(sub).precedence >= ops.get(operator).precedence);
     }
 
 }

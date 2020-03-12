@@ -1,7 +1,7 @@
 package project12.test;
 
 import org.junit.jupiter.api.Test;
-import project12.physicsengine.CourseFunction;
+import project12.physicsengine.functions.CourseFunction;
 import project12.physicsengine.Vector2d;
 
 import static org.junit.jupiter.api.Assertions.*;
