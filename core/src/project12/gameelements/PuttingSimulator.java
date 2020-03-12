@@ -1,9 +1,6 @@
 package project12.gameelements;
 
-import project12.physicsengine.EulerSolver;
-import project12.physicsengine.Function2d;
-import project12.physicsengine.PhysicsEngine;
-import project12.physicsengine.Vector2d;
+import project12.physicsengine.*;
 
 /**
  * Represents a simulation of the Crazy Putting! game
@@ -67,7 +64,7 @@ class PuttingSimulator {
         engine.setPositionVector(ballPosition);
         engine.setVelocityVector(ballVelocity);
 
-        final double deltaT = Math.pow(10, -2);
+        final double deltaT = Math.pow(10, -3);
         if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
 
         //Course function
@@ -78,7 +75,7 @@ class PuttingSimulator {
 
         final double comparisonError = 0.1;
         // Keep computing for a small delta t while the velocity is not 0
-        while(ballVelocity.get_x() >= comparisonError && ballVelocity.get_y() >= comparisonError) {
+        while(ballVelocity.get_x() >= comparisonError || ballVelocity.get_y() >= comparisonError) {
 
             // Calculate acceleration using the given formula
             Vector2d gradient = z.gradient(ballPosition);
@@ -92,7 +89,24 @@ class PuttingSimulator {
             engine.setAccelerationVector(accelerationVector);
             engine.approximate();
 
+            System.out.println(ballPosition);
+
         }
+    }
+
+    public static void main(String[] args) {
+
+        Function2d courseFunction = new CourseFunction();
+        Vector2d flag = new Vector2d(10, 10);
+
+        PuttingCourse course = new PuttingCourse(courseFunction, flag);
+        PhysicsEngine engine = new EulerSolver();
+
+        PuttingSimulator simulator = new PuttingSimulator(course, engine);
+
+        Vector2d ballVelocity = new Vector2d(5, 10);
+        simulator.take_shot(ballVelocity);
+
     }
 
 }
