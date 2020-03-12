@@ -1,6 +1,8 @@
 package project12.gameelements;
 
 import project12.physicsengine.*;
+import project12.physicsengine.engines.EulerSolver;
+import project12.physicsengine.engines.VerletSolver;
 
 /**
  * Represents a simulation of the Crazy Putting! game
@@ -64,6 +66,7 @@ class PuttingSimulator {
         engine.setPositionVector(ballPosition);
         engine.setVelocityVector(ballVelocity);
 
+        //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
         final double deltaT = Math.pow(10, -5);
         if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
 
@@ -85,7 +88,6 @@ class PuttingSimulator {
             Vector2d gradient = z.gradient(ballPosition);
             Vector2d normalizedVelocity = ballVelocity.getNormalized();
 
-            //TODO: Negative bug and updating
             double aX = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
             double aY = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
             Vector2d accelerationVector = new Vector2d(aX, aY);
@@ -106,7 +108,7 @@ class PuttingSimulator {
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
-        PhysicsEngine engine = new EulerSolver();
+        PhysicsEngine engine = new VerletSolver();
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 

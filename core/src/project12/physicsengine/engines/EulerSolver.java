@@ -1,25 +1,27 @@
-package project12.physicsengine;
+package project12.physicsengine.engines;
 
-//TODO: Program this method
+import project12.physicsengine.PhysicsEngine;
+import project12.physicsengine.Vector2d;
+
 public class EulerSolver implements PhysicsEngine {
 
     /**
      * The time step size
      */
-    private double stepSize;
+    protected double stepSize;
 
     /**
      * The position vector
      */
-    private Vector2d positionVector;
+    protected Vector2d positionVector;
     /**
      * The velocity vector
      */
-    private Vector2d velocityVector;
+    protected Vector2d velocityVector;
     /**
      * The acceleration vector
      */
-    private Vector2d accelerationVector;
+    protected Vector2d accelerationVector;
 
     /**
      * Constructor
@@ -83,7 +85,7 @@ public class EulerSolver implements PhysicsEngine {
     /**
      * Calculates the new coordinates of a position vector
      */
-    private void approximatePosition() {
+    protected void approximatePosition() {
         double valX = this.stepSize * this.velocityVector.get_x();
         double valY = this.stepSize * this.velocityVector.get_y();
         positionVector.addX(valX);
