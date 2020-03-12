@@ -47,8 +47,28 @@ public class Vector2d extends Vector {
         return v;
     }
 
+    /**
+     * Creates and returns a copy of the vector
+     * @return The copied vector
+     */
     public Vector2d copy() {
         return new Vector2d(get_x(), get_y());
+    }
+
+    /**
+     * Add to the current x-coordinate
+     * @param val The value to add
+     */
+    public void addX(double val) {
+        this.coords[0] += val;
+    }
+
+    /**
+     * Add to the current y-coordinate
+     * @param val The value to add
+     */
+    public void addY(double val) {
+        this.coords[1] += val;
     }
 
 }

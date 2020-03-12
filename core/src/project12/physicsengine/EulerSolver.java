@@ -1,12 +1,25 @@
 package project12.physicsengine;
 
 //TODO: Program this method
-class EulerSolver implements PhysicsEngine {
+public class EulerSolver implements PhysicsEngine {
 
     /**
      * The time step size
      */
     private double stepSize;
+
+    /**
+     * The position vector
+     */
+    private Vector2d positionVector;
+    /**
+     * The velocity vector
+     */
+    private Vector2d velocityVector;
+    /**
+     * The acceleration vector
+     */
+    private Vector2d accelerationVector;
 
     /**
      * Constructor
@@ -29,6 +42,62 @@ class EulerSolver implements PhysicsEngine {
      */
     public void set_step_size(double h) {
         this.stepSize = h;
+    }
+
+    /**
+     * Sets the position vector
+     * @param p The position vector
+     */
+    @Override
+    public void setPositionVector(Vector2d p) {
+        this.positionVector = p;
+    }
+
+    /**
+     * Sets the velocity vector
+     * @param v The velocity vector
+     */
+    @Override
+    public void setVelocityVector(Vector2d v) {
+        this.velocityVector = v;
+    }
+
+    /**
+     * Sets the acceleration vector
+     * @param a The acceleration vector
+     */
+    @Override
+    public void setAccelerationVector(Vector2d a) {
+        this.accelerationVector = a;
+    }
+
+    /**
+     * Calculates the new coordinates of a position and velocity vector
+     */
+    @Override
+    public void approximate() {
+        approximatePosition();
+        approximateVelocity();
+    }
+
+    /**
+     * Calculates the new coordinates of a position vector
+     */
+    private void approximatePosition() {
+        double valX = this.stepSize * this.velocityVector.get_x();
+        double valY = this.stepSize * this.velocityVector.get_y();
+        positionVector.addX(valX);
+        positionVector.addY(valY);
+    }
+
+    /**
+     * Calculates the new coordinates of a velocity vector
+     */
+    private void approximateVelocity() {
+        double valX = this.stepSize * this.accelerationVector.get_x();
+        double valY = this.stepSize * this.accelerationVector.get_y();
+        velocityVector.addX(valX);
+        velocityVector.addY(valY);
     }
 
 }
