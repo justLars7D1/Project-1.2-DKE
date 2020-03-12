@@ -20,7 +20,7 @@ class PuttingCourse {
     /**
      * The radius around the target
      */
-    double holeTolerance = 1;
+    double holeTolerance = 0.02;
 
     /**
      * The starting point where the ball is on the beginning of the game
@@ -30,12 +30,12 @@ class PuttingCourse {
     /**
      * The coefficient of friction of the terrain
      */
-    double frictionalCoefficient = 1;
+    double frictionalCoefficient = 0.131;
 
     /**
      * The maximum velocity of the ball
      */
-    double maximumVelocity = 5;
+    double maximumVelocity = 3;
 
     //TODO: Hole tolerance and friction coefficient? Are we allowed to change the constructor?
 

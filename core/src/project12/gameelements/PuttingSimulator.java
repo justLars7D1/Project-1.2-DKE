@@ -64,7 +64,7 @@ class PuttingSimulator {
         engine.setPositionVector(ballPosition);
         engine.setVelocityVector(ballVelocity);
 
-        final double deltaT = Math.pow(10, -3);
+        final double deltaT = Math.pow(10, -5);
         if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
 
         //Course function
@@ -73,25 +73,31 @@ class PuttingSimulator {
         //Friction constant
         double friction = course.get_friction_coefficient();
 
-        final double comparisonError = 0.1;
+        final double comparisonError = 0.01;
         // Keep computing for a small delta t while the velocity is not 0
         while(ballVelocity.get_x() >= comparisonError || ballVelocity.get_y() >= comparisonError) {
+
+            //If the speed is negative, before evaluating, set it to 0
+            if (ballVelocity.get_x() < 0) ballVelocity.addX(-ballVelocity.get_x());
+            if (ballVelocity.get_y() < 0) ballVelocity.addY(-ballVelocity.get_y());
 
             // Calculate acceleration using the given formula
             Vector2d gradient = z.gradient(ballPosition);
             Vector2d normalizedVelocity = ballVelocity.getNormalized();
 
-            double aX = GRAVITATIONAL_CONSTANT * (gradient.get_x() - (friction * normalizedVelocity.get_x()));
-            double aY = GRAVITATIONAL_CONSTANT * (gradient.get_y() - (friction * normalizedVelocity.get_y()));
+            //TODO: Negative bug and updating
+            double aX = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
+            double aY = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
             Vector2d accelerationVector = new Vector2d(aX, aY);
 
             //Set the acceleration vector and approximate the new position and velocity of the ball
             engine.setAccelerationVector(accelerationVector);
             engine.approximate();
 
-            System.out.println(ballPosition);
-
         }
+
+        System.out.println(ballPosition);
+
     }
 
     public static void main(String[] args) {
@@ -104,7 +110,7 @@ class PuttingSimulator {
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
-        Vector2d ballVelocity = new Vector2d(5, 10);
+        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
         simulator.take_shot(ballVelocity);
 
     }

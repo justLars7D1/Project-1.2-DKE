@@ -8,7 +8,7 @@ public interface Function2d {
     /**
      * Factor for computing the derivative as a limit approaching this variable
      */
-    double ACCURACYGRADIENTFACTOR = Math.pow(10, -3);
+    double ACCURACYGRADIENTFACTOR = Math.pow(10, -5);
 
     /**
      * Evaluates the function

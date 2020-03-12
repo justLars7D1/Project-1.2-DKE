@@ -75,7 +75,8 @@ public class CourseFunction implements Function2d {
         public double evaluate(Vector2d p) {
             double x = p.get_x();
             double y = p.get_y();
-            return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
+            //return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
+            return 1;
         }
 
     /**
