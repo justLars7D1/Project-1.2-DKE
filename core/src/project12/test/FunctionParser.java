@@ -71,7 +71,97 @@ public class FunctionParser {
     }
 
     public static void main(String[] args) {
-        System.out.println(postfix("sin ( 2 + x ^ 2 ) * cos ( 5 / 3 )"));
+        String[] polish = postfix("sin ( 2 + x ^ 2 ) * cos ( y / 3 )").toLowerCase().split(" ");
+        System.out.println(Arrays.toString(polish));
+        System.out.println(eval(polish, 0, 5));
+    }
+
+    public static double eval(String[] polish, double xVal, double yVal) {
+        double result = 0;
+        ArrayList<String> pol = new ArrayList<>(Arrays.asList(polish));
+        int i = polish.length-1;
+        while(i >= 0) {
+
+            //If the operation is finished
+            if (pol.size() == 1) {
+                result = Double.parseDouble(pol.get(0));
+                break;
+            }
+
+            // If the value is an operator sine, cosine or tangent, and there is a number before it, execute it
+            if (ops.containsKey(pol.get(i)) && !ops.containsKey(pol.get(i-1)) && (pol.get(i).equals("sin") || pol.get(i).equals("cos") || pol.get(i).equals("tan"))) {
+                if (pol.get(i-1).equals("x")) pol.set(i-1, String.valueOf(xVal));
+                else if (pol.get(i-1).equals("y")) pol.set(i-1, String.valueOf(yVal));
+                double valToEval = Double.parseDouble(pol.get(i-1));
+                double value = executeOp(pol.get(i), valToEval, 0);
+                pol.remove(i);
+                pol.remove(i-1);
+                pol.add(i-1, String.valueOf(value));
+
+                while(i < pol.size() && !ops.containsKey(pol.get(i))) i++;
+
+//                System.out.println(pol + " : " + i);
+
+                // Else if it's an operator, but not one of the previous ones and there are two number in front, execute it
+            } else if (ops.containsKey(pol.get(i)) && !ops.containsKey(pol.get(i-1)) && !ops.containsKey(pol.get(i-2))) {
+
+                if (pol.get(i-1).equals("x")) pol.set(i-1, String.valueOf(xVal));
+                else if (pol.get(i-1).equals("y")) pol.set(i-1, String.valueOf(yVal));
+                if (pol.get(i-2).equals("x")) pol.set(i-2, String.valueOf(xVal));
+                else if (pol.get(i-2).equals("y")) pol.set(i-2, String.valueOf(yVal));
+                double valToEval1 = Double.parseDouble(pol.get(i-1));
+                double valToEval2 = Double.parseDouble(pol.get(i-2));
+                double value = executeOp(pol.get(i), valToEval2, valToEval1);
+                pol.remove(i);
+                pol.remove(i-1);
+                pol.remove(i-2);
+                pol.add(i-2, String.valueOf(value));
+
+                i--;
+                while(i < pol.size() && !ops.containsKey(pol.get(i))) i++;
+
+//                System.out.println(pol + " : " + i);
+
+                //Otherwise continue our search
+            } else {
+                i--;
+            }
+
+        }
+
+        return result;
+
+    }
+
+    private static double executeOp(String operation, double v1, double v2) {
+        double val = 0;
+        switch (operation) {
+            case "sin":
+                val = Math.sin(v1);
+                break;
+            case "cos":
+                val = Math.cos(v1);
+                break;
+            case "tan":
+                val = Math.tan(v1);
+                break;
+            case "^":
+                val = Math.pow(v1, v2);
+                break;
+            case "/":
+                val = v1 / v2;
+                break;
+            case "*":
+                val = v1 * v2;
+                break;
+            case "-":
+                val = v1 - v2;
+                break;
+            case "+":
+                val = v1 + v2;
+                break;
+        }
+        return val;
     }
 
 }
