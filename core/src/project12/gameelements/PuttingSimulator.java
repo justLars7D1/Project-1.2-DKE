@@ -70,7 +70,7 @@ class PuttingSimulator {
         engine.setVelocityVector(ballVelocity);
 
         //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
-        final double deltaT = Math.pow(10, -5);
+        final double deltaT = Math.pow(10, -3);
         if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
 
         //Course function
@@ -109,7 +109,7 @@ class PuttingSimulator {
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
-        PhysicsEngine engine = new VerletSolver();
+        PhysicsEngine engine = new EulerSolver();
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
