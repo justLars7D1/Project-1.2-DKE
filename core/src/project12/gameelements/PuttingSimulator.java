@@ -140,6 +140,7 @@ class PuttingSimulator {
         //Expected results with CourseFunction():   (7.890192765686016 7.890192765689748)
         //Results with replicated FunctionParser(): (7.890192765686016 7.890192765689748)
         //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
+        //Solved: setting the delta t for the euler calculation to 10e-3 instead of 10e-5 really helps
         Vector2d ballVelocity = new Vector2d(4.273, 4.273);
         simulator.take_shot(ballVelocity);
 
