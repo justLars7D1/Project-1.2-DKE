@@ -11,33 +11,36 @@ class PuttingCourse {
     /**
      * Function describing the height of the putting terrain on any (x.y)-coordinate
      */
-    Function2d height;
+    private Function2d height;
 
     /**
      * The coordinate of the target
      */
-    Vector2d flag;
+    private Vector2d flag;
     /**
      * The radius around the target
      */
-    double holeTolerance = 0.02;
+    private double holeTolerance = 0.02;
 
     /**
      * The starting point where the ball is on the beginning of the game
      */
-    Vector2d start;
+    private Vector2d start;
 
     /**
      * The coefficient of friction of the terrain
      */
-    double frictionalCoefficient = 0.131;
+    private double frictionalCoefficient = 0.131;
 
     /**
      * The maximum velocity of the ball
      */
-    double maximumVelocity = 3;
+    private double maximumVelocity = 3;
 
-    //TODO: Hole tolerance and friction coefficient? Are we allowed to change the constructor?
+    /**
+     * The gravitational constant
+     */
+    private double gravitationalConstant = 9.81;
 
     /**
      * Constructor
@@ -111,6 +114,14 @@ class PuttingCourse {
     }
 
     /**
+     * Set the gravitational constant (in m/s^2)
+     * @param gConstant The gravitational constant
+     */
+    public void setGravitationalConstant(double gConstant) {
+        this.gravitationalConstant = gConstant;
+    }
+
+    /**
      * Gets the coefficient of friction
      * @return the frictional coefficient
      */
@@ -133,6 +144,15 @@ class PuttingCourse {
     public double get_hole_tolerance() {
         return holeTolerance;
     }
+
+    /**
+     * Gets the gravitational constant
+     * @return The gravitational constant
+     */
+    public double get_gravitational_constant() {
+        return gravitationalConstant;
+    }
+
 
 }
 

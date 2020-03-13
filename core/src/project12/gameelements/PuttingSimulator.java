@@ -15,17 +15,17 @@ class PuttingSimulator {
     /**
      * The game course
      */
-    PuttingCourse course;
+    private PuttingCourse course;
 
     /**
      * The physics engine
      */
-    PhysicsEngine engine;
+    private PhysicsEngine engine;
 
     /**
      * The current position of the ball
      */
-    Vector2d ballPosition;
+    private Vector2d ballPosition;
 
     /**
      * Constructor
@@ -53,8 +53,6 @@ class PuttingSimulator {
     public Vector2d get_ball_position() {
         return this.ballPosition;
     }
-
-   private static final double GRAVITATIONAL_CONSTANT = 9.81;
 
     /**
      * Simulate taking a shot
@@ -91,8 +89,8 @@ class PuttingSimulator {
             Vector2d gradient = z.gradient(ballPosition);
             Vector2d normalizedVelocity = ballVelocity.getNormalized();
 
-            double aX = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
-            double aY = -1 * GRAVITATIONAL_CONSTANT * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
+            double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
+            double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
             Vector2d accelerationVector = new Vector2d(aX, aY);
 
             //Set the acceleration vector and approximate the new position and velocity of the ball
