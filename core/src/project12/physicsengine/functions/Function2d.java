@@ -2,10 +2,12 @@ package project12.physicsengine.functions;
 
 import project12.physicsengine.Vector2d;
 
+import java.io.Serializable;
+
 /**
  * A collective term of all implemented course functions
  */
-public interface Function2d {
+public interface Function2d extends Serializable {
 
     /**
      * Factor for computing the derivative as a limit approaching this variable

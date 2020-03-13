@@ -1,9 +1,11 @@
 package project12.physicsengine;
 
+import java.io.Serializable;
+
 /**
  * Abstract notion of an n-dimensional vector
  */
-public abstract class Vector {
+public abstract class Vector implements Serializable {
 
     /**
      * The vector coordinates

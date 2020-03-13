@@ -3,10 +3,12 @@ package project12.gameelements;
 import project12.physicsengine.functions.Function2d;
 import project12.physicsengine.Vector2d;
 
+import java.io.Serializable;
+
 /**
  * Represents a course for the Crazy Putting! game
  */
-class PuttingCourse {
+class PuttingCourse implements Serializable {
 
     /**
      * Function describing the height of the putting terrain on any (x.y)-coordinate
@@ -153,6 +155,21 @@ class PuttingCourse {
         return gravitationalConstant;
     }
 
-
+    /**
+     * Gets the string representation of the course
+     * @return String representation of the course
+     */
+    @Override
+    public String toString() {
+        return "PuttingCourse{" +
+                "height=" + height +
+                ", flag=" + flag +
+                ", holeTolerance=" + holeTolerance +
+                ", start=" + start +
+                ", frictionalCoefficient=" + frictionalCoefficient +
+                ", maximumVelocity=" + maximumVelocity +
+                ", gravitationalConstant=" + gravitationalConstant +
+                '}';
+    }
 }
 

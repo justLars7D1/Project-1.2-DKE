@@ -7,6 +7,8 @@ import project12.physicsengine.functions.CourseFunction;
 import project12.physicsengine.functions.Function2d;
 import project12.physicsengine.functions.FunctionParser;
 
+import java.io.*;
+
 /**
  * Represents a simulation of the Crazy Putting! game
  */
@@ -99,6 +101,30 @@ class PuttingSimulator {
 
         }
 
+    }
+
+    public boolean saveCourse(String filePath) {
+        try {
+            FileOutputStream f = new FileOutputStream(filePath);
+            ObjectOutputStream outputStream = new ObjectOutputStream(f);
+            outputStream.writeObject(course);
+            outputStream.close();
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean loadCourse(String filePath) {
+        try {
+            FileInputStream f = new FileInputStream(filePath);
+            ObjectInputStream inputStream = new ObjectInputStream(f);
+            course = (PuttingCourse) (inputStream.readObject());
+            inputStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            return false;
+        }
+        return true;
     }
 
     public static void main(String[] args) {

@@ -198,4 +198,12 @@ public class FunctionParser implements Function2d {
 //    }
 
 
+    /**
+     * Returns the string representation of the function
+     * @return String representation of the function
+     */
+    @Override
+    public String toString() {
+        return "'"+function+"'";
+    }
 }
