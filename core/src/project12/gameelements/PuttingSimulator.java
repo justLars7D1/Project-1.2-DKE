@@ -101,13 +101,11 @@ class PuttingSimulator {
 
         }
 
-        System.out.println(ballPosition);
-
     }
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParser("-0.01 * x + 0.003 * x ^ 2 + 0.04 * y");
+        Function2d courseFunction = new FunctionParser("-0.01*x + 0.003*x^2 + 0.04 * y");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
@@ -120,6 +118,8 @@ class PuttingSimulator {
         //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
         Vector2d ballVelocity = new Vector2d(4.273, 4.273);
         simulator.take_shot(ballVelocity);
+
+        System.out.println(simulator.get_ball_position());
 
     }
 

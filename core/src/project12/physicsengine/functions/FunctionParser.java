@@ -42,7 +42,21 @@ public class FunctionParser implements Function2d {
     //Constructor
     public FunctionParser(String function) {
         this.function = function;
-        this.reversePolishOrder = getReversePolishOrder(function).toLowerCase().split(" ");
+        StringBuilder goodFunctionFormat = new StringBuilder();
+        for (int i = 0; i < function.length(); i++) {
+            if (i+1 < function.length() && function.charAt(i) == '-' && Character.isDigit(function.charAt(i+1))) {
+                goodFunctionFormat.append(function.charAt(i));
+            } else if (ops.containsKey(function.substring(i,i+1)) || function.charAt(i) == '(' || function.charAt(i) == ')') {
+                goodFunctionFormat.append(" ").append(function.charAt(i)).append(" ");
+            } else {
+                goodFunctionFormat.append(function.charAt(i));
+            }
+        }
+
+        this.reversePolishOrder = getReversePolishOrder(goodFunctionFormat.toString()).toLowerCase().split(" ");
+        ArrayList<String> orderNoEmpty = new ArrayList<>(Arrays.asList(this.reversePolishOrder));
+        orderNoEmpty.removeAll(Arrays.asList("", null));
+        this.reversePolishOrder =  orderNoEmpty.toArray(new String[orderNoEmpty.size()]);
     }
 
     //Get the reverse polish notation of an equation
@@ -179,7 +193,7 @@ public class FunctionParser implements Function2d {
 
     //For some testing
 //    public static void main(String[] args) {
-//        FunctionParser p = new FunctionParser("cos ( x + y )");
+//        FunctionParser p = new FunctionParser("cos(x+y)");
 //        System.out.println(p.evaluate(new Vector2d(0,1)));
 //    }
 
