@@ -5,6 +5,7 @@ import project12.physicsengine.Vector2d;
 /**
  * Represents a function of the course
  */
+@Deprecated
 public class CourseFunction implements Function2d {
 
     //TODO: Maybe change add this to the function: 0.1 * |x| * |y|

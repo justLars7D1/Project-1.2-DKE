@@ -12,7 +12,7 @@ import java.io.*;
 /**
  * Represents a simulation of the Crazy Putting! game
  */
-class PuttingSimulator {
+public class PuttingSimulator {
 
     /**
      * The game course
@@ -79,7 +79,7 @@ class PuttingSimulator {
         //Friction constant
         double friction = course.get_friction_coefficient();
 
-        final double comparisonError = 0.01;
+        final double comparisonError = 0.0001;
         // Keep computing for a small delta t while the velocity is not 0
         while(ballVelocity.get_x() >= comparisonError || ballVelocity.get_y() >= comparisonError) {
 
@@ -103,6 +103,11 @@ class PuttingSimulator {
 
     }
 
+    /**
+     * Saves the course to a file denoted by the specified filepath
+     * @param filePath The filepath
+     * @return Whether the operation was successfull or not
+     */
     public boolean saveCourse(String filePath) {
         try {
             FileOutputStream f = new FileOutputStream(filePath);
@@ -115,6 +120,11 @@ class PuttingSimulator {
         return true;
     }
 
+    /**
+     * Loads the course from a file denoted by the specified filepath
+     * @param filePath The filepath
+     * @return Whether the operation was successfull or not
+     */
     public boolean loadCourse(String filePath) {
         try {
             FileInputStream f = new FileInputStream(filePath);
@@ -129,11 +139,11 @@ class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParser("-0.01*x + 0.003*x^2 + 0.04 * y");
+        Function2d courseFunction = new FunctionParser("1");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
-        PhysicsEngine engine = new EulerSolver();
+        PhysicsEngine engine = new VerletSolver();
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 

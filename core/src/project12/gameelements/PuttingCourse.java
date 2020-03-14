@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Represents a course for the Crazy Putting! game
  */
-class PuttingCourse implements Serializable {
+public class PuttingCourse implements Serializable {
 
     /**
      * Function describing the height of the putting terrain on any (x.y)-coordinate

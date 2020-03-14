@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 // START, COURSE DESIGNER, LOAD COURSE, SETTINGS
 // would be cool to implement
 public class Application implements ApplicationListener {
+
 	public Environment environment;
 	public PerspectiveCamera cam;
 	public CameraInputController camController;

@@ -191,11 +191,10 @@ public class FunctionParser implements Function2d {
         return x;
     }
 
-    //For some testing
-//    public static void main(String[] args) {
-//        FunctionParser p = new FunctionParser("cos(x+y)");
-//        System.out.println(p.evaluate(new Vector2d(0,1)));
-//    }
+    public static void main(String[] args) {
+        FunctionParser p = new FunctionParser("e^x");
+        System.out.println(p.evaluate(new Vector2d(0,1)));
+    }
 
 
     /**
