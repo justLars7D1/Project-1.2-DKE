@@ -40,13 +40,15 @@ class MainMenuScreen extends AbstractScreen {
 
         backgroundImage.setSize(getWidth(), getHeight());
 
-        startGameBtn.setSize(0.6f*startGameBtn.getWidth(), 0.6f*startGameBtn.getHeight());
-        courseDesignerBtn.setSize(0.6f*courseDesignerBtn.getWidth(), 0.6f*courseDesignerBtn.getHeight());
-        exitBtn.setSize(0.6f*exitBtn.getWidth(), 0.6f*exitBtn.getHeight());
+        float sizeFactor = (float) (0.4f*Math.sqrt(Application.screenSizeFactor));
+        startGameBtn.setSize(sizeFactor*getWidth(), sizeFactor*getHeight());
+        courseDesignerBtn.setSize(sizeFactor*getWidth(), sizeFactor*getHeight());
+        exitBtn.setSize(sizeFactor*getWidth(), sizeFactor*getHeight());
 
-        startGameBtn.setPosition(getWidth()/2 - startGameBtn.getWidth()/2, 0.6f*getHeight());
-        courseDesignerBtn.setPosition(getWidth()/2 - courseDesignerBtn.getWidth()/2, 0.4f*getHeight());
-        exitBtn.setPosition(getWidth()/2 - exitBtn.getWidth()/2, 0.2f*getHeight());
+        sizeFactor = 0.7f;
+        startGameBtn.setPosition(getWidth()/2 - startGameBtn.getWidth()/2, sizeFactor*getHeight() - startGameBtn.getHeight()/2);
+        courseDesignerBtn.setPosition(getWidth()/2 - courseDesignerBtn.getWidth()/2, (sizeFactor*2/3f)*getHeight() - courseDesignerBtn.getHeight()/2);
+        exitBtn.setPosition(getWidth()/2 - exitBtn.getWidth()/2, (sizeFactor*1/3f)*getHeight() - exitBtn.getHeight()/2);
 
         addActor(startGameBtn);
         addActor(courseDesignerBtn);

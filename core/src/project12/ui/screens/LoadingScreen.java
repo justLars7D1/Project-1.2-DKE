@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import project12.ui.Application;
 
 class LoadingScreen extends AbstractScreen {
 
@@ -28,7 +29,7 @@ class LoadingScreen extends AbstractScreen {
 
         Gdx.graphics.setTitle("Crazy Putting! - Loading - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
-        loadingSprite.setSize(0.6f * loadingSprite.getWidth(), 0.6f * loadingSprite.getHeight());
+        loadingSprite.setSize((int)(Application.screenSizeFactor*getWidth()), (int)(Application.screenSizeFactor*getHeight()));
         loadingSprite.setPosition(getWidth()/2 - loadingSprite.getWidth()/2, getHeight()/2 - loadingSprite.getHeight()/2);
         loadingSprite.setAlpha(alpha);
         loadingSprite.setOriginCenter();
