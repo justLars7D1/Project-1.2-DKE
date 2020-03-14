@@ -6,9 +6,9 @@ import java.util.*;
 
 /**
  * Represents any function in string form that can be put in by the user. It will automatically converted to an
- * actual mathematical function
+ * actual mathematical function (denoted in Reverse Polish Notation)
  */
-public class FunctionParser implements Function2d {
+public class FunctionParserRPN implements Function2d {
 
     //Enum with precedences
     private enum Operator {
@@ -40,7 +40,7 @@ public class FunctionParser implements Function2d {
     private String[] reversePolishOrder;
 
     //Constructor
-    public FunctionParser(String function) {
+    public FunctionParserRPN(String function) {
         this.function = function;
         StringBuilder goodFunctionFormat = new StringBuilder();
         for (int i = 0; i < function.length(); i++) {
@@ -192,7 +192,7 @@ public class FunctionParser implements Function2d {
     }
 
     public static void main(String[] args) {
-        FunctionParser p = new FunctionParser("e^x");
+        FunctionParserRPN p = new FunctionParserRPN("e^x");
         System.out.println(p.evaluate(new Vector2d(0,1)));
     }
 

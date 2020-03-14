@@ -3,9 +3,8 @@ package project12.gameelements;
 import project12.physicsengine.*;
 import project12.physicsengine.engines.EulerSolver;
 import project12.physicsengine.engines.VerletSolver;
-import project12.physicsengine.functions.CourseFunction;
 import project12.physicsengine.functions.Function2d;
-import project12.physicsengine.functions.FunctionParser;
+import project12.physicsengine.functions.FunctionParserRPN;
 
 import java.io.*;
 
@@ -139,7 +138,7 @@ public class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParser("1");
+        Function2d courseFunction = new FunctionParserRPN("1");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
