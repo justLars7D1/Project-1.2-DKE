@@ -10,6 +10,8 @@ import project12.ui.screens.ScreenManager;
 // would be cool to implement
 public class Application extends Game {
 
+	public static final float screenSizeFactor = 0.8f;
+
 	@Override
 	public void create() {
 		Gdx.graphics.setTitle("Crazy Putting!");

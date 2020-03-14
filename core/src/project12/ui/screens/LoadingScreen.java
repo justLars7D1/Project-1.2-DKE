@@ -15,7 +15,7 @@ class LoadingScreen extends AbstractScreen {
 
     private float alpha = 0.2f;
     private float rotation = 0f;
-    private final float totalDuration = 7f;
+    private final float totalDuration = 4f;
 
     public LoadingScreen() {
         this.batch = new SpriteBatch();
@@ -26,6 +26,8 @@ class LoadingScreen extends AbstractScreen {
     @Override
     public void buildStage() {
 
+        Gdx.graphics.setTitle("Crazy Putting! - Loading - " + Gdx.graphics.getFramesPerSecond() + "FPS");
+
         loadingSprite.setSize(0.6f * loadingSprite.getWidth(), 0.6f * loadingSprite.getHeight());
         loadingSprite.setPosition(getWidth()/2 - loadingSprite.getWidth()/2, getHeight()/2 - loadingSprite.getHeight()/2);
         loadingSprite.setAlpha(alpha);
@@ -35,6 +37,7 @@ class LoadingScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        Gdx.graphics.setTitle("Crazy Putting! - Loading - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
         Gdx.gl.glClearColor(0, 0, 0, 1); // Clear the screen with black
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
