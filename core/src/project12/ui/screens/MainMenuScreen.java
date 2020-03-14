@@ -1,6 +1,7 @@
 package project12.ui.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -37,7 +38,7 @@ class MainMenuScreen extends AbstractScreen {
 
         Gdx.graphics.setTitle("Crazy Putting! - Main Menu - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
-        backgroundImage.setSize(Application.screenSizeFactor * backgroundImage.getWidth(), Application.screenSizeFactor * backgroundImage.getHeight());
+        backgroundImage.setSize(getWidth(), getHeight());
 
         startGameBtn.setSize(0.6f*startGameBtn.getWidth(), 0.6f*startGameBtn.getHeight());
         courseDesignerBtn.setSize(0.6f*courseDesignerBtn.getWidth(), 0.6f*courseDesignerBtn.getHeight());
@@ -79,6 +80,8 @@ class MainMenuScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+
         Gdx.graphics.setTitle("Crazy Putting! - Main Menu - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
         batch.begin();

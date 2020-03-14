@@ -37,12 +37,11 @@ class LoadingScreen extends AbstractScreen {
 
     @Override
     public void render(float delta) {
+        super.render(delta);
+
         Gdx.graphics.setTitle("Crazy Putting! - Loading - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
-        Gdx.gl.glClearColor(0, 0, 0, 1); // Clear the screen with black
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // Clear the screen
-
-        if (Gdx.graphics.getFramesPerSecond() != 0 && alpha < 1.2f) {
+        if (Gdx.graphics.getFramesPerSecond() != 0 && alpha < 1.5f) {
             alpha += (1f / Gdx.graphics.getFramesPerSecond()) / totalDuration;
             rotation += 360 * ((1f / Gdx.graphics.getFramesPerSecond()) / totalDuration*1.5);
             if (alpha <= 1) loadingSprite.setAlpha(alpha);

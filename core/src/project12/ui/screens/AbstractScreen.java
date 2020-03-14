@@ -1,15 +1,38 @@
 package project12.ui.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import project12.ui.Application;
+
+import static com.badlogic.gdx.Gdx.input;
 
 abstract class AbstractScreen extends Stage implements Screen {
 
     protected AbstractScreen() {
         super(new ScreenViewport());
+
+        addListener(new InputListener() {
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.F11) {
+                    boolean fullScreen = Gdx.graphics.isFullscreen();
+                    Graphics.DisplayMode currentMode = Gdx.graphics.getDisplayMode();
+                    if (fullScreen)
+                        Gdx.graphics.setWindowedMode((int)(Application.screenSizeFactor*1920), (int)(Application.screenSizeFactor*1080));
+                    else
+                        Gdx.graphics.setFullscreenMode(currentMode);
+                }
+                return true;
+            }
+        });
+
     }
 
     public abstract void buildStage();
@@ -27,7 +50,7 @@ abstract class AbstractScreen extends Stage implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
+        input.setInputProcessor(this);
     }
 
     @Override public void resize(int width, int height) {
