@@ -1,6 +1,7 @@
 package project12.ui;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import project12.ui.screens.ScreenEnum;
 import project12.ui.screens.ScreenManager;
 
@@ -11,6 +12,7 @@ public class Application extends Game {
 
 	@Override
 	public void create() {
+		Gdx.graphics.setTitle("Crazy Putting!");
 		ScreenManager.getInstance().init(this);
 		ScreenManager.getInstance().setScreen(ScreenEnum.LOADING);
 	}
