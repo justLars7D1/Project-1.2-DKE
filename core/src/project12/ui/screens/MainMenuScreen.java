@@ -57,7 +57,9 @@ class MainMenuScreen extends AbstractScreen {
         startGameBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                ScreenManager.getInstance().setScreen(ScreenEnum.GAME);
+                if (ScreenManager.getInstance().getSimulation() != null) {
+                    ScreenManager.getInstance().setScreen(ScreenEnum.GAME);
+                }
                 return false;
             }
         });
