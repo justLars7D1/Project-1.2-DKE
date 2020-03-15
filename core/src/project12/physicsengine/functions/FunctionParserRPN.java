@@ -203,6 +203,6 @@ public class FunctionParserRPN implements Function2d {
      */
     @Override
     public String toString() {
-        return "'"+function+"'";
+        return function;
     }
 }

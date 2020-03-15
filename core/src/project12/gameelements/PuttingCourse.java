@@ -45,12 +45,17 @@ public class PuttingCourse implements Serializable {
     private double gravitationalConstant = 9.81;
 
     /**
+     * The mass of the golf ball
+     */
+    private double ballMass = 45.93;
+
+    /**
      * Constructor
      * @param height Set the height function
      * @param flag Set the target position
      * @param start The starting point of the ball
      */
-    public PuttingCourse(Function2d height, Vector2d flag, Vector2d start) {
+    public PuttingCourse(Function2d height, Vector2d start, Vector2d flag) {
         this.height = height;
         this.flag = flag;
         this.start = start;
@@ -153,6 +158,22 @@ public class PuttingCourse implements Serializable {
      */
     public double get_gravitational_constant() {
         return gravitationalConstant;
+    }
+
+    /**
+     * Gets the mass of the golf ball
+     * @return The mass of the golf ball
+     */
+    public double get_ball_mass() {
+        return ballMass;
+    }
+
+    /**
+     * Sets the mass of the golf ball
+     * @param ballMass The mass of the golf ball
+     */
+    public void setBallMass(double ballMass) {
+        this.ballMass = ballMass;
     }
 
     /**

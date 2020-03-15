@@ -40,6 +40,25 @@ public class PuttingSimulator {
     }
 
     /**
+     * Constructor that loads the course from a file
+     * @param filePath The course file
+     * @param engine The physics engine
+     */
+    public PuttingSimulator(String filePath, PhysicsEngine engine) {
+        loadCourse(filePath);
+        this.engine = engine;
+        this.ballPosition = course.get_start_position();
+    }
+
+    /**
+     * Constructor with only the physics engine (course can later be loaded by loadCourse(path)
+     * @param engine The physics engine
+     */
+    public PuttingSimulator(PhysicsEngine engine) {
+        this.engine = engine;
+    }
+
+    /**
      * Sets the ball position
      * @param p The position of the ball
      */
@@ -129,11 +148,16 @@ public class PuttingSimulator {
             FileInputStream f = new FileInputStream(filePath);
             ObjectInputStream inputStream = new ObjectInputStream(f);
             course = (PuttingCourse) (inputStream.readObject());
+            this.ballPosition = course.get_start_position();
             inputStream.close();
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }
         return true;
+    }
+
+    public PuttingCourse getCourse() {
+        return course;
     }
 
     public static void main(String[] args) {
@@ -144,16 +168,18 @@ public class PuttingSimulator {
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
         PhysicsEngine engine = new VerletSolver();
 
-        PuttingSimulator simulator = new PuttingSimulator(course, engine);
+        PuttingSimulator simulator = new PuttingSimulator(engine);
+
+        System.out.println(simulator.loadCourse("C:\\Users\\Larsq\\Downloads\\course.txt"));
 
         //Expected results with CourseFunction():   (7.890192765686016 7.890192765689748)
         //Results with replicated FunctionParser(): (7.890192765686016 7.890192765689748)
         //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
         //Solved: setting the delta t for the euler calculation to 10e-3 instead of 10e-5 really helps
-        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
-        simulator.take_shot(ballVelocity);
-
-        System.out.println(simulator.get_ball_position());
+//        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
+//        simulator.take_shot(ballVelocity);
+//
+//        System.out.println(simulator.get_ball_position());
 
     }
 

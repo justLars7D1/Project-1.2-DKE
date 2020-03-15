@@ -1,12 +1,14 @@
 package project12.ui.screens;
 
 import com.badlogic.gdx.Screen;
+import project12.gameelements.PuttingSimulator;
 import project12.ui.Application;
 
 public class ScreenManager {
 
     private static ScreenManager manager;
     private Application application;
+    private PuttingSimulator simulation;
 
     private ScreenManager() {}
 
@@ -19,6 +21,14 @@ public class ScreenManager {
 
     public void init(Application app) {
         this.application = app;
+    }
+
+    public void setSimulation(PuttingSimulator simulation) {
+        this.simulation = simulation;
+    }
+
+    public PuttingSimulator getSimulation() {
+        return simulation;
     }
 
     public void setScreen(ScreenEnum screenEnum, Object ... params) {

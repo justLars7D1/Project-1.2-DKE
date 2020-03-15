@@ -1,10 +1,12 @@
 package project12.ui.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.loaders.AssetLoader;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import project12.ui.Application;
 
 class LoadingScreen extends AbstractScreen {
@@ -16,7 +18,7 @@ class LoadingScreen extends AbstractScreen {
 
     private float alpha = 0.2f;
     private float rotation = 0f;
-    private final float totalDuration = 4f;
+    private final float totalDuration = 0.1f;
 
     public LoadingScreen() {
         this.batch = new SpriteBatch();

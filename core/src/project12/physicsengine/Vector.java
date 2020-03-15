@@ -56,7 +56,7 @@ public abstract class Vector implements Serializable {
         StringBuilder res = new StringBuilder("(");
         for (int i = 0; i < coords.length; i++) {
             res.append(coords[i]);
-            if (i != coords.length-1) res.append(" ");
+            if (i != coords.length-1) res.append(",");
         }
         res.append(")");
         return res.toString();
