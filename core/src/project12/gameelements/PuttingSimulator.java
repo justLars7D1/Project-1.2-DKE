@@ -82,6 +82,7 @@ public class PuttingSimulator {
 
         //Copy the initial velocity of the ball
         Vector2d ballVelocity = initial_ball_velocity.copy();
+        Vector2d accelerationVector = new Vector2d(1, 1);
 
         //Initialize the physics engine
         engine.setPositionVector(ballPosition);
@@ -97,13 +98,10 @@ public class PuttingSimulator {
         //Friction constant
         double friction = course.get_friction_coefficient();
 
-        final double comparisonError = 0.0001;
-        // Keep computing for a small delta t while the velocity is not 0
-        while(ballVelocity.get_x() >= comparisonError || ballVelocity.get_y() >= comparisonError) {
+        while((!isZero(ballVelocity.get_x()) || !isZero(accelerationVector.get_x())) || (!isZero(ballVelocity.get_y()) || !isZero(accelerationVector.get_y()))) {
 
-            //If the speed is negative, before evaluating, set it to 0
-            if (ballVelocity.get_x() < 0) ballVelocity.addX(-ballVelocity.get_x());
-            if (ballVelocity.get_y() < 0) ballVelocity.addY(-ballVelocity.get_y());
+            if (isZero(ballVelocity.get_x())) ballVelocity.addX(-ballVelocity.get_x());
+            if (isZero(ballVelocity.get_y())) ballVelocity.addY(-ballVelocity.get_y());
 
             // Calculate acceleration using the given formula
             Vector2d gradient = z.gradient(ballPosition);
@@ -111,7 +109,7 @@ public class PuttingSimulator {
 
             double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
             double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
-            Vector2d accelerationVector = new Vector2d(aX, aY);
+            accelerationVector = new Vector2d(aX, aY);
 
             //Set the acceleration vector and approximate the new position and velocity of the ball
             engine.setAccelerationVector(accelerationVector);
@@ -119,6 +117,11 @@ public class PuttingSimulator {
 
         }
 
+    }
+
+    private boolean isZero(double x) {
+        final double comparisonError = 0.1;
+        return -comparisonError <= x && x <= comparisonError;
     }
 
     /**
@@ -162,24 +165,22 @@ public class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParserRPN("1");
+        Function2d courseFunction = new FunctionParserRPN("(x+y)");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
         PhysicsEngine engine = new VerletSolver();
 
-        PuttingSimulator simulator = new PuttingSimulator(engine);
-
-        System.out.println(simulator.loadCourse("C:\\Users\\Larsq\\Downloads\\course.txt"));
+        PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
         //Expected results with CourseFunction():   (7.890192765686016 7.890192765689748)
         //Results with replicated FunctionParser(): (7.890192765686016 7.890192765689748)
         //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
         //Solved: setting the delta t for the euler calculation to 10e-3 instead of 10e-5 really helps
-//        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
-//        simulator.take_shot(ballVelocity);
-//
-//        System.out.println(simulator.get_ball_position());
+        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
+        simulator.take_shot(ballVelocity);
+
+        System.out.println(simulator.get_ball_position());
 
     }
 

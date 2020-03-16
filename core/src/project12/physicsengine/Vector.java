@@ -42,8 +42,6 @@ public abstract class Vector implements Serializable {
             for (int i = 0; i < coords.length; i++) {
                 coords[i] /= magnitude;
             }
-        } else {
-            System.out.println("Normalization failed!");
         }
     }
 

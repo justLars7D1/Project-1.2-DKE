@@ -12,7 +12,7 @@ public interface Function2d extends Serializable {
     /**
      * Factor for computing the derivative as a limit approaching this variable
      */
-    double ACCURACYGRADIENTFACTOR = Math.pow(10, -5);
+    double ACCURACYGRADIENTFACTOR = Math.pow(10, -2);
 
     /**
      * Evaluates the function

@@ -18,7 +18,7 @@ class LoadingScreen extends AbstractScreen {
 
     private float alpha = 0.2f;
     private float rotation = 0f;
-    private final float totalDuration = 0.1f;
+    private final float totalDuration = 4f;
 
     public LoadingScreen() {
         this.batch = new SpriteBatch();
