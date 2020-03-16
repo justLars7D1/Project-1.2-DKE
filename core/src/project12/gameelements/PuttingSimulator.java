@@ -165,7 +165,7 @@ public class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParserRPN("(x+y)");
+        Function2d courseFunction = new FunctionParserRPN("-1*(x+y)");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
@@ -173,10 +173,6 @@ public class PuttingSimulator {
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
-        //Expected results with CourseFunction():   (7.890192765686016 7.890192765689748)
-        //Results with replicated FunctionParser(): (7.890192765686016 7.890192765689748)
-        //Problem: it's not as fast as expected for complex functions... Maybe improvements can be made
-        //Solved: setting the delta t for the euler calculation to 10e-3 instead of 10e-5 really helps
         Vector2d ballVelocity = new Vector2d(4.273, 4.273);
         simulator.take_shot(ballVelocity);
 
