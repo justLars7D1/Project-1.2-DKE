@@ -21,6 +21,11 @@ public interface Function2d extends Serializable {
      */
     double evaluate(Vector2d p);
 
+    double evaluate(double x, double y);
+
+    double partialDerivativeX(double x, double y);
+    double partialDerivativeY(double x, double y);
+
     /**
      * Compute the gradient at a point of the function
      * @param p The (x,y)-coordinate

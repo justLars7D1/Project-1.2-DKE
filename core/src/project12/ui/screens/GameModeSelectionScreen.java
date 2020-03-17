@@ -58,13 +58,7 @@ public class GameModeSelectionScreen extends AbstractScreen {
             startGameBtn.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    new Thread(() -> {
-                        JFrame f = new JFrame();
-                        f.setVisible(true);
-                        f.toFront();
-                        f.setVisible(false);
-
-                    }).start();
+                    ScreenManager.getInstance().setScreen(ScreenEnum.GAME, ScreenManager.getInstance().getSimulation());
                     return true;
                 }
             });
@@ -75,7 +69,7 @@ public class GameModeSelectionScreen extends AbstractScreen {
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     new Thread(() -> {
                         JFileChooser chooser = new JFileChooser();
-                        chooser.setDialogTitle("Load Course!");
+                        chooser.setDialogTitle("Load Shot Information!");
                         JFrame f = new JFrame();
                         f.setVisible(true);
                         f.toFront();

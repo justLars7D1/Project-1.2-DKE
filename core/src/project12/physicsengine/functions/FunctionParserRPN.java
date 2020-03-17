@@ -109,6 +109,23 @@ public class FunctionParserRPN implements Function2d {
         return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
     }
 
+    public Vector2d gradient(double x, double y) {
+        return new Vector2d(partialDerivativeX(x, y), partialDerivativeY(x, y));
+    }
+
+    public double partialDerivativeX(double x, double y) {
+        double z = evaluate(x, y);
+        double zphx = evaluate(new Vector2d(x+ACCURACYGRADIENTFACTOR, y));
+        return (zphx-z)/ACCURACYGRADIENTFACTOR;
+    }
+
+    public double partialDerivativeY(double x, double y) {
+        double z = evaluate(x, y);
+        double zphy = evaluate(new Vector2d(x, y+ACCURACYGRADIENTFACTOR));
+        return (zphy-z)/ACCURACYGRADIENTFACTOR;
+    }
+
+
     //Check if the current operator has a higher precedence
     private static boolean hasHigherPrecedence(String operator, String sub) {
         return (ops.containsKey(sub) && ops.get(sub).precedence >= ops.get(operator).precedence);
@@ -130,6 +147,26 @@ public class FunctionParserRPN implements Function2d {
             } else if (ops.containsKey(op)) {
                 double y = getValue(stack.pop(), p);
                 double x = getValue(stack.pop(), p);
+                String result = String.valueOf(executeOp(op, x, y));
+                stack.push(result);
+            } else {
+                stack.push(op);
+            }
+        }
+        return Double.parseDouble(stack.pop());
+    }
+
+    @Override
+    public double evaluate(double funcX, double funcY) {
+        Stack<String> stack = new Stack<>();
+        for (String op : reversePolishOrder) {
+            if (op.equals("sin") || op.equals("cos") || op.equals("tan")) {
+                double x = getValue(stack.pop(), funcX, funcY);
+                String result = String.valueOf(executeOp(op, x, 0));
+                stack.push(result);
+            } else if (ops.containsKey(op)) {
+                double y = getValue(stack.pop(), funcX, funcY);
+                double x = getValue(stack.pop(), funcX, funcY);
                 String result = String.valueOf(executeOp(op, x, y));
                 stack.push(result);
             } else {
@@ -183,6 +220,25 @@ public class FunctionParserRPN implements Function2d {
                 break;
             case "y":
                 x = p.get_y();
+                break;
+            default:
+                x = Double.parseDouble(stackVal);
+                break;
+        }
+        return x;
+    }
+
+    private double getValue(String stackVal, double xVal, double yVal) {
+        double x;
+        switch (stackVal) {
+            case "e":
+                x = Math.E;
+                break;
+            case "x":
+                x = xVal;
+                break;
+            case "y":
+                x = yVal;
                 break;
             default:
                 x = Double.parseDouble(stackVal);

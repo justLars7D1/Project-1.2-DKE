@@ -1,9 +1,9 @@
 package project12.ui.desktop;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import project12.ui.Application;
+import project12.ui.rendertest.CrazyPutting;
 
 public class DesktopLauncher {
 

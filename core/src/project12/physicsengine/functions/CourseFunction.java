@@ -81,6 +81,21 @@ public class CourseFunction implements Function2d {
         return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
     }
 
+    @Override
+    public double evaluate(double x, double y) {
+        return 0;
+    }
+
+    @Override
+    public double partialDerivativeX(double x, double y) {
+        return 0;
+    }
+
+    @Override
+    public double partialDerivativeY(double x, double y) {
+        return 0;
+    }
+
     /**
      * Compute the gradient at a point of the function
      * @param p The (x,y)-coordinate
