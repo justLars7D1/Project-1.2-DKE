@@ -1,5 +1,7 @@
 package project12.gameelements;
 
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Vector3;
 import project12.physicsengine.*;
 import project12.physicsengine.engines.EulerSolver;
 import project12.physicsengine.engines.VerletSolver;
@@ -122,7 +124,59 @@ public class PuttingSimulator {
             }
             current = ballPosition.copy();
 
-            System.out.println(ballPosition);
+        }
+
+    }
+
+    public void take_shot(Vector2d initial_ball_velocity, ModelInstance golfBallModel, float radius) {
+
+        //Copy the initial velocity of the ball
+        Vector2d ballVelocity = initial_ball_velocity.copy();
+        Vector2d accelerationVector = new Vector2d(1, 1);
+
+        //Initialize the physics engine
+        engine.setPositionVector(ballPosition);
+        engine.setVelocityVector(ballVelocity);
+
+        //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
+        final double deltaT = Math.pow(10, -4);
+        if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
+
+        //Course function
+        Function2d z = course.get_height();
+        Vector2d gradient = z.gradient(ballPosition);
+
+        //Friction constant
+        double friction = course.get_friction_coefficient();
+
+        int numTimesCloseToCurrent = 0;
+        Vector2d current = ballPosition.copy();
+        while(numTimesCloseToCurrent < 100) {
+
+            // Calculate acceleration using the given formula
+            gradient = z.gradient(ballPosition);
+            Vector2d normalizedVelocity = ballVelocity.getNormalized();
+
+            double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
+            double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
+            accelerationVector = new Vector2d(aX, aY);
+
+            //Set the acceleration vector and approximate the new position and velocity of the ball
+            engine.setAccelerationVector(accelerationVector);
+            engine.approximate();
+
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
+                numTimesCloseToCurrent++;
+            } else {
+                numTimesCloseToCurrent = 0;
+            }
+            current = ballPosition.copy();
+
+            Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
+            float transX = -oldPosition.x + (float) ballPosition.get_x();
+            float transY = -oldPosition.y + 2*(float) course.get_height().evaluate(ballPosition);
+            float transZ = -oldPosition.z + (float) ballPosition.get_y();
+            golfBallModel.transform.translate(transX, transY + radius, transZ);
 
         }
 

@@ -143,17 +143,14 @@ class GameScreen extends AbstractScreen {
     @Override
     public boolean keyDown(int keyCode) {
         if (keyCode == Input.Keys.SPACE) {
-            Vector2d shot = new Vector2d(camera.direction.x, camera.direction.z);
-            shot.normalize();
-            shot.scale(shotVelocity);
-            simulator.take_shot(shot);
-            Vector2d newPosition = simulator.get_ball_position();
-            Vector3 oldPosition = golfBall.transform.getTranslation(new Vector3());
-            float transX = -oldPosition.x + (float) newPosition.get_x();
-            float transY = -oldPosition.y + 2*(float) course.get_height().evaluate(newPosition);
-            float transZ = -oldPosition.z + (float) newPosition.get_y();
-            golfBall.transform.translate(transX, transY + radius, transZ);
-            System.out.println(course.holeReached(newPosition));
+            Thread t = new Thread(() -> {
+                Vector2d shot = new Vector2d(camera.direction.x, camera.direction.z);
+                shot.normalize();
+                shot.scale(shotVelocity);
+                simulator.take_shot(shot, golfBall, radius);
+            });
+            t.start();
+            System.out.println(course.holeReached(simulator.get_ball_position()));
         }
         if (keyCode == Input.Keys.UP)
             isUpUp = true;
