@@ -147,7 +147,7 @@ class GameScreen extends AbstractScreen {
                 Vector2d shot = new Vector2d(camera.direction.x, camera.direction.z);
                 shot.normalize();
                 shot.scale(shotVelocity);
-                simulator.take_shot(shot, golfBall, radius);
+                simulator.take_shot(shot, camera, golfBall, radius);
             });
             t.start();
             System.out.println(course.holeReached(simulator.get_ball_position()));

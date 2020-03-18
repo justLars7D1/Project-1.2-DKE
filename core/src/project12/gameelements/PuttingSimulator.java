@@ -1,5 +1,6 @@
 package project12.gameelements;
 
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import project12.physicsengine.*;
@@ -128,7 +129,7 @@ public class PuttingSimulator {
 
     }
 
-    public void take_shot(Vector2d initial_ball_velocity, ModelInstance golfBallModel, float radius) {
+    public void take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
 
         //Copy the initial velocity of the ball
         Vector2d ballVelocity = initial_ball_velocity.copy();
@@ -177,7 +178,8 @@ public class PuttingSimulator {
             float transY = -oldPosition.y + 2*(float) course.get_height().evaluate(ballPosition);
             float transZ = -oldPosition.z + (float) ballPosition.get_y();
             golfBallModel.transform.translate(transX, transY + radius, transZ);
-
+            camera.translate(transX, 0, transZ);
+            camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
         }
 
     }
