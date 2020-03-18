@@ -194,8 +194,8 @@ public class PuttingSimulator {
             float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
             float transZ = -oldPosition.z + (float) ballPosition.get_y();
             golfBallModel.transform.translate(transX, transY + radius, transZ);
-            camera.translate(transX, 0, transZ);
-            camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
+            //camera.translate(transX, 0, transZ);
+            //camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
         }
 
     }
