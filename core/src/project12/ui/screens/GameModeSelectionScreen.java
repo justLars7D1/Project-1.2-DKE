@@ -97,7 +97,7 @@ public class GameModeSelectionScreen extends AbstractScreen {
         @Override
         public void render(float delta) {
             super.render(delta);
-            Gdx.graphics.setTitle("Crazy Putting! - Designer - " + Gdx.graphics.getFramesPerSecond() + "FPS");
+            Gdx.graphics.setTitle("Crazy Putting! - Gamemode Selection - " + Gdx.graphics.getFramesPerSecond() + "FPS");
 
             batch.begin();
             backgroundImg.draw(batch);

@@ -89,22 +89,22 @@ public class PuttingSimulator {
         engine.setVelocityVector(ballVelocity);
 
         //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
-        final double deltaT = Math.pow(10, -3);
+        final double deltaT = Math.pow(10, -4);
         if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
 
         //Course function
         Function2d z = course.get_height();
+        Vector2d gradient = z.gradient(ballPosition);
 
         //Friction constant
         double friction = course.get_friction_coefficient();
 
-        while((!isZero(ballVelocity.get_x()) || !isZero(accelerationVector.get_x())) || (!isZero(ballVelocity.get_y()) || !isZero(accelerationVector.get_y()))) {
-
-            if (isZero(ballVelocity.get_x())) ballVelocity.addX(-ballVelocity.get_x());
-            if (isZero(ballVelocity.get_y())) ballVelocity.addY(-ballVelocity.get_y());
+        int numTimesCloseToCurrent = 0;
+        Vector2d current = ballPosition.copy();
+        while(numTimesCloseToCurrent < 100) {
 
             // Calculate acceleration using the given formula
-            Vector2d gradient = z.gradient(ballPosition);
+            gradient = z.gradient(ballPosition);
             Vector2d normalizedVelocity = ballVelocity.getNormalized();
 
             double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
@@ -115,13 +115,17 @@ public class PuttingSimulator {
             engine.setAccelerationVector(accelerationVector);
             engine.approximate();
 
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
+                numTimesCloseToCurrent++;
+            } else {
+                numTimesCloseToCurrent = 0;
+            }
+            current = ballPosition.copy();
+
+            System.out.println(ballPosition);
+
         }
 
-    }
-
-    private boolean isZero(double x) {
-        final double comparisonError = 0.1;
-        return -comparisonError <= x && x <= comparisonError;
     }
 
     /**
@@ -165,15 +169,15 @@ public class PuttingSimulator {
 
     public static void main(String[] args) {
 
-        Function2d courseFunction = new FunctionParserRPN("-1*(x+y)");
+        Function2d courseFunction = new FunctionParserRPN("sin(x)*sin(y)");
         Vector2d flag = new Vector2d(10, 10);
 
         PuttingCourse course = new PuttingCourse(courseFunction, flag);
-        PhysicsEngine engine = new VerletSolver();
+        PhysicsEngine engine = new EulerSolver();
 
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
 
-        Vector2d ballVelocity = new Vector2d(4.273, 4.273);
+        Vector2d ballVelocity = new Vector2d(1, 1);
         simulator.take_shot(ballVelocity);
 
         System.out.println(simulator.get_ball_position());

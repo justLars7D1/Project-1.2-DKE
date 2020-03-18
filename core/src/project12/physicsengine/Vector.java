@@ -1,6 +1,7 @@
 package project12.physicsengine;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Abstract notion of an n-dimensional vector
@@ -18,6 +19,12 @@ public abstract class Vector implements Serializable {
      */
     protected Vector(double ... coords) {
         this.coords = coords;
+    }
+
+    public void scale(double factor) {
+        for (int i = 0; i < coords.length; i++) {
+            coords[i] *= factor;
+        }
     }
 
     /**

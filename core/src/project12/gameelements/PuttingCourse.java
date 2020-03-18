@@ -72,6 +72,11 @@ public class PuttingCourse implements Serializable {
         this.start = new Vector2d();
     }
 
+    public boolean holeReached(Vector2d p) {
+        return (flag.get_x()-holeTolerance <= p.get_x() && p.get_x() <= flag.get_x()+holeTolerance)
+                && (flag.get_y()-holeTolerance <= p.get_y() && p.get_y() <= flag.get_y()+holeTolerance);
+    }
+
     /**
      * Gets the height function
      * @return The height function
