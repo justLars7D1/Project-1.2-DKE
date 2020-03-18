@@ -21,9 +21,28 @@ public interface Function2d extends Serializable {
      */
     double evaluate(Vector2d p);
 
+    /**
+     * Evaluates the function
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     * @return The z-coordinate
+     */
     double evaluate(double x, double y);
 
+    /**
+     * Compute the partial derivative with respect to x
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     * @return The value of the partial derivative with respect to x at that point
+     */
     double partialDerivativeX(double x, double y);
+
+    /**
+     * Compute the partial derivative with respect to y
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     * @return The value of the partial derivative with respect to y at that point
+     */
     double partialDerivativeY(double x, double y);
 
     /**

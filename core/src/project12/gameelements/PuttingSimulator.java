@@ -78,6 +78,18 @@ public class PuttingSimulator {
     }
 
     /**
+     * Returns whether the shot reached the target (game ended)
+     * @param p The position of the golf ball
+     * @return Whether or not the shot reached the target
+     */
+    public boolean holeReached(Vector2d p) {
+        Vector2d flag = course.get_flag_position();
+        double holeTolerance = course.get_hole_tolerance();
+        return (flag.get_x()-holeTolerance <= p.get_x() && p.get_x() <= flag.get_x()+holeTolerance)
+                && (flag.get_y()-holeTolerance <= p.get_y() && p.get_y() <= flag.get_y()+holeTolerance);
+    }
+
+    /**
      * Simulate taking a shot
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
@@ -129,6 +141,10 @@ public class PuttingSimulator {
 
     }
 
+    /**
+     * Simulate taking a shot, updating the ball live
+     * @param initial_ball_velocity The initial ball velocity of a shot
+     */
     public void take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
 
         //Copy the initial velocity of the ball

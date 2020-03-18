@@ -13,8 +13,14 @@ import project12.ui.Application;
 
 import static com.badlogic.gdx.Gdx.input;
 
+/**
+ * Represents a screen in the UI
+ */
 abstract class AbstractScreen extends Stage implements Screen {
 
+    /**
+     * Constructor with keyboard shortcut for toggling fullscreen
+     */
     protected AbstractScreen() {
         super(new ScreenViewport());
 
@@ -35,8 +41,15 @@ abstract class AbstractScreen extends Stage implements Screen {
 
     }
 
+    /**
+     * Called upon generating the screen
+     */
     public abstract void buildStage();
 
+    /**
+     * Render method
+     * @param delta the delta time
+     */
     @Override
     public void render(float delta) {
         // Clear screen

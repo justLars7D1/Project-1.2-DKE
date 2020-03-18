@@ -150,7 +150,8 @@ class GameScreen extends AbstractScreen {
                 simulator.take_shot(shot, camera, golfBall, radius);
             });
             t.start();
-            System.out.println(course.holeReached(simulator.get_ball_position()));
+            controller = new CameraInputController(camera);
+            System.out.println(simulator.holeReached(simulator.get_ball_position()));
         }
         if (keyCode == Input.Keys.UP)
             isUpUp = true;

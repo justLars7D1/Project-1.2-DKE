@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -23,9 +22,6 @@ import project12.ui.Application;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 class CourseDesignerScreen extends AbstractScreen {
 
@@ -104,6 +100,7 @@ class CourseDesignerScreen extends AbstractScreen {
         addActor(exportToFileBtn);
         addActor(loadFromFileBtn);
 
+        //Add a listener for exporting to files
         exportToFileBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -126,6 +123,7 @@ class CourseDesignerScreen extends AbstractScreen {
             }
         });
 
+        //Add a listener for loading to files
         loadFromFileBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -155,6 +153,7 @@ class CourseDesignerScreen extends AbstractScreen {
             }
         });
 
+        //Add a listener for saving the changes
         saveChangesBtn.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -195,12 +194,22 @@ class CourseDesignerScreen extends AbstractScreen {
         super.dispose();
     }
 
+    /**
+     * Method for initializing a text field (correct size and position on screen)
+     * @param field The textfield
+     * @param yOffset The offset of Y from the first textfield
+     */
     private void initTextField(TextField field, float yOffset) {
         field.setSize(0.2f*getWidth(), 0.05f*getHeight());
         field.setPosition(0.52f*getWidth(), (0.765f - yOffset)*getHeight() - field.getHeight());
         addActor(field);
     }
 
+    /**
+     * Parse a vector string to a vector
+     * @param text The string representing a vector
+     * @return The vector
+     */
     private Vector2d fieldToVec2d(String text) {
         text = text.replaceAll("\\s", "").replaceAll("\\(", "").replaceAll("\\)", "");
         String[] split = text.split(",");
@@ -220,6 +229,10 @@ class CourseDesignerScreen extends AbstractScreen {
         maximumVelocityField.setText(String.valueOf(course.get_maximum_velocity()));
     }
 
+    /**
+     * Creates the simulation object and adds all properties to it
+     * @return THe simulation object
+     */
     private PuttingSimulator createSimulation() {
         Function2d courseFunction = new FunctionParserRPN(functionField.getText());
         Vector2d startPoint = fieldToVec2d(startPointField.getText());
