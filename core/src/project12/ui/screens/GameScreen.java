@@ -108,9 +108,6 @@ class GameScreen extends AbstractScreen {
         batch.render(flag, environment);
         batch.end();
 
-        System.out.println("Ball: " + golfBall.transform.getTranslation(new Vector3()));
-        System.out.println("Terrain: " + terrainRenderer.rectInstance[4].transform.getTranslation(new Vector3()));
-
         spriteBatch.begin();
         font.draw(spriteBatch, String.format("Shot velocity: %.2f m/s", shotVelocity), 0.85f*getWidth(), 0.9f*getHeight());
         font.draw(spriteBatch, "Press \"SPACE\" to take the shot", 0.85f*getWidth(), 0.85f*getHeight());
