@@ -26,7 +26,7 @@ public class FunctionRenderer {
         create(course.get_start_position(), course.get_flag_position());
     }
 
-    private static int colSize = 5;
+    private static int colSize = 25;
     private void create(Vector2d startPoint, Vector2d endPoint) {
 
         int minX = (int) Math.min(startPoint.get_x()/colSize, endPoint.get_x()/colSize) - 1;
@@ -45,7 +45,7 @@ public class FunctionRenderer {
                 MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.GREEN)));
                 buildTerrain(builder, i, j);
                 Model mod = modelBuilder.end();
-                rectInstance[count++] = new ModelInstance(mod, i*colSize, (float) f.evaluate(i*colSize, j*colSize), j*colSize);
+                rectInstance[count++] = new ModelInstance(mod, i*colSize, 0, j*colSize);
             }
         }
 
@@ -66,7 +66,7 @@ public class FunctionRenderer {
      * @param gridCol The column of the grid in the field
      * @param gridRow The row of the grid in the field
      */
-    public void buildTerrain(MeshPartBuilder b, int gridCol, int gridRow){
+    public void buildTerrain(MeshPartBuilder b, int gridCol, int gridRow) {
         Vector3 pos1,pos2,pos3,pos4;
         Vector3 nor1,nor2,nor3,nor4;
         MeshPartBuilder.VertexInfo v1,v2,v3,v4;
