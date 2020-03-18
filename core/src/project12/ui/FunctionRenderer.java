@@ -36,9 +36,7 @@ public class FunctionRenderer {
         modelBatch = new ModelBatch();
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Model[] gridModels = new Model[(Math.abs(maxX-minX)+1)*(Math.abs(maxY-minY)+1)];
-        rectInstance = new ModelInstance[gridModels.length];
-
+        rectInstance = new ModelInstance[(Math.abs(maxX-minX)+1)*(Math.abs(maxY-minY)+1)];
         int count = 0;
         for(int i = minX; i <= maxX; i++) {
             for(int j = minY; j <= maxY; j++) {
@@ -46,7 +44,6 @@ public class FunctionRenderer {
                 MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.GREEN)));
                 buildTerrain(builder, i, j);
                 Model mod = modelBuilder.end();
-                gridModels[count] = mod;
                 rectInstance[count++] = new ModelInstance(mod, i*25, (float) f.evaluate(i*25, j*25), j*25);
             }
         }

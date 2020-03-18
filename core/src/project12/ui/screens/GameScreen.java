@@ -55,10 +55,10 @@ class GameScreen extends AbstractScreen {
         //1184 is the golf ball's density
         this.radius = (float) Math.cbrt((3*course.get_ball_mass())/(4*Math.PI*1184));
 
-        camera = new PerspectiveCamera(120, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Vector2d initialBallPosition = this.simulator.get_ball_position();
-        camera.position.set((float)(initialBallPosition.get_x()) + 7f, (float)(this.course.get_height().evaluate(initialBallPosition)) + 3f, (float)(initialBallPosition.get_y()) + 7f);
-        camera.lookAt((float)(initialBallPosition.get_x()), (float)(this.course.get_height().evaluate(initialBallPosition)) + radius/2, (float)(initialBallPosition.get_y()));
+        camera.position.set((float)(initialBallPosition.get_x()) + 7f, 2*(float)(this.course.get_height().evaluate(initialBallPosition)) + 3f, (float)(initialBallPosition.get_y()) + 7f);
+        camera.lookAt((float)(initialBallPosition.get_x()), 2*(float)(this.course.get_height().evaluate(initialBallPosition)), (float)(initialBallPosition.get_y()));
         camera.near = 0.01f;
         camera.far = 3000.0f;
 
@@ -70,7 +70,7 @@ class GameScreen extends AbstractScreen {
         Model golfBall = modelBuilder.createSphere(radius*2,radius*2,radius*2,10,10,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
         modelBuilder.begin();
-        this.golfBall = new ModelInstance(golfBall, (float)(initialBallPosition.get_x()), (float)(this.course.get_height().evaluate(initialBallPosition)) + radius/2, (float)(initialBallPosition.get_y()));
+        this.golfBall = new ModelInstance(golfBall, (float)(initialBallPosition.get_x()), 2*(float)(this.course.get_height().evaluate(initialBallPosition)) + radius, (float)(initialBallPosition.get_y()));
         modelBuilder.end();
 
         // Create a model loader passing in our json reader
@@ -80,7 +80,7 @@ class GameScreen extends AbstractScreen {
         Model model = modelLoader.loadModel(Gdx.files.getFileHandle("game/flag.g3dj", Files.FileType.Internal));
         // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         Vector2d flagPosition = course.get_flag_position();
-        flag = new ModelInstance(model, (float) flagPosition.get_x() + 2f, (float) course.get_height().evaluate(flagPosition), (float) flagPosition.get_y());
+        flag = new ModelInstance(model, (float) flagPosition.get_x() + 2f, 2*(float) course.get_height().evaluate(flagPosition), (float) flagPosition.get_y());
 
         controller = new CameraInputController(camera);
         Gdx.input.setInputProcessor(new InputMultiplexer(this, controller));
@@ -110,7 +110,7 @@ class GameScreen extends AbstractScreen {
 
         spriteBatch.begin();
         font.draw(spriteBatch, String.format("Shot velocity: %.2f m/s", shotVelocity), 0.85f*getWidth(), 0.9f*getHeight());
-        font.draw(spriteBatch, "Press \"ENTER\" to take the shot", 0.85f*getWidth(), 0.85f*getHeight());
+        font.draw(spriteBatch, "Press \"SPACE\" to take the shot", 0.85f*getWidth(), 0.85f*getHeight());
         spriteBatch.end();
 
         if (isUpUp) {
@@ -150,9 +150,9 @@ class GameScreen extends AbstractScreen {
             Vector2d newPosition = simulator.get_ball_position();
             Vector3 oldPosition = golfBall.transform.getTranslation(new Vector3());
             float transX = -oldPosition.x + (float) newPosition.get_x();
-            float transY = -oldPosition.y + (float) course.get_height().evaluate(newPosition);
+            float transY = -oldPosition.y + 2*(float) course.get_height().evaluate(newPosition);
             float transZ = -oldPosition.z + (float) newPosition.get_y();
-            golfBall.transform.translate(transX, transY, transZ);
+            golfBall.transform.translate(transX, transY + radius, transZ);
             System.out.println(course.holeReached(newPosition));
         }
         if (keyCode == Input.Keys.UP)
