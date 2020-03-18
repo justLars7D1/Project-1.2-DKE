@@ -17,7 +17,7 @@ public class FunctionRenderer {
 
     private ModelBatch modelBatch;
 
-    private ModelInstance[] rectInstance;
+    public ModelInstance[] rectInstance;
 
     private Function2d f;
 
@@ -26,12 +26,13 @@ public class FunctionRenderer {
         create(course.get_start_position(), course.get_flag_position());
     }
 
+    private static int colSize = 5;
     private void create(Vector2d startPoint, Vector2d endPoint) {
 
-        int minX = (int) Math.min(startPoint.get_x()/25, endPoint.get_x()/25) - 1;
-        int maxX = (int) Math.max(startPoint.get_x()/25, endPoint.get_x()/25) + 1;
-        int minY = (int) Math.min(startPoint.get_y()/25, endPoint.get_y()/25) - 1;
-        int maxY = (int) Math.max(startPoint.get_y()/25, endPoint.get_y()/25) + 1;
+        int minX = (int) Math.min(startPoint.get_x()/colSize, endPoint.get_x()/colSize) - 1;
+        int maxX = (int) Math.max(startPoint.get_x()/colSize, endPoint.get_x()/colSize) + 1;
+        int minY = (int) Math.min(startPoint.get_y()/colSize, endPoint.get_y()/colSize) - 1;
+        int maxY = (int) Math.max(startPoint.get_y()/colSize, endPoint.get_y()/colSize) + 1;
 
         modelBatch = new ModelBatch();
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -44,7 +45,7 @@ public class FunctionRenderer {
                 MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal, new Material(ColorAttribute.createDiffuse(Color.GREEN)));
                 buildTerrain(builder, i, j);
                 Model mod = modelBuilder.end();
-                rectInstance[count++] = new ModelInstance(mod, i*25, (float) f.evaluate(i*25, j*25), j*25);
+                rectInstance[count++] = new ModelInstance(mod, i*colSize, (float) f.evaluate(i*colSize, j*colSize), j*colSize);
             }
         }
 
@@ -52,8 +53,9 @@ public class FunctionRenderer {
 
     public void render(PerspectiveCamera camera, Environment environment) {
         modelBatch.begin(camera);
-        for(int i=0;i<rectInstance.length;i++)
+        for(int i=0;i<rectInstance.length;i++) {
             modelBatch.render(rectInstance[i], environment);
+        }
         modelBatch.end();
     }
 
@@ -68,8 +70,8 @@ public class FunctionRenderer {
         Vector3 pos1,pos2,pos3,pos4;
         Vector3 nor1,nor2,nor3,nor4;
         MeshPartBuilder.VertexInfo v1,v2,v3,v4;
-        for(int i=-25+(25*gridCol);i<=25+(25*gridCol);i++){
-            for(int k=-25+(25*gridRow);k<=25+(25*gridRow);k++){
+        for(int i=-colSize+(colSize*gridCol);i<=colSize+(colSize*gridCol);i++){
+            for(int k=-colSize+(colSize*gridRow);k<=colSize+(colSize*gridRow);k++){
                 pos1 = new Vector3 (i,(float)(f.evaluate(i, k)), k);
                 pos2 = new Vector3 (i,(float)(f.evaluate(i, k+1)),k+1);
                 pos3 = new Vector3 (i+1,(float)(f.evaluate(i+1, k+1)),k+1);
@@ -80,9 +82,9 @@ public class FunctionRenderer {
                 nor3 = (new Vector3((float)-f.partialDerivativeX(i+1, k+1),1,0).add(new Vector3(0,1,(float)-f.partialDerivativeY(i+1, k+1))));
                 nor4 = (new Vector3((float)-f.partialDerivativeX(i+1, k),1,0).add(new Vector3(0,1,(float)-f.partialDerivativeY(i, k))));
 
-                v1 = new MeshPartBuilder.VertexInfo().setPos(pos1).setNor(nor1).setCol(null).setUV(0.5f, 0.0f);
-                v2 = new MeshPartBuilder.VertexInfo().setPos(pos2).setNor(nor2).setCol(null).setUV(0.0f, 0.0f);
-                v3 = new MeshPartBuilder.VertexInfo().setPos(pos3).setNor(nor3).setCol(null).setUV(0.0f, 0.5f);
+                v1 = new MeshPartBuilder.VertexInfo().setPos(pos1).setNor(nor1).setCol(null).setUV(0.0f, 0.0f);
+                v2 = new MeshPartBuilder.VertexInfo().setPos(pos2).setNor(nor2).setCol(null).setUV(0.0f, 0.5f);
+                v3 = new MeshPartBuilder.VertexInfo().setPos(pos3).setNor(nor3).setCol(null).setUV(0.5f, 0.0f);
                 v4 = new MeshPartBuilder.VertexInfo().setPos(pos4).setNor(nor4).setCol(null).setUV(0.5f, 0.5f);
 
                 b.rect(v1, v2, v3, v4);
