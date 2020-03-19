@@ -54,7 +54,7 @@ class CourseDesignerScreen extends AbstractScreen {
         backgroundImg.setSize(getWidth(), getHeight());
 
         saveChangesBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("coursedesigner/SaveChangesBtn.png"))));
-        exportToFileBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("coursedesigner/exportToFileBtn.png"))));
+        exportToFileBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("coursedesigner/ExportToFileBtn.png"))));
         loadFromFileBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("coursedesigner/LoadFromFileBtn.png"))));
 
         saveChangesBtn.setSize(4/5f*Application.screenSizeFactor*saveChangesBtn.getWidth(), 4/5f*Application.screenSizeFactor*saveChangesBtn.getHeight());
