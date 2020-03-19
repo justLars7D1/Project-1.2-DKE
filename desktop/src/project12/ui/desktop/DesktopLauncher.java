@@ -8,6 +8,9 @@ public class DesktopLauncher {
 
 	private static final float screenSizeFactor = 0.8f;
 
+	/**
+	 * Screen configurations and launch application
+	 */
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = (int) (1920 * screenSizeFactor);
