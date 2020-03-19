@@ -8,34 +8,30 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import project12.gameelements.PuttingCourse;
-import project12.gameelements.PuttingSimulator;
-import project12.physicsengine.PhysicsEngine;
 import project12.physicsengine.Vector2d;
-import project12.physicsengine.engines.VerletSolver;
-import project12.physicsengine.functions.Function2d;
-import project12.physicsengine.functions.FunctionParserRPN;
 import project12.ui.Application;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class GameModeSelectionScreen extends AbstractScreen {
 
-        private PuttingSimulator simulator;
-
         private SpriteBatch batch;
-
-        private static final Skin uiSkin = new Skin(Gdx.files.internal("skins/uiskin.json"));
 
         private Sprite backgroundImg;
 
-        private ImageButton startGameBtn;
+        private ImageButton singlePlayerBtn;
         private ImageButton loadFromFileBtn;
 
+        private volatile Vector2d[] moves;
+
+        private boolean terminateLoop;
         @Override
         public void buildStage() {
             Gdx.graphics.setTitle("Crazy Putting! - Designer - " + Gdx.graphics.getFramesPerSecond() + "FPS");
@@ -44,18 +40,17 @@ public class GameModeSelectionScreen extends AbstractScreen {
             backgroundImg = new Sprite(new Texture("gamemodeselection/mainbackground.png"));
             backgroundImg.setSize(getWidth(), getHeight());
 
-            startGameBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("gamemodeselection/SinglePlayerBtn.png"))));
+            singlePlayerBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("gamemodeselection/SinglePlayerBtn.png"))));
             loadFromFileBtn = new ImageButton(new TextureRegionDrawable(new TextureRegion(new Texture("gamemodeselection/FromFileBtn.png"))));
 
-            startGameBtn.setSize(4 / 5f * Application.screenSizeFactor * startGameBtn.getWidth(), 4 / 5f * Application.screenSizeFactor * startGameBtn.getHeight());
+            singlePlayerBtn.setSize(4 / 5f * Application.screenSizeFactor * singlePlayerBtn.getWidth(), 4 / 5f * Application.screenSizeFactor * singlePlayerBtn.getHeight());
             loadFromFileBtn.setSize(4 / 5f * Application.screenSizeFactor * loadFromFileBtn.getWidth(), 4 / 5f * Application.screenSizeFactor * loadFromFileBtn.getHeight());
 
-
-            simulator = ScreenManager.getInstance().getSimulation();
-            addActor(startGameBtn);
+            addActor(singlePlayerBtn);
             addActor(loadFromFileBtn);
 
-            startGameBtn.addListener(new InputListener() {
+            //Single player gamemode
+            singlePlayerBtn.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                     ScreenManager.getInstance().setScreen(ScreenEnum.GAME, ScreenManager.getInstance().getSimulation());
@@ -64,34 +59,50 @@ public class GameModeSelectionScreen extends AbstractScreen {
             });
 
 
+            //Loading shots from a file gamemode
             loadFromFileBtn.addListener(new InputListener() {
                 @Override
                 public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    new Thread(() -> {
-                        JFileChooser chooser = new JFileChooser();
-                        chooser.setDialogTitle("Load Shot Information!");
-                        JFrame f = new JFrame();
-                        f.setVisible(true);
-                        f.toFront();
-                        f.setVisible(false);
-                        int res = chooser.showOpenDialog(f);
-                        f.dispose();
-                        if (res == JFileChooser.APPROVE_OPTION) {
-                            File fileToLoad = chooser.getSelectedFile();
-                            PuttingSimulator s = new PuttingSimulator(new VerletSolver());
-                            boolean worked = s.loadCourse(fileToLoad.getAbsolutePath());
-                            //If the file is successfully loaded in, set the simulation
-                            if (worked) {
-                                PuttingCourse course = s.getCourse();
+                    terminateLoop = false;
+                    Thread t = new Thread() {
+                        @Override
+                        public void run() {
+                            JFileChooser chooser = new JFileChooser();
+                            chooser.setDialogTitle("Load Shot Information!");
+                            JFrame f = new JFrame();
+                            f.setVisible(true);
+                            f.toFront();
+                            f.setVisible(false);
+                            int res = chooser.showOpenDialog(f);
+                            f.dispose();
+                            if (res == JFileChooser.APPROVE_OPTION) {
+                                File fileToLoad = chooser.getSelectedFile();
+                                try {
+                                    BufferedReader reader = new BufferedReader(new FileReader(fileToLoad));
+                                    ArrayList<Vector2d> movesList = new ArrayList<>();
+                                    String line = "";
+                                    while ((line = reader.readLine()) != null) {
+                                        String numbers = line.replaceAll("\\(", "").replaceAll("\\)", "").replaceAll("\\s", "");
+                                        String[] values = numbers.split(",");
+                                        movesList.add(new Vector2d(Double.parseDouble(values[0]), Double.parseDouble(values[1])));
+                                    }
+                                    moves = movesList.toArray(new Vector2d[0]);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
                             } else {
-                                System.out.println("Error... Could not load in the specified course!");
+                                terminateLoop = true;
                             }
                         }
-                    }).start();
+                    };
+                    t.start();
+                    while (moves == null && !terminateLoop) {
+                        Thread.onSpinWait();
+                    };
+                    ScreenManager.getInstance().setScreen(ScreenEnum.GAME, ScreenManager.getInstance().getSimulation(), moves);
                     return true;
                 }
             });
-
         }
 
         @Override
@@ -101,10 +112,10 @@ public class GameModeSelectionScreen extends AbstractScreen {
 
             batch.begin();
             backgroundImg.draw(batch);
-            startGameBtn.draw(batch, 1.0f);
+            singlePlayerBtn.draw(batch, 1.0f);
             loadFromFileBtn.draw(batch, 1.0f);
-            startGameBtn.setVisible(true);
-            startGameBtn.setPosition(550,550);
+            singlePlayerBtn.setVisible(true);
+            singlePlayerBtn.setPosition(550,550);
             loadFromFileBtn.setVisible(true);
             loadFromFileBtn.setPosition(550,400);
             batch.end();
@@ -114,6 +125,7 @@ public class GameModeSelectionScreen extends AbstractScreen {
         @Override
         public void dispose() {
             super.dispose();
+            batch.dispose();
         }
 
         private void initTextField(TextField field, float yOffset) {

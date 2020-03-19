@@ -3,7 +3,6 @@ package project12.ui.screens;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.graphics.g3d.*;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.G3dModelLoader;
-import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.JsonReader;
@@ -25,30 +23,46 @@ import project12.ui.FunctionRenderer;
 
 import javax.swing.*;
 
+/**
+ * Represents the actual game
+ */
 class GameScreen extends AbstractScreen {
 
+    //Number of moves taken, loaded moves from a file if any and in index counter for those loaded moves
     private int numMoves;
+    private final Vector2d[] loadedMoves;
+    private int moveCounter;
 
+    //The course and simulator
     private PuttingSimulator simulator;
     private PuttingCourse course;
 
+    //All the field items like ball and flag
     private ModelBatch batch;
     private ModelInstance golfBall;
     private ModelInstance flag;
     private final float radius;
 
+    //The camera, environment and a renderer that generates the terrain
     private FunctionRenderer terrainRenderer;
     private PerspectiveCamera camera;
     private Environment environment;
 
+    //Text to show the current shot velocity
     private SpriteBatch spriteBatch;
     private BitmapFont font = new BitmapFont();
     private double shotVelocity = 0.05;
+
 
     public GameScreen(Object ... param) {
         this.simulator = (PuttingSimulator)(param[0]);
         this.course = this.simulator.getCourse();
         this.radius = (float) Math.cbrt((3*course.get_ball_mass())/(4*Math.PI*1184));
+        if (param.length > 1 && param[1] != null) {
+            this.loadedMoves = (Vector2d[]) (param[1]);
+        } else {
+            this.loadedMoves = null;
+        }
     }
 
     @Override
@@ -57,7 +71,6 @@ class GameScreen extends AbstractScreen {
         this.batch = new ModelBatch();
         this.spriteBatch = new SpriteBatch();
         this.terrainRenderer = new FunctionRenderer(this.course);
-        //1184 is the golf ball's density
 
         camera = new PerspectiveCamera(75, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Vector2d initialBallPosition = this.simulator.get_ball_position();
@@ -70,6 +83,7 @@ class GameScreen extends AbstractScreen {
         environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.2f, 0.2f, 0.2f, 1.f));
         environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f, -1.0f, 1f));
 
+        //Now build the golf ball's model
         ModelBuilder modelBuilder = new ModelBuilder();
         Model golfBall = modelBuilder.createSphere(radius*2,radius*2,radius*2,10,10,
                 new Material(ColorAttribute.createDiffuse(Color.WHITE)),VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
@@ -79,13 +93,12 @@ class GameScreen extends AbstractScreen {
 
         // Create a model loader passing in our json reader
         G3dModelLoader modelLoader = new G3dModelLoader(new JsonReader());
-        // Now load the model by name
-        // Note, the model (g3db file ) and textures need to be added to the assets folder of the Android proj
+        // Load the flag by name
         Model model = modelLoader.loadModel(Gdx.files.getFileHandle("game/flag.g3dj", Files.FileType.Internal));
-        // Now create an instance.  Instance holds the positioning data, etc of an instance of your model
         Vector2d flagPosition = course.get_flag_position();
         flag = new ModelInstance(model, (float) flagPosition.get_x() + 2f, (float) course.get_height().evaluate(flagPosition), (float) flagPosition.get_y());
 
+        //Set the input processor to itself
         Gdx.input.setInputProcessor(this);
 
     }
@@ -99,17 +112,20 @@ class GameScreen extends AbstractScreen {
 
         camera.update();
 
+        //Render the elements on the environment (camera, ball, flag, function)
         terrainRenderer.render(camera, environment);
         batch.begin(camera);
         batch.render(golfBall, environment);
         batch.render(flag, environment);
         batch.end();
 
+        //Draw the velocity information on the top right of the screen
         spriteBatch.begin();
         font.draw(spriteBatch, String.format("Shot velocity: %.2f m/s", shotVelocity), 0.85f*getWidth(), 0.9f*getHeight());
         font.draw(spriteBatch, "Press \"SPACE\" to take the shot", 0.85f*getWidth(), 0.85f*getHeight());
         spriteBatch.end();
 
+        //Increase/Decrease the velocity on key press
         if (isUpUp) {
             double velToAdd = 0.05;
             if (shotVelocity+velToAdd <= course.get_maximum_velocity()) {
@@ -132,6 +148,9 @@ class GameScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
+        batch.dispose();
+        spriteBatch.dispose();
+        font.dispose();
         terrainRenderer.dispose();
     }
 
@@ -140,24 +159,31 @@ class GameScreen extends AbstractScreen {
     private boolean isRunning = false;
     @Override
     public boolean keyDown(int keyCode) {
+        //Take the shot
         if (keyCode == Input.Keys.SPACE && !isRunning) {
             isRunning = true;
             Thread t = new Thread(() -> {
                 Vector2d shot = new Vector2d(camera.direction.x, camera.direction.z);
                 shot.normalize();
                 shot.scale(shotVelocity);
+                if (loadedMoves != null && moveCounter < loadedMoves.length) {
+                    shot = loadedMoves[moveCounter++];
+                }
+                //Here we actually take the shot
                 boolean successfulShot = simulator.take_shot(shot, camera, golfBall, radius);
+                //If it landed in water it's not successful, so then show that to the user
+                System.out.println(successfulShot);
                 if (!successfulShot) {
                     new Thread(() -> {
                         JFrame f = new JFrame();
                         f.setVisible(true);
                         f.toFront();
                         f.setVisible(false);
-                        JOptionPane.showMessageDialog(f, "The ball landed in water :(");
+                        JOptionPane.showMessageDialog(f, "The ball landed in water :(", "Water message", JOptionPane.INFORMATION_MESSAGE);
                     }).start();
                 }
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     isRunning = false;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -165,6 +191,7 @@ class GameScreen extends AbstractScreen {
             });
             t.start();
             numMoves++;
+            //If the target is reached
             if (simulator.holeReached(simulator.get_ball_position())) {
                 //Game is over
                 new Thread(() -> {
@@ -173,7 +200,7 @@ class GameScreen extends AbstractScreen {
                     f.toFront();
                     f.setVisible(false);
                     JOptionPane.showMessageDialog(f, "Number of moves: " + numMoves,
-                            "Game over!", JOptionPane.INFORMATION_MESSAGE);
+                            "You Won!", JOptionPane.INFORMATION_MESSAGE);
                 }).start();
                 ScreenManager.getInstance().setScreen(ScreenEnum.MAIN);
             }
@@ -182,6 +209,7 @@ class GameScreen extends AbstractScreen {
             isUpUp = true;
         if (keyCode == Input.Keys.DOWN)
             isDownUp = true;
+        //Move the camera up or down
         if (!isRunning && keyCode == Input.Keys.W) {
             camera.translate(0, 1, 0);
             camera.lookAt(golfBall.transform.getTranslation(new Vector3()));
