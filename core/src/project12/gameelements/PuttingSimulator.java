@@ -90,12 +90,19 @@ public class PuttingSimulator {
     }
 
     /**
-     * Simulate taking a shot
+     * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
+     * @param camera The camera focusing on the ball
+     * @param golfBallModel The model of the golf ball
+     * @param radius The radius of the golf ball
+     * @return If the shot is successful (false if it lands in water)
      */
-    public void take_shot(Vector2d initial_ball_velocity) {
+    public boolean take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
 
-        //Copy the initial velocity of the ball
+        boolean returnVal = true;
+
+        //Copy the initial velocity and position of the ball
+        Vector2d tmpOldBallPosition = ballPosition.copy();
         Vector2d ballVelocity = initial_ball_velocity.copy();
         Vector2d accelerationVector = new Vector2d(1, 1);
 
@@ -137,66 +144,30 @@ public class PuttingSimulator {
             }
             current = ballPosition.copy();
 
+            if (z.evaluate(ballPosition) < 0) {
+                ballPosition = tmpOldBallPosition;
+                returnVal = false;
+                break;
+            }
+
+            updateSimulation(golfBallModel, radius, camera);
+
         }
+
+        updateSimulation(golfBallModel, radius, camera);
+
+        return returnVal;
 
     }
 
-    /**
-     * Simulate taking a shot, updating the ball live
-     * @param initial_ball_velocity The initial ball velocity of a shot
-     */
-    public void take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
-
-        //Copy the initial velocity of the ball
-        Vector2d ballVelocity = initial_ball_velocity.copy();
-        Vector2d accelerationVector = new Vector2d(1, 1);
-
-        //Initialize the physics engine
-        engine.setPositionVector(ballPosition);
-        engine.setVelocityVector(ballVelocity);
-
-        //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
-        final double deltaT = Math.pow(10, -4);
-        if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
-
-        //Course function
-        Function2d z = course.get_height();
-        Vector2d gradient = z.gradient(ballPosition);
-
-        //Friction constant
-        double friction = course.get_friction_coefficient();
-
-        int numTimesCloseToCurrent = 0;
-        Vector2d current = ballPosition.copy();
-        while(numTimesCloseToCurrent < 100) {
-
-            // Calculate acceleration using the given formula
-            gradient = z.gradient(ballPosition);
-            Vector2d normalizedVelocity = ballVelocity.getNormalized();
-
-            double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
-            double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
-            accelerationVector = new Vector2d(aX, aY);
-
-            //Set the acceleration vector and approximate the new position and velocity of the ball
-            engine.setAccelerationVector(accelerationVector);
-            engine.approximate();
-
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
-                numTimesCloseToCurrent++;
-            } else {
-                numTimesCloseToCurrent = 0;
-            }
-            current = ballPosition.copy();
-
-            Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
-            float transX = -oldPosition.x + (float) ballPosition.get_x();
-            float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
-            float transZ = -oldPosition.z + (float) ballPosition.get_y();
-            golfBallModel.transform.translate(transX, transY + radius, transZ);
-            camera.translate(transX, 0, transZ);
-            camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
-        }
+    private void updateSimulation(ModelInstance golfBallModel, float radius, PerspectiveCamera camera) {
+        Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
+        float transX = -oldPosition.x + (float) ballPosition.get_x();
+        float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
+        float transZ = -oldPosition.z + (float) ballPosition.get_y();
+        golfBallModel.transform.translate(transX, transY + radius, transZ);
+        camera.translate(transX, 0, transZ);
+        camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
 
     }
 
@@ -247,23 +218,6 @@ public class PuttingSimulator {
 
     public PuttingCourse getCourse() {
         return course;
-    }
-
-    public static void main(String[] args) {
-
-        Function2d courseFunction = new FunctionParserRPN("sin(x)*sin(y)");
-        Vector2d flag = new Vector2d(10, 10);
-
-        PuttingCourse course = new PuttingCourse(courseFunction, flag);
-        PhysicsEngine engine = new EulerSolver();
-
-        PuttingSimulator simulator = new PuttingSimulator(course, engine);
-
-        Vector2d ballVelocity = new Vector2d(1, 1);
-        simulator.take_shot(ballVelocity);
-
-        System.out.println(simulator.get_ball_position());
-
     }
 
 }

@@ -192,6 +192,7 @@ class CourseDesignerScreen extends AbstractScreen {
     @Override
     public void dispose() {
         super.dispose();
+        batch.dispose();
     }
 
     /**
