@@ -26,13 +26,13 @@ public class FunctionRenderer {
         create(course.get_start_position(), course.get_flag_position());
     }
 
-    private static int colSize = 25;
+    private static int colSize = 44;
     private void create(Vector2d startPoint, Vector2d endPoint) {
 
-        int minX = (int) Math.min(startPoint.get_x()/colSize, endPoint.get_x()/colSize) - 1;
-        int maxX = (int) Math.max(startPoint.get_x()/colSize, endPoint.get_x()/colSize) + 1;
-        int minY = (int) Math.min(startPoint.get_y()/colSize, endPoint.get_y()/colSize) - 1;
-        int maxY = (int) Math.max(startPoint.get_y()/colSize, endPoint.get_y()/colSize) + 1;
+        int minX = (int) Math.min(startPoint.get_x()/colSize, endPoint.get_x()/colSize);
+        int maxX = (int) Math.max(startPoint.get_x()/colSize, endPoint.get_x()/colSize);
+        int minY = (int) Math.min(startPoint.get_y()/colSize, endPoint.get_y()/colSize);
+        int maxY = (int) Math.max(startPoint.get_y()/colSize, endPoint.get_y()/colSize);
 
         modelBatch = new ModelBatch();
         ModelBuilder modelBuilder = new ModelBuilder();

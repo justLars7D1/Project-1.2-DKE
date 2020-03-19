@@ -147,7 +147,8 @@ public class PuttingSimulator {
      */
     public void take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
 
-        //Copy the initial velocity of the ball
+        //Copy the initial velocity and position of the ball
+        Vector2d tmpOldBallPosition = ballPosition.copy();
         Vector2d ballVelocity = initial_ball_velocity.copy();
         Vector2d accelerationVector = new Vector2d(1, 1);
 
@@ -189,13 +190,19 @@ public class PuttingSimulator {
             }
             current = ballPosition.copy();
 
+            if (z.evaluate(ballPosition) < 0) {
+                ballPosition = tmpOldBallPosition;
+                System.out.println("In a body of water!");
+            }
             Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
             float transX = -oldPosition.x + (float) ballPosition.get_x();
             float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
             float transZ = -oldPosition.z + (float) ballPosition.get_y();
             golfBallModel.transform.translate(transX, transY + radius, transZ);
-            //camera.translate(transX, 0, transZ);
-            //camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
+            camera.translate(transX, 0, transZ);
+            camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
+            if (z.evaluate(ballPosition) < 0) break;
+
         }
 
     }
