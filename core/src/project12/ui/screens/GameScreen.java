@@ -146,7 +146,16 @@ class GameScreen extends AbstractScreen {
                 Vector2d shot = new Vector2d(camera.direction.x, camera.direction.z);
                 shot.normalize();
                 shot.scale(shotVelocity);
-                simulator.take_shot(shot, camera, golfBall, radius);
+                boolean successfulShot = simulator.take_shot(shot, camera, golfBall, radius);
+                if (!successfulShot) {
+                    new Thread(() -> {
+                        JFrame f = new JFrame();
+                        f.setVisible(true);
+                        f.toFront();
+                        f.setVisible(false);
+                        JOptionPane.showMessageDialog(f, "The ball landed in water :(");
+                    }).start();
+                }
                 try {
                     Thread.sleep(2000);
                     isRunning = false;
