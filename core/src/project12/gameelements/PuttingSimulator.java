@@ -99,6 +99,8 @@ public class PuttingSimulator {
      */
     public boolean take_shot(Vector2d initial_ball_velocity, PerspectiveCamera camera, ModelInstance golfBallModel, float radius) {
 
+        boolean returnVal = true;
+
         //Copy the initial velocity and position of the ball
         Vector2d tmpOldBallPosition = ballPosition.copy();
         Vector2d ballVelocity = initial_ball_velocity.copy();
@@ -144,20 +146,28 @@ public class PuttingSimulator {
 
             if (z.evaluate(ballPosition) < 0) {
                 ballPosition = tmpOldBallPosition;
-                return false;
+                returnVal = false;
+                break;
             }
-            Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
-            float transX = -oldPosition.x + (float) ballPosition.get_x();
-            float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
-            float transZ = -oldPosition.z + (float) ballPosition.get_y();
-            golfBallModel.transform.translate(transX, transY + radius, transZ);
-            camera.translate(transX, 0, transZ);
-            camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
-            if (z.evaluate(ballPosition) < 0) break;
+
+            updateSimulation(golfBallModel, radius, camera);
 
         }
 
-        return true;
+        updateSimulation(golfBallModel, radius, camera);
+
+        return returnVal;
+
+    }
+
+    private void updateSimulation(ModelInstance golfBallModel, float radius, PerspectiveCamera camera) {
+        Vector3 oldPosition = golfBallModel.transform.getTranslation(new Vector3());
+        float transX = -oldPosition.x + (float) ballPosition.get_x();
+        float transY = -oldPosition.y + (float) course.get_height().evaluate(ballPosition);
+        float transZ = -oldPosition.z + (float) ballPosition.get_y();
+        golfBallModel.transform.translate(transX, transY + radius, transZ);
+        camera.translate(transX, 0, transZ);
+        camera.lookAt(golfBallModel.transform.getTranslation(new Vector3()));
 
     }
 
