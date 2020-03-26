@@ -172,7 +172,6 @@ class GameScreen extends AbstractScreen {
                 //Here we actually take the shot
                 boolean successfulShot = simulator.take_shot(shot, camera, golfBall, radius);
                 //If it landed in water it's not successful, so then show that to the user
-                System.out.println(successfulShot);
                 if (!successfulShot) {
                     new Thread(() -> {
                         JFrame f = new JFrame();

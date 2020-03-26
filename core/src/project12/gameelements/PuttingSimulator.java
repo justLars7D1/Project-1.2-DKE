@@ -197,13 +197,29 @@ public class PuttingSimulator {
         try {
             FileInputStream f = new FileInputStream(filePath);
             ObjectInputStream inputStream = new ObjectInputStream(f);
-            course = (PuttingCourse) (inputStream.readObject());
-            this.ballPosition = course.get_start_position();
-            inputStream.close();
+            Object courseObj = inputStream.readObject();
+            if (courseObj instanceof PuttingCourse) {
+                course = (PuttingCourse) (courseObj);
+                inputStream.close();
+                this.ballPosition = course.get_start_position();
+            } else {
+                inputStream.close();
+                loadCourseByString(filePath);
+            }
         } catch (IOException | ClassNotFoundException e) {
             return false;
         }
         return true;
+    }
+
+    public boolean loadCourseByString(String filePath) {
+    	Input load = new Input(filePath);
+    	course = load.loadCourse(filePath);
+    	if (course != null) {
+    		this.ballPosition = course.get_start_position();
+    		return true;
+    	}
+    	return false;
     }
 
     public PuttingCourse getCourse() {
