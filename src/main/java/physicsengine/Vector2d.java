@@ -79,6 +79,14 @@ public class Vector2d extends Vector {
         return new Vector2d(coords[0] + otherVector.get_x(), coords[1] + otherVector.get_y());
     }
 
+    public Vector2d mult(Vector2d otherVector) {
+        return new Vector2d(coords[0] * otherVector.get_x(), coords[1] * otherVector.get_y());
+    }
 
+    public Vector2d getScaled(double scalingFactor) {
+        Vector2d newScaled = copy();
+        newScaled.scale(scalingFactor);
+        return newScaled;
+    }
 
 }

@@ -1,38 +1,49 @@
 package physicsengine.engines;
 
+import gameelements.PuttingCourse;
 import physicsengine.PhysicsEngine;
+import physicsengine.PhysicsLaws;
 import physicsengine.Vector2d;
 
-public class VerletSolver extends EulerSolver implements PhysicsEngine {
+public class VerletSolver implements PhysicsEngine {
 
-    /**
-     * Constructor
-     * @param stepSize The time step size
-     */
-    public VerletSolver(double stepSize) {
-        super(stepSize);
+    private PhysicsLaws physicsLaws;
+    private double stepSize;
+
+    private Vector2d ballPosition;
+    private Vector2d ballVelocity;
+
+    public VerletSolver(PuttingCourse course) {
+        this.physicsLaws = new PhysicsLaws(course);
+        this.stepSize = 0.01;
     }
 
-    /**
-     * Constructor without arguments
-     */
-    public VerletSolver() {
-        super(0.01);
-    }
-
-    /**
-     * Since Verlet's equation is just an extension to Euler's method, we can just add the missing parts to it.
-     * This is the extra addition of a factor of acceleration, which is obtained by integrating from the acceleration
-     * up to the position, ending up with p[t+h] = p[t] + h*v[t] + 1/2*h^2*a[t]. The first two sums were already
-     * added by Euler's method and we're only adding the final "1/2*h^2*a[t]" part of the equation to the position
-     */
     @Override
-    public void approximatePosition() {
-        super.approximatePosition();
-        double accelerationAdditionX = 0.5 * Math.pow(stepSize, 2) * accelerationVector.get_x();
-        double accelerationAdditionY = 0.5 * Math.pow(stepSize, 2) * accelerationVector.get_y();
-        positionVector.addX(accelerationAdditionX);
-        positionVector.addY(accelerationAdditionY);
+    public void set_step_size(double step_size) {
+        this.stepSize = step_size;
     }
 
+    @Override
+    public void approximate() {
+        Vector2d acceleration = physicsLaws.ballAcceleration(ballPosition, ballVelocity);
+        //x += h*v + 1/2*h^2*a
+        ballPosition = ballPosition.add(ballVelocity.getScaled(stepSize)).add(acceleration.getScaled(0.5 * Math.pow(stepSize, 2)));
+        ballVelocity = ballVelocity.add(acceleration.getScaled(stepSize));
+    }
+
+    public void setBallPosition(Vector2d ballPosition) {
+        this.ballPosition = ballPosition;
+    }
+
+    public void setBallVelocity(Vector2d ballVelocity) {
+        this.ballVelocity = ballVelocity;
+    }
+
+    public Vector2d getBallPosition() {
+        return ballPosition;
+    }
+
+    public Vector2d getBallVelocity() {
+        return ballVelocity;
+    }
 }

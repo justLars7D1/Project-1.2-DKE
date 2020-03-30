@@ -1,105 +1,49 @@
 package physicsengine.engines;
 
+import gameelements.PuttingCourse;
+import org.lwjgl.odbc.SQL_YEAR_MONTH_STRUCT;
 import physicsengine.PhysicsEngine;
+import physicsengine.PhysicsLaws;
 import physicsengine.Vector2d;
 
 public class EulerSolver implements PhysicsEngine {
 
-    /**
-     * The time step size
-     */
-    protected double stepSize;
+    private PhysicsLaws physicsLaws;
+    private double stepSize;
 
-    /**
-     * The position vector
-     */
-    protected Vector2d positionVector;
-    /**
-     * The velocity vector
-     */
-    protected Vector2d velocityVector;
-    /**
-     * The acceleration vector
-     */
-    protected Vector2d accelerationVector;
+    private Vector2d ballPosition;
+    private Vector2d ballVelocity;
 
-    /**
-     * Constructor
-     * @param stepSize The time step size
-     */
-    public EulerSolver(double stepSize) {
-        this.stepSize = stepSize;
-    }
-
-    /**
-     * Constructor without arguments
-     */
-    public EulerSolver() {
+    public EulerSolver(PuttingCourse course) {
+        this.physicsLaws = new PhysicsLaws(course);
         this.stepSize = 0.01;
     }
 
-    /**
-     * Set the step size
-     * @param h The step size
-     */
-    public void set_step_size(double h) {
-        this.stepSize = h;
-    }
-
-    /**
-     * Sets the position vector
-     * @param p The position vector
-     */
     @Override
-    public void setPositionVector(Vector2d p) {
-        this.positionVector = p;
+    public void set_step_size(double step_size) {
+        this.stepSize = step_size;
     }
 
-    /**
-     * Sets the velocity vector
-     * @param v The velocity vector
-     */
-    @Override
-    public void setVelocityVector(Vector2d v) {
-        this.velocityVector = v;
-    }
-
-    /**
-     * Sets the acceleration vector
-     * @param a The acceleration vector
-     */
-    @Override
-    public void setAccelerationVector(Vector2d a) {
-        this.accelerationVector = a;
-    }
-
-    /**
-     * Calculates the new coordinates of a position and velocity vector
-     */
     @Override
     public void approximate() {
-        approximatePosition();
-        approximateVelocity();
+        Vector2d acceleration = physicsLaws.ballAcceleration(ballPosition, ballVelocity);
+        ballPosition = ballPosition.add(ballVelocity.getScaled(stepSize));
+        ballVelocity = ballVelocity.add(acceleration.getScaled(stepSize));
     }
 
-    /**
-     * Calculates the new coordinates of a position vector
-     */
-    protected void approximatePosition() {
-        double valX = this.stepSize * this.velocityVector.get_x();
-        double valY = this.stepSize * this.velocityVector.get_y();
-        positionVector.addX(valX);
-        positionVector.addY(valY);
+    public void setBallPosition(Vector2d ballPosition) {
+        this.ballPosition = ballPosition;
     }
 
-    /**
-     * Calculates the new coordinates of a velocity vector
-     */
-    private void approximateVelocity() {
-        double valX = this.stepSize * this.accelerationVector.get_x();
-        double valY = this.stepSize * this.accelerationVector.get_y();
-        velocityVector.addX(valX);
-        velocityVector.addY(valY);
+    public void setBallVelocity(Vector2d ballVelocity) {
+        this.ballVelocity = ballVelocity;
     }
 
+    public Vector2d getBallPosition() {
+        return ballPosition;
+    }
+
+    public Vector2d getBallVelocity() {
+        return ballVelocity;
+    }
 }

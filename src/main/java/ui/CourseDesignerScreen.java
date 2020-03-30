@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL30;
 import physicsengine.PhysicsEngine;
 import physicsengine.Vector2d;
 import physicsengine.engines.EulerSolver;
+import physicsengine.engines.RK4;
+import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
 import ui.renderEngine.Window;
@@ -49,7 +51,7 @@ public class CourseDesignerScreen {
         this.courseSettingsBtns.get("continue").setOnMouseClicked(e -> doneSelecting = true);
 
         this.courseSettingsBtns.get("save").setOnMouseClicked(e -> {
-            PuttingSimulator s = createSimulator(new EulerSolver());
+            PuttingSimulator s = createSimulator("euler");
             new Thread(() -> {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Save Course!");
@@ -78,7 +80,7 @@ public class CourseDesignerScreen {
                 f.dispose();
                 if (res == JFileChooser.APPROVE_OPTION) {
                     File fileToLoad = chooser.getSelectedFile();
-                    PuttingSimulator s = new PuttingSimulator(new EulerSolver());
+                    PuttingSimulator s = new PuttingSimulator();
                     boolean worked = s.loadCourse(fileToLoad.getAbsolutePath());
                     //If the file is successfully loaded in, set the simulation
                     if (worked) {
@@ -129,7 +131,7 @@ public class CourseDesignerScreen {
      * Creates the simulation object and adds all properties to it
      * @return THe simulation object
      */
-    public PuttingSimulator createSimulator(PhysicsEngine solver) {
+    public PuttingSimulator createSimulator(String solverType) {
         Function2d courseFunction = new FunctionParserRPN(getContent("height_function"));
         Vector2d startPoint = fieldToVec2d(getContent("starting_point"));
         Vector2d holePoint = fieldToVec2d(getContent("target_point"));
@@ -140,7 +142,21 @@ public class CourseDesignerScreen {
         course.setGravitationalConstant(Double.parseDouble(getContent("gravity")));
         course.setMaximumVelocity(Double.parseDouble(getContent("maximum_velocity")));
 
-        return new PuttingSimulator(course, solver);
+        PhysicsEngine engine;
+        switch(solverType.toLowerCase()) {
+            case "euler":
+                engine = new EulerSolver(course);
+                break;
+            case "verlet":
+                engine = new VerletSolver(course);
+                break;
+            case "rk4":
+            default:
+                engine = new RK4(course);
+                break;
+        }
+
+        return new PuttingSimulator(course, engine);
     }
 
     private String getContent(String id) {

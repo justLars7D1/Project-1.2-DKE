@@ -2,6 +2,7 @@ import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
 import org.lwjgl.opengl.GL;
 import physicsengine.PhysicsEngine;
+import physicsengine.engines.RK4;
 import physicsengine.engines.VerletSolver;
 import ui.CourseDesignerScreen;
 import ui.GameModeScreen;
@@ -49,7 +50,7 @@ public class Main {
 
         PuttingSimulator puttingSimulator = null;
         String gameMode;
-        PhysicsEngine solver = new VerletSolver();
+        String solverType = "RK4";
 
         //This is the loop that runs the entire game
         while (!Window.closed()) {
@@ -69,13 +70,13 @@ public class Main {
             while (!designerScreen.isDoneSelecting() && !Window.closed()) {
                 designerScreen.update();
                 if (designerScreen.isDoneSelecting()) {
-                    puttingSimulator = designerScreen.createSimulator(solver);
+                    puttingSimulator = designerScreen.createSimulator(solverType);
                     designerScreen.finish();
                     gameModeScreen.create(guiWindow);
                 }
             }
 
-            //While loop for the game mode selector
+            //While logop for the game mode selector
             while (!gameModeScreen.isDoneSelecting() && !Window.closed()) {
                 gameModeScreen.update();
                 if (gameModeScreen.isDoneSelecting()) {
