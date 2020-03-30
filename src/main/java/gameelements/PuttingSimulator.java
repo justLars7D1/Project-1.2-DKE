@@ -7,7 +7,6 @@ import physicsengine.engines.EulerSolver;
 import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
-import ui.entities.Camera;
 import ui.entities.UIPlayer;
 import ui.status.StatusMessage;
 
@@ -94,14 +93,12 @@ public class PuttingSimulator {
     /**
      * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
-     * @param player The player that takes the shot
      */
-    public void take_shot(Vector2d initial_ball_velocity, UIPlayer player) {
+    public void take_shot(Vector2d initial_ball_velocity) {
 
         //Copy the initial velocity and position of the ball
-        Vector2d tmpOldBallPosition = ballPosition.copy();
         Vector2d ballVelocity = initial_ball_velocity.copy();
-        Vector2d accelerationVector = new Vector2d(1, 1);
+        Vector2d accelerationVector;
 
         //Initialize the physics engine
         engine.setPositionVector(ballPosition);
@@ -113,7 +110,56 @@ public class PuttingSimulator {
 
         //Course function
         Function2d z = course.get_height();
-        Vector2d gradient = z.gradient(ballPosition);
+        Vector2d gradient;
+
+        int numTimesCloseToCurrent = 0;
+        Vector2d current = ballPosition.copy();
+
+        while(numTimesCloseToCurrent < 100) {
+
+            // Calculate acceleration using the given formula
+            gradient = z.gradient(ballPosition);
+
+            //Get the acceleration at the current point by applying the laws of Physics
+            accelerationVector = ballAcceleration(gradient, ballVelocity);
+
+            //Set the acceleration vector and approximate the new position and velocity of the ball
+            engine.setAccelerationVector(accelerationVector);
+            engine.approximate();
+
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
+                numTimesCloseToCurrent++;
+            } else {
+                numTimesCloseToCurrent = 0;
+            }
+            current = ballPosition.copy();
+
+        }
+
+    }
+
+    /**
+     * Simulate taking a shot, updating the ball live
+     * @param initial_ball_velocity The initial ball velocity of a shot
+     * @param player The player that takes the shot
+     */
+    public void take_shot(Vector2d initial_ball_velocity, UIPlayer player) {
+
+        //Copy the initial velocity and position of the ball
+        Vector2d ballVelocity = initial_ball_velocity.copy();
+        Vector2d accelerationVector;
+
+        //Initialize the physics engine
+        engine.setPositionVector(ballPosition);
+        engine.setVelocityVector(ballVelocity);
+
+        //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
+        final double deltaT = Math.pow(10, -4);
+        if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
+
+        //Course function
+        Function2d z = course.get_height();
+        Vector2d gradient;
 
         //Friction constant
         double friction = course.get_friction_coefficient();
@@ -125,11 +171,9 @@ public class PuttingSimulator {
 
             // Calculate acceleration using the given formula
             gradient = z.gradient(ballPosition);
-            Vector2d normalizedVelocity = ballVelocity.getNormalized();
 
-            double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
-            double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
-            accelerationVector = new Vector2d(aX, aY);
+            //Get the acceleration at the current point by applying the laws of Physics
+            accelerationVector = ballAcceleration(gradient, ballVelocity);
 
             //Set the acceleration vector and approximate the new position and velocity of the ball
             engine.setAccelerationVector(accelerationVector);
@@ -163,62 +207,24 @@ public class PuttingSimulator {
 
     }
 
-    public boolean take_shot(Vector2d initial_ball_velocity) {
+    private Vector2d ballAcceleration(Vector2d fieldGradient, Vector2d ballVelocity) {
+        Vector2d gravitationalForce = gravitationalForce(fieldGradient);
+        Vector2d frictionalForce = frictionalForce(ballVelocity);
+        Vector2d totalAcceleration = gravitationalForce.add(frictionalForce);
+        totalAcceleration.scale(1/course.get_ball_mass());
+        return totalAcceleration;
+    }
 
-        boolean returnVal = true;
+    private Vector2d gravitationalForce(Vector2d fieldGradient) {
+        double constantPart = -1 * course.get_ball_mass() * course.get_gravitational_constant();
+        return new Vector2d(constantPart * fieldGradient.get_x(), constantPart * fieldGradient.get_y());
+    }
 
-        //Copy the initial velocity and position of the ball
-        Vector2d tmpOldBallPosition = ballPosition.copy();
-        Vector2d ballVelocity = initial_ball_velocity.copy();
-        Vector2d accelerationVector = new Vector2d(1, 1);
-
-        //Initialize the physics engine
-        engine.setPositionVector(ballPosition);
-        engine.setVelocityVector(ballVelocity);
-
-        //Set step size if we're using Euler's or Verlet's solver (works since Verlet extends Euler)
-        final double deltaT = Math.pow(10, -4);
-        if (engine instanceof EulerSolver) ((EulerSolver)(engine)).set_step_size(deltaT);
-
-        //Course function
-        Function2d z = course.get_height();
-        Vector2d gradient = z.gradient(ballPosition);
-
-        //Friction constant
-        double friction = course.get_friction_coefficient();
-
-        int numTimesCloseToCurrent = 0;
-        Vector2d current = ballPosition.copy();
-        while(numTimesCloseToCurrent < 100) {
-
-            // Calculate acceleration using the given formula
-            gradient = z.gradient(ballPosition);
-            Vector2d normalizedVelocity = ballVelocity.getNormalized();
-
-            double aX = -1 * course.get_gravitational_constant() * (gradient.get_x() + (friction * normalizedVelocity.get_x()));
-            double aY = -1 * course.get_gravitational_constant() * (gradient.get_y() + (friction * normalizedVelocity.get_y()));
-            accelerationVector = new Vector2d(aX, aY);
-
-            //Set the acceleration vector and approximate the new position and velocity of the ball
-            engine.setAccelerationVector(accelerationVector);
-            engine.approximate();
-
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
-                numTimesCloseToCurrent++;
-            } else {
-                numTimesCloseToCurrent = 0;
-            }
-            current = ballPosition.copy();
-
-            if (z.evaluate(ballPosition) < 0) {
-                ballPosition = tmpOldBallPosition;
-                returnVal = false;
-                break;
-            }
-
-        }
-
-        return returnVal;
+    private Vector2d frictionalForce(Vector2d ballVelocity) {
+        double constantPart = -1 * course.get_friction_coefficient() * course.get_ball_mass() * course.get_gravitational_constant();
+        Vector2d normalizedVelocity = ballVelocity.getNormalized();
+        normalizedVelocity.scale(constantPart);
+        return normalizedVelocity;
     }
 
     /**
