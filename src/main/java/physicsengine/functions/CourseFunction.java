@@ -1,6 +1,6 @@
 package physicsengine.functions;
 
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 /**
  * Represents a function of the course
@@ -75,9 +75,9 @@ public class CourseFunction implements Function2d {
      * @return The z-coordinate
      */
     @Override
-    public double evaluate(Vector2d p) {
+    public double evaluate(Vector3d p) {
         double x = p.get_x();
-        double y = p.get_y();
+        double y = p.get_z();
         return a * Math.sin(b * (x - c)) * Math.sin(d * (y - e)) + f;
     }
 
@@ -103,11 +103,11 @@ public class CourseFunction implements Function2d {
      */
     double ACCURACYGRADIENTFACTOR = 0.1;
     @Override
-    public Vector2d gradient(Vector2d p) {
+    public Vector3d gradient(Vector3d p) {
         double z = evaluate(p);
-        double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
-        double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
-        return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
+        double yphx = evaluate(new Vector3d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_z()));
+        double yphz = evaluate(new Vector3d(p.get_x(), p.get_z()+ACCURACYGRADIENTFACTOR));
+        return new Vector3d((yphx-z)/ACCURACYGRADIENTFACTOR, (yphz-z)/ACCURACYGRADIENTFACTOR);
     }
 
 }

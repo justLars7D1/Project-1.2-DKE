@@ -1,6 +1,6 @@
 package physicsengine.functions;
 
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 import java.io.Serializable;
 
@@ -19,7 +19,7 @@ public interface Function2d extends Serializable {
      * @param p The (x,y)-coordinate
      * @return The z-coordinate
      */
-    double evaluate(Vector2d p);
+    double evaluate(Vector3d p);
 
     /**
      * Evaluates the function
@@ -50,6 +50,6 @@ public interface Function2d extends Serializable {
      * @param p The (x,y)-coordinate
      * @return The gradient
      */
-    Vector2d gradient(Vector2d p);
+    Vector3d gradient(Vector3d p);
 
 }

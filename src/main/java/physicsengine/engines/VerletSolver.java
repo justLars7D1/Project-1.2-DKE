@@ -3,15 +3,15 @@ package physicsengine.engines;
 import gameelements.PuttingCourse;
 import physicsengine.PhysicsEngine;
 import physicsengine.PhysicsLaws;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 public class VerletSolver implements PhysicsEngine {
 
     private PhysicsLaws physicsLaws;
     private double stepSize;
 
-    private Vector2d ballPosition;
-    private Vector2d ballVelocity;
+    private Vector3d ballPosition;
+    private Vector3d ballVelocity;
 
     public VerletSolver(PuttingCourse course) {
         this.physicsLaws = new PhysicsLaws(course);
@@ -25,25 +25,25 @@ public class VerletSolver implements PhysicsEngine {
 
     @Override
     public void approximate() {
-        Vector2d acceleration = physicsLaws.ballAcceleration(ballPosition, ballVelocity);
+        Vector3d acceleration = physicsLaws.ballAcceleration(ballPosition, ballVelocity);
         //x += h*v + 1/2*h^2*a
         ballPosition = ballPosition.add(ballVelocity.getScaled(stepSize)).add(acceleration.getScaled(0.5 * Math.pow(stepSize, 2)));
         ballVelocity = ballVelocity.add(acceleration.getScaled(stepSize));
     }
 
-    public void setBallPosition(Vector2d ballPosition) {
+    public void setBallPosition(Vector3d ballPosition) {
         this.ballPosition = ballPosition;
     }
 
-    public void setBallVelocity(Vector2d ballVelocity) {
+    public void setBallVelocity(Vector3d ballVelocity) {
         this.ballVelocity = ballVelocity;
     }
 
-    public Vector2d getBallPosition() {
+    public Vector3d getBallPosition() {
         return ballPosition;
     }
 
-    public Vector2d getBallVelocity() {
+    public Vector3d getBallVelocity() {
         return ballVelocity;
     }
 }

@@ -5,7 +5,7 @@ import gameelements.PuttingSimulator;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 import ui.entities.Camera;
 import ui.entities.Light;
 import ui.fontMeshCreator.FontType;
@@ -21,7 +21,6 @@ import ui.water.WaterRenderer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SimpleTimeZone;
 
 public class GameScreen {
 
@@ -63,18 +62,18 @@ public class GameScreen {
 
     private void takeShot() {
         GamePlayer currentShooter = players.get(currentCameraPlayerFocus);
-        Vector2d oldPosition = currentShooter.getPosition();
-        Vector2d shot;
+        Vector3d oldPosition = currentShooter.getPosition();
+        Vector3d shot;
         if (currentShooter.getType().equals("user")) {
             //Calculate the direction (and magnitude) of the shot
-            Vector2d curBallPos = currentShooter.getPosition();
-            Vector2d curCamPos = new Vector2d(playerCamera.getPosition().x, playerCamera.getPosition().z);
-            Vector2d normDirection = curBallPos.minus(curCamPos).getNormalized();
+            Vector3d curBallPos = currentShooter.getPosition();
+            Vector3d curCamPos = new Vector3d(playerCamera.getPosition().x, playerCamera.getPosition().z);
+            Vector3d normDirection = curBallPos.minus(curCamPos).getNormalized();
             normDirection.scale(ballVelocity);
             shot = normDirection;
         } else {
             //Let the bot shoot
-            shot = new Vector2d(0,0);
+            shot = new Vector3d(0,0);
         }
         //Take the shot
 
@@ -143,26 +142,26 @@ public class GameScreen {
     }
 
     private void createMap(Loader loader) {
-        Vector2d ballPos = gameCourse.get_start_position();
-        Vector2d flagPos = gameCourse.get_flag_position();
+        Vector3d ballPos = gameCourse.get_start_position();
+        Vector3d flagPos = gameCourse.get_flag_position();
         int minX = (int) Math.round(Math.min(ballPos.get_x(), flagPos.get_x()));
         int maxX = (int) Math.round(Math.max(ballPos.get_x(), flagPos.get_x()));
-        int minY = (int) Math.round(Math.min(ballPos.get_y(), flagPos.get_y()));
-        int maxY = (int) Math.round(Math.max(ballPos.get_y(), flagPos.get_y()));
-        this.terrainMap = new GameMap(minX - 20, minY - 20, maxX + 20, maxY + 20, gameCourse.get_height(), loader);
+        int minZ = (int) Math.round(Math.min(ballPos.get_z(), flagPos.get_z()));
+        int maxZ = (int) Math.round(Math.max(ballPos.get_z(), flagPos.get_z()));
+        this.terrainMap = new GameMap(minX - 20, minZ - 20, maxX + 20, maxZ + 20, gameCourse.get_height(), loader);
     }
 
     private void createFlag() {
-        Vector2d flagPos = gameCourse.get_flag_position();
+        Vector3d flagPos = gameCourse.get_flag_position();
         float targetLightHeight = (float)(gameCourse.get_height().evaluate(flagPos) + 1);
-        terrainMap.generateEntityAtPosition("game/entities/flag/flag", "game/entities/bunny/white", (float)flagPos.get_x() + 1.8f, (float)flagPos.get_y(), 0, 1, 3f, 1);
-        lights.add(new Light(new Vector3f((float) flagPos.get_x(), targetLightHeight, (float) flagPos.get_y()), new Vector3f(0, 0, 5), new Vector3f(.1f, .1f, .1f)));
+        terrainMap.generateEntityAtPosition("game/entities/flag/flag", "game/entities/bunny/white", (float)flagPos.get_x() + 1.8f, (float)flagPos.get_z(), 0, 1, 3f, 1);
+        lights.add(new Light(new Vector3f((float) flagPos.get_x(), targetLightHeight, (float) flagPos.get_z()), new Vector3f(0, 0, 5), new Vector3f(.1f, .1f, .1f)));
     }
 
     private void setupPlayers(String gamemode, Loader loader) {
-        Vector2d startPos2d = gameCourse.get_start_position();
+        Vector3d startPos2d = gameCourse.get_start_position();
         float startPosHeight = (float)(gameCourse.get_height().evaluate(startPos2d));
-        Vector3f startPosition = new Vector3f((float) startPos2d.get_x(), startPosHeight, (float) startPos2d.get_y());
+        Vector3f startPosition = new Vector3f((float) startPos2d.get_x(), startPosHeight, (float) startPos2d.get_z());
         switch (gamemode) {
             case "single_player":
                 GamePlayer p = new GamePlayer("user", loader, startPosition, terrainMap, gameSimulator.copy());

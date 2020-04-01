@@ -1,9 +1,6 @@
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
 import org.lwjgl.opengl.GL;
-import physicsengine.PhysicsEngine;
-import physicsengine.engines.RK4;
-import physicsengine.engines.VerletSolver;
 import ui.CourseDesignerScreen;
 import ui.GameModeScreen;
 import ui.GameScreen;

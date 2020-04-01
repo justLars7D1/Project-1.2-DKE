@@ -1,7 +1,7 @@
 package gameelements;
 
 import physicsengine.functions.Function2d;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 import java.io.Serializable;
 
@@ -18,7 +18,7 @@ public class PuttingCourse implements Serializable {
     /**
      * The coordinate of the target
      */
-    private Vector2d flag;
+    private Vector3d flag;
     /**
      * The radius around the target
      */
@@ -27,7 +27,7 @@ public class PuttingCourse implements Serializable {
     /**
      * The starting point where the ball is on the beginning of the game
      */
-    private Vector2d start;
+    private Vector3d start;
 
     /**
      * The coefficient of friction of the terrain
@@ -55,7 +55,7 @@ public class PuttingCourse implements Serializable {
      * @param flag Set the target position
      * @param start The starting point of the ball
      */
-    public PuttingCourse(Function2d height, Vector2d start, Vector2d flag) {
+    public PuttingCourse(Function2d height, Vector3d start, Vector3d flag) {
         this.height = height;
         this.flag = flag;
         this.start = start;
@@ -66,10 +66,10 @@ public class PuttingCourse implements Serializable {
      * @param height Set the height function
      * @param flag Set the target position
      */
-    public PuttingCourse(Function2d height, Vector2d flag) {
+    public PuttingCourse(Function2d height, Vector3d flag) {
         this.height = height;
         this.flag = flag;
-        this.start = new Vector2d();
+        this.start = new Vector3d();
     }
 
     /**
@@ -84,7 +84,7 @@ public class PuttingCourse implements Serializable {
      * Gets the flag position
      * @return The flag position
      */
-    public Vector2d get_flag_position() {
+    public Vector3d get_flag_position() {
         return this.flag;
     }
 
@@ -92,7 +92,7 @@ public class PuttingCourse implements Serializable {
      * Gets the start position
      * @return The starting position
      */
-    public Vector2d get_start_position() {
+    public Vector3d get_start_position() {
         return this.start;
     }
 

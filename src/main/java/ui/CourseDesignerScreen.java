@@ -10,7 +10,7 @@ import lwjgui.scene.layout.floating.FloatingPane;
 import lwjgui.style.BackgroundNVGImage;
 import org.lwjgl.opengl.GL30;
 import physicsengine.PhysicsEngine;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
 import physicsengine.engines.RK4;
 import physicsengine.engines.VerletSolver;
@@ -133,8 +133,8 @@ public class CourseDesignerScreen {
      */
     public PuttingSimulator createSimulator(String solverType) {
         Function2d courseFunction = new FunctionParserRPN(getContent("height_function"));
-        Vector2d startPoint = fieldToVec2d(getContent("starting_point"));
-        Vector2d holePoint = fieldToVec2d(getContent("target_point"));
+        Vector3d startPoint = fieldToVec2d(getContent("starting_point"));
+        Vector3d holePoint = fieldToVec2d(getContent("target_point"));
 
         PuttingCourse course = new PuttingCourse(courseFunction, startPoint, holePoint);
         course.setHoleTolerance(Double.parseDouble(getContent("goal_tolerance")));
@@ -168,12 +168,12 @@ public class CourseDesignerScreen {
      * @param text The string representing a vector
      * @return The vector
      */
-    private Vector2d fieldToVec2d(String text) {
+    private Vector3d fieldToVec2d(String text) {
         text = text.replaceAll("\\s", "").replaceAll("\\(", "").replaceAll("\\)", "");
         String[] split = text.split(",");
         double x = Double.parseDouble(split[0]);
         double y = Double.parseDouble(split[1]);
-        return new Vector2d(x, y);
+        return new Vector3d(x, y);
     }
 
     private void setupTextFields(FloatingPane floatingPane) {

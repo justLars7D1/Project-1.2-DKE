@@ -1,6 +1,6 @@
 package physicsengine.functions;
 
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 import java.util.*;
 
@@ -104,26 +104,26 @@ public class FunctionParserRPN implements Function2d {
      * @return The gradient
      */
     @Override
-    public Vector2d gradient(Vector2d p) {
+    public Vector3d gradient(Vector3d p) {
         double z = evaluate(p);
-        double zphx = evaluate(new Vector2d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_y()));
-        double zphy = evaluate(new Vector2d(p.get_x(), p.get_y()+ACCURACYGRADIENTFACTOR));
-        return new Vector2d((zphx-z)/ACCURACYGRADIENTFACTOR, (zphy-z)/ACCURACYGRADIENTFACTOR);
+        double yphx = evaluate(new Vector3d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_z()));
+        double yphz = evaluate(new Vector3d(p.get_x(), p.get_z()+ACCURACYGRADIENTFACTOR));
+        return new Vector3d((yphx-z)/ACCURACYGRADIENTFACTOR, (yphz-z)/ACCURACYGRADIENTFACTOR);
     }
 
-    public Vector2d gradient(double x, double y) {
-        return new Vector2d(partialDerivativeX(x, y), partialDerivativeY(x, y));
+    public Vector3d gradient(double x, double y) {
+        return new Vector3d(partialDerivativeX(x, y), partialDerivativeY(x, y));
     }
 
     public double partialDerivativeX(double x, double y) {
         double z = evaluate(x, y);
-        double zphx = evaluate(new Vector2d(x+ACCURACYGRADIENTFACTOR, y));
+        double zphx = evaluate(new Vector3d(x+ACCURACYGRADIENTFACTOR, y));
         return (zphx-z)/ACCURACYGRADIENTFACTOR;
     }
 
     public double partialDerivativeY(double x, double y) {
         double z = evaluate(x, y);
-        double zphy = evaluate(new Vector2d(x, y+ACCURACYGRADIENTFACTOR));
+        double zphy = evaluate(new Vector3d(x, y+ACCURACYGRADIENTFACTOR));
         return (zphy-z)/ACCURACYGRADIENTFACTOR;
     }
 
@@ -139,7 +139,7 @@ public class FunctionParserRPN implements Function2d {
      * @return The z-coordinate
      */
     @Override
-    public double evaluate(Vector2d p) {
+    public double evaluate(Vector3d p) {
         Stack<String> stack = new Stack<>();
         for (String op : reversePolishOrder) {
             if (op.equals("sin") || op.equals("cos") || op.equals("tan")) {
@@ -211,7 +211,7 @@ public class FunctionParserRPN implements Function2d {
     }
 
     //Calculate the value of a stack number (no operation)
-    private double getValue(String stackVal, Vector2d p) {
+    private double getValue(String stackVal, Vector3d p) {
         double x;
         switch (stackVal) {
             case "e":
@@ -221,7 +221,7 @@ public class FunctionParserRPN implements Function2d {
                 x = p.get_x();
                 break;
             case "y":
-                x = p.get_y();
+                x = p.get_z();
                 break;
             default:
                 x = Double.parseDouble(stackVal);
@@ -251,7 +251,7 @@ public class FunctionParserRPN implements Function2d {
 
     public static void main(String[] args) {
         FunctionParserRPN p = new FunctionParserRPN("e^x");
-        System.out.println(p.evaluate(new Vector2d(0,1)));
+        System.out.println(p.evaluate(new Vector3d(0,1)));
     }
 
 

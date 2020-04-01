@@ -1,8 +1,8 @@
 package ai;
 
 import gameelements.PuttingCourse;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 public interface PuttingBot {
-    Vector2d shot_velocity(PuttingCourse course, Vector2d ball_position);
+    Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position);
 }

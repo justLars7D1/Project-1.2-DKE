@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 import physicsengine.functions.FunctionParserRPN;
 
 public class Input {
@@ -39,8 +39,8 @@ public class Input {
 			this.mu = Double.parseDouble(in[2]);
 			this.vmax = Double.parseDouble(in[3]);
 			this.tol = Double.parseDouble(in[4]);
-			Vector2d start = new Vector2d(Double.parseDouble(in[5]), Double.parseDouble(in[6]));
-			Vector2d flag = new Vector2d(Double.parseDouble(in[7]), Double.parseDouble(in[8]));
+			Vector3d start = new Vector3d(Double.parseDouble(in[5]), Double.parseDouble(in[6]));
+			Vector3d flag = new Vector3d(Double.parseDouble(in[7]), Double.parseDouble(in[8]));
 			pc = new PuttingCourse(new FunctionParserRPN(in[9]), start, flag);
 			pc.set_friction_coefficient(this.mu);
 			pc.setBallMass(this.m);

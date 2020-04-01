@@ -2,8 +2,7 @@ package ui;
 
 import gameelements.PuttingSimulator;
 import org.joml.Vector3f;
-import physicsengine.Vector2d;
-import ui.entities.Camera;
+import physicsengine.Vector3d;
 import ui.entities.UIPlayer;
 import ui.models.RawModel;
 import ui.models.TexturedModel;
@@ -30,7 +29,7 @@ public class GamePlayer {
         map.addPlayers(uiPlayer);
     }
 
-    public void takeShot(Vector2d ballVelocity) {
+    public void takeShot(Vector3d ballVelocity) {
         this.numMovesMade++;
         simulator.take_shot(ballVelocity, uiPlayer);
     }
@@ -51,18 +50,18 @@ public class GamePlayer {
         return numMovesMade;
     }
 
-    public Vector2d getPosition() {
+    public Vector3d getPosition() {
         return simulator.get_ball_position();
     }
 
     public void setPosition(Vector3f position) {
         this.uiPlayer.setPosition(position);
-        this.simulator.set_ball_position(new Vector2d(position.x, position.z));
+        this.simulator.set_ball_position(new Vector3d(position.x, position.z));
     }
 
-    public void setPosition(Vector2d position) {
+    public void setPosition(Vector3d position) {
         simulator.set_ball_position(position);
-        Vector3f newPos = new Vector3f((float)position.get_x(), (float)simulator.getCourse().get_height().evaluate(position), (float)position.get_y());
+        Vector3f newPos = new Vector3f((float)position.get_x(), (float)simulator.getCourse().get_height().evaluate(position), (float)position.get_z());
         uiPlayer.setPosition(newPos);
     }
 

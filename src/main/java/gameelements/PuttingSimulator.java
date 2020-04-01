@@ -2,7 +2,7 @@ package gameelements;
 
 import org.joml.Vector3f;
 import physicsengine.PhysicsEngine;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
 import physicsengine.engines.RK4;
 import physicsengine.engines.VerletSolver;
@@ -31,7 +31,7 @@ public class PuttingSimulator {
     /**
      * The current position of the ball
      */
-    private Vector2d ballPosition;
+    private Vector3d ballPosition;
 
     /**
      * Constructor
@@ -69,7 +69,7 @@ public class PuttingSimulator {
      * Sets the ball position
      * @param p The position of the ball
      */
-    public void set_ball_position(Vector2d p) {
+    public void set_ball_position(Vector3d p) {
         this.ballPosition = p;
     }
 
@@ -77,7 +77,7 @@ public class PuttingSimulator {
      * Gets the ball position
      * @return The ball position
      */
-    public Vector2d get_ball_position() {
+    public Vector3d get_ball_position() {
         return this.ballPosition;
     }
 
@@ -85,10 +85,10 @@ public class PuttingSimulator {
      * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
-    public void take_shot(Vector2d initial_ball_velocity) {
+    public void take_shot(Vector3d initial_ball_velocity) {
 
         //Copy the initial velocity and position of the ball
-        Vector2d ballVelocity = initial_ball_velocity.copy();
+        Vector3d ballVelocity = initial_ball_velocity.copy();
 
         //Initialize the physics engine
         final double deltaT = Math.pow(10, -4);
@@ -100,15 +100,15 @@ public class PuttingSimulator {
         Function2d z = course.get_height();
 
         int numTimesCloseToCurrent = 0;
-        Vector2d current = ballPosition.copy();
+        Vector3d current = ballPosition.copy();
 
-        while(numTimesCloseToCurrent < 100) {
+        while(numTimesCloseToCurrent < 1000) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_z() - ballPosition.get_z()) <= Math.pow(10,-5)) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
@@ -124,10 +124,10 @@ public class PuttingSimulator {
      * @param initial_ball_velocity The initial ball velocity of a shot
      * @param player The player that takes the shot
      */
-    public void take_shot(Vector2d initial_ball_velocity, UIPlayer player) {
+    public void take_shot(Vector3d initial_ball_velocity, UIPlayer player) {
 
         //Copy the initial velocity and position of the ball
-        Vector2d ballVelocity = initial_ball_velocity.copy();
+        Vector3d ballVelocity = initial_ball_velocity.copy();
 
         //Initialize the physics engine
         final double deltaT = Math.pow(10, -4);
@@ -139,31 +139,31 @@ public class PuttingSimulator {
         Function2d z = course.get_height();
 
         int numTimesCloseToCurrent = 0;
-        Vector2d current = ballPosition.copy();
+        Vector3d current = ballPosition.copy();
 
-        while(numTimesCloseToCurrent < 100) {
+        while(numTimesCloseToCurrent < 1000) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_y() - ballPosition.get_y()) <= Math.pow(10,-5)) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_z() - ballPosition.get_z()) <= Math.pow(10,-5)) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
             }
             current = ballPosition.copy();
 
-            Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_y());
+            Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_z());
             player.setPosition(newPos);
 
         }
 
-        Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_y());
+        Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_z());
         player.setPosition(newPos);
 
         boolean isInHole = Math.sqrt(Math.pow(ballPosition.get_x() - course.get_flag_position().get_x(), 2) +
-                                     Math.pow(ballPosition.get_y() - course.get_flag_position().get_y(), 2)) <= course.get_hole_tolerance();
+                                     Math.pow(ballPosition.get_z() - course.get_flag_position().get_z(), 2)) <= course.get_hole_tolerance();
 
         if (z.evaluate(ballPosition) < 0) {
             StatusMessage.setSTATUS("water");
@@ -238,11 +238,18 @@ public class PuttingSimulator {
     }
 
     public static void main(String[] args) {
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector2d(0, 10));
-        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
-        sim.take_shot(new Vector2d(0, 3));
-        System.out.println(sim.get_ball_position());
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
+        PuttingSimulator sim1 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
+        PuttingSimulator sim2 = new PuttingSimulator(course.copy(), new VerletSolver(course.copy()));
+        PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
+        sim1.take_shot(new Vector3d(0, 3));
+        sim2.take_shot(new Vector3d(0, 3));
+        sim3.take_shot(new Vector3d(0, 3));
+        System.out.println("Euler: " + sim1.get_ball_position());
+        System.out.println("Verlet: " + sim2.get_ball_position());
+        System.out.println("RK4: " + sim3.get_ball_position());
     }
+
 
 }
 

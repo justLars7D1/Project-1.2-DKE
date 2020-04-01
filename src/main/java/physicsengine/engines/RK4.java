@@ -3,15 +3,15 @@ package physicsengine.engines;
 import gameelements.PuttingCourse;
 import physicsengine.PhysicsEngine;
 import physicsengine.PhysicsLaws;
-import physicsengine.Vector2d;
+import physicsengine.Vector3d;
 
 public class RK4 implements PhysicsEngine {
 
     private PhysicsLaws physicsLaws;
     private double stepSize;
 
-    private Vector2d ballPosition;
-    private Vector2d ballVelocity;
+    private Vector3d ballPosition;
+    private Vector3d ballVelocity;
 
     public RK4(PuttingCourse course) {
         this.physicsLaws = new PhysicsLaws(course);
@@ -25,22 +25,22 @@ public class RK4 implements PhysicsEngine {
 
     @Override
     public void approximate() {
-        Vector2d pos = ballPosition.copy();
-        Vector2d vel = ballVelocity.copy();
-        Vector2d[] ODEDerivativesK1 = RK4(pos, vel);
-        Vector2d[] ODEDerivativesK2 = RK4(pos.add(ODEDerivativesK1[0].getScaled(stepSize / 2)),
+        Vector3d pos = ballPosition.copy();
+        Vector3d vel = ballVelocity.copy();
+        Vector3d[] ODEDerivativesK1 = RK4(pos, vel);
+        Vector3d[] ODEDerivativesK2 = RK4(pos.add(ODEDerivativesK1[0].getScaled(stepSize / 2)),
                 vel.add(ODEDerivativesK1[1].getScaled(stepSize / 2)));
-        Vector2d[] ODEDerivativesK3 = RK4(pos.add(ODEDerivativesK2[0].getScaled(stepSize / 2)),
+        Vector3d[] ODEDerivativesK3 = RK4(pos.add(ODEDerivativesK2[0].getScaled(stepSize / 2)),
                 vel.add(ODEDerivativesK2[1].getScaled(stepSize / 2)));
-        Vector2d[] ODEDerivativesK4 = RK4(pos.add(ODEDerivativesK3[0].getScaled(stepSize)),
+        Vector3d[] ODEDerivativesK4 = RK4(pos.add(ODEDerivativesK3[0].getScaled(stepSize)),
                 vel.add(ODEDerivativesK3[1].getScaled(stepSize)));
 
-        Vector2d addToPosition = ODEDerivativesK1[0]
+        Vector3d addToPosition = ODEDerivativesK1[0]
                 .add(ODEDerivativesK2[0].getScaled(2))
                 .add(ODEDerivativesK3[0].getScaled(2))
                 .add(ODEDerivativesK4[0]).getScaled(stepSize / 6);
 
-        Vector2d addToVelocity = ODEDerivativesK1[1]
+        Vector3d addToVelocity = ODEDerivativesK1[1]
                 .add(ODEDerivativesK2[1].getScaled(2))
                 .add(ODEDerivativesK3[1].getScaled(2))
                 .add(ODEDerivativesK4[1]).getScaled(stepSize / 6);
@@ -50,29 +50,29 @@ public class RK4 implements PhysicsEngine {
 
     }
 
-    private Vector2d[] RK4(Vector2d position, Vector2d velocity) {
+    private Vector3d[] RK4(Vector3d position, Vector3d velocity) {
         //Index 0: The velocity at this point
         //Index 1: The acceleration at this point
-        Vector2d[] result = new Vector2d[2];
+        Vector3d[] result = new Vector3d[2];
         //The velocity at this position is the velocity
         result[0] = velocity;
         result[1] = physicsLaws.ballAcceleration(position, velocity);
         return result;
     }
 
-    public void setBallPosition(Vector2d ballPosition) {
+    public void setBallPosition(Vector3d ballPosition) {
         this.ballPosition = ballPosition;
     }
 
-    public void setBallVelocity(Vector2d ballVelocity) {
+    public void setBallVelocity(Vector3d ballVelocity) {
         this.ballVelocity = ballVelocity;
     }
 
-    public Vector2d getBallPosition() {
+    public Vector3d getBallPosition() {
         return ballPosition;
     }
 
-    public Vector2d getBallVelocity() {
+    public Vector3d getBallVelocity() {
         return ballVelocity;
     }
 }
