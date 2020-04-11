@@ -3,6 +3,7 @@ package ui.skybox;
 import org.joml.Matrix4f;
 
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 
 import org.joml.Vector3f;
 import ui.renderEngine.Window;

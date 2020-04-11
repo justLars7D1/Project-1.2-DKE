@@ -1,6 +1,7 @@
 package ui.shaders;
 
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import ui.entities.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;

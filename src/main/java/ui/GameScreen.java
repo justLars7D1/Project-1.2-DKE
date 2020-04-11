@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import physicsengine.Vector3d;
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import ui.entities.Light;
 import ui.fontMeshCreator.FontType;
 import ui.fontMeshCreator.GUIText;
@@ -36,7 +37,7 @@ public class GameScreen {
     private final PuttingSimulator gameSimulator;
     private final PuttingCourse gameCourse;
 
-    private Camera playerCamera;
+    private PlayerCamera playerCamera;
     private int currentCameraPlayerFocus;
     private final List<GamePlayer> players;
     private GUIText numTurnsText;
@@ -186,7 +187,7 @@ public class GameScreen {
                 break;
 
         }
-        this.playerCamera = new Camera(players.get(0).getUiPlayer(), Window.getWindow());
+        this.playerCamera = new PlayerCamera(players.get(0).getUiPlayer(), Window.getWindow());
         this.currentCameraPlayerFocus = 0;
     }
 
@@ -203,8 +204,8 @@ public class GameScreen {
     }
 
     //For the map editor
-    public void renderMap(MasterRenderer renderer) {
-        terrainMap.renderMap(renderer, waterRenderer, playerCamera, lights);
+    public void renderMap(MasterRenderer renderer, Camera camera) {
+        terrainMap.renderMap(renderer, waterRenderer, camera, lights);
     }
 
 }

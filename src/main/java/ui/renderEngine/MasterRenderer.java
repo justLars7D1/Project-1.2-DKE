@@ -1,6 +1,7 @@
 package ui.renderEngine;
 
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import ui.entities.Entity;
 import ui.entities.Light;
 import ui.models.TexturedModel;

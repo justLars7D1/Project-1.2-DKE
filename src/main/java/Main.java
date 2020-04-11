@@ -84,7 +84,10 @@ public class Main {
 
             //While loop for the terrain editor (sand banks, etc...)
             while(!mapEditorScreen.isDoneEditing() && !Window.closed()) {
-                mapEditorScreen.render();
+                mapEditorScreen.render(renderer);
+
+                Window.update();
+                Window.swapBuffers();
             }
 
 

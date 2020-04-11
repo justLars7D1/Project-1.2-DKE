@@ -1,6 +1,7 @@
 package ui.skybox;
 
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import ui.models.RawModel;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL30;

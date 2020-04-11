@@ -1,9 +1,10 @@
 package ui.water;
 
 import org.joml.Matrix4f;
+import ui.entities.Camera;
 import ui.shaders.ShaderProgram;
 import ui.toolbox.Maths;
-import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 
 public class WaterShader extends ShaderProgram {
 

@@ -1,6 +1,7 @@
 package ui.toolbox;
 
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -38,12 +39,12 @@ public class Maths {
         return matrix;
     }
 
-    public static Matrix4f createViewMatrix(Camera camera) {
+    public static Matrix4f createViewMatrix(Camera playerCamera) {
         Matrix4f matrix = new Matrix4f();
         matrix = matrix.identity();
-        matrix = matrix.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0));
-        matrix = matrix.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0));
-        Vector3f position = camera.getPosition();
+        matrix = matrix.rotate((float) Math.toRadians(playerCamera.getPitch()), new Vector3f(1, 0, 0));
+        matrix = matrix.rotate((float) Math.toRadians(playerCamera.getYaw()), new Vector3f(0, 1, 0));
+        Vector3f position = playerCamera.getPosition();
         Vector3f negativeCameraPosition = new Vector3f(-position.x, -position.y, -position.z);
         matrix = matrix.translate(negativeCameraPosition);
         return matrix;

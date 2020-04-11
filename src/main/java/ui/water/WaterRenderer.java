@@ -2,6 +2,7 @@ package ui.water;
 
 import java.util.List;
 
+import ui.entities.Camera;
 import ui.models.RawModel;
 
 import org.joml.Matrix4f;
@@ -13,7 +14,7 @@ import org.lwjgl.opengl.GL30;
 import ui.renderEngine.Loader;
 import ui.renderEngine.Window;
 import ui.toolbox.Maths;
-import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 
 public class WaterRenderer {
 
@@ -40,7 +41,7 @@ public class WaterRenderer {
 	}
 
 	public void render(List<WaterTile> water, Camera camera) {
-		prepareRender(camera);	
+		prepareRender(camera);
 		for (WaterTile tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(
 					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0,

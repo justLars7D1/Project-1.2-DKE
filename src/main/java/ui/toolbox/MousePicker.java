@@ -4,10 +4,11 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import ui.entities.FlyingCamera;
 import ui.renderEngine.Window;
 import ui.terrains.MasterTerrain;
 import ui.terrains.Terrain;
-import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 
 public class MousePicker {
 
@@ -18,12 +19,12 @@ public class MousePicker {
 
     private Matrix4f projectionMatrix;
     private Matrix4f viewMatrix;
-    private Camera camera;
+    private FlyingCamera camera;
 
     private MasterTerrain masterTerrain;
     private Vector3f currentTerrainPoint;
 
-    public MousePicker(Camera cam, Matrix4f projection, MasterTerrain masterTerrain) {
+    public MousePicker(FlyingCamera cam, Matrix4f projection, MasterTerrain masterTerrain) {
         camera = cam;
         projectionMatrix = projection;
         viewMatrix = Maths.createViewMatrix(camera);

@@ -5,6 +5,7 @@ import org.joml.Vector4f;
 import org.lwjgl.opengl.GL30;
 import physicsengine.functions.Function2d;
 import ui.entities.Camera;
+import ui.entities.PlayerCamera;
 import ui.entities.Entity;
 import ui.entities.Light;
 import ui.models.RawModel;
