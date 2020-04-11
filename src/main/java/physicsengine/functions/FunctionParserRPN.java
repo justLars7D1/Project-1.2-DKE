@@ -105,10 +105,9 @@ public class FunctionParserRPN implements Function2d {
      */
     @Override
     public Vector3d gradient(Vector3d p) {
-        double z = evaluate(p);
-        double yphx = evaluate(new Vector3d(p.get_x()+ACCURACYGRADIENTFACTOR, p.get_z()));
-        double yphz = evaluate(new Vector3d(p.get_x(), p.get_z()+ACCURACYGRADIENTFACTOR));
-        return new Vector3d((yphx-z)/ACCURACYGRADIENTFACTOR, (yphz-z)/ACCURACYGRADIENTFACTOR);
+        double partialDerivativeX = partialDerivativeX(p.get_x(), p.get_z());
+        double partialDerivativeY = partialDerivativeY(p.get_x(), p.get_z());
+        return new Vector3d(partialDerivativeX, partialDerivativeY);
     }
 
     public Vector3d gradient(double x, double y) {
@@ -116,15 +115,21 @@ public class FunctionParserRPN implements Function2d {
     }
 
     public double partialDerivativeX(double x, double y) {
-        double z = evaluate(x, y);
-        double zphx = evaluate(new Vector3d(x+ACCURACYGRADIENTFACTOR, y));
-        return (zphx-z)/ACCURACYGRADIENTFACTOR;
+        double h = ACCURACYGRADIENTFACTOR;
+        double z1 = evaluate(x - 2*h, y);
+        double z2 = evaluate(x - h, y);
+        double z3 = evaluate(x + h, y);
+        double z4 = evaluate(x + 2*h, y);
+        return (z1 - 8*z2 + 8*z3 - z4)/(12*h);
     }
 
     public double partialDerivativeY(double x, double y) {
-        double z = evaluate(x, y);
-        double zphy = evaluate(new Vector3d(x, y+ACCURACYGRADIENTFACTOR));
-        return (zphy-z)/ACCURACYGRADIENTFACTOR;
+        double h = ACCURACYGRADIENTFACTOR;
+        double z1 = evaluate(x, y - 2*h);
+        double z2 = evaluate(x, y - h);
+        double z3 = evaluate(x, y + h);
+        double z4 = evaluate(x, y + 2*h);
+        return (z1 - 8*z2 + 8*z3 - z4)/(12*h);
     }
 
 
