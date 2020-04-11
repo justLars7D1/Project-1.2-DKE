@@ -133,4 +133,14 @@ public class GameMap {
         fbos.cleanUp();
     }
 
+    public void addEntity(Entity entity) {
+        if (!allEntities.contains(entity)) {
+            this.allEntities.add(entity);
+        }
+    }
+
+    public void removeEntity(Entity entity) {
+        this.allEntities.remove(entity);
+    }
+
 }
