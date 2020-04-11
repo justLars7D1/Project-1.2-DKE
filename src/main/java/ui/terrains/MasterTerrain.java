@@ -64,4 +64,10 @@ public class MasterTerrain {
         return gridNumToTerrain.get("["+gridX+","+gridZ+"]").getHeightOfTerrain(x, z);
     }
 
+    public Terrain getTerrain(float x, float z) {
+        int gridX = (int) Math.floor(x / Terrain.getSIZE());
+        int gridZ = (int) Math.floor(z / Terrain.getSIZE());
+        return gridNumToTerrain.get("["+gridX+","+gridZ+"]");
+    }
+
 }

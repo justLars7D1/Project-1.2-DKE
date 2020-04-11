@@ -5,6 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import ui.renderEngine.Window;
+import ui.terrains.MasterTerrain;
 import ui.terrains.Terrain;
 import ui.entities.Camera;
 
@@ -19,14 +20,14 @@ public class MousePicker {
     private Matrix4f viewMatrix;
     private Camera camera;
 
-    private Terrain terrain;
+    private MasterTerrain masterTerrain;
     private Vector3f currentTerrainPoint;
 
-    public MousePicker(Camera cam, Matrix4f projection, Terrain terrain) {
+    public MousePicker(Camera cam, Matrix4f projection, MasterTerrain masterTerrain) {
         camera = cam;
         projectionMatrix = projection;
         viewMatrix = Maths.createViewMatrix(camera);
-        this.terrain = terrain;
+        this.masterTerrain = masterTerrain;
     }
 
     public Vector3f getCurrentTerrainPoint() {
@@ -120,7 +121,7 @@ public class MousePicker {
     }
 
     private Terrain getTerrain(float worldX, float worldZ) {
-        return terrain;
+        return masterTerrain.getTerrain(worldX, worldZ);
     }
 
 }

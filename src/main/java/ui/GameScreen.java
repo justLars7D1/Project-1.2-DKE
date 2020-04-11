@@ -86,6 +86,7 @@ public class GameScreen {
         } else if (StatusMessage.isFinished()) {
             //Handle game is over since target is reached
             System.out.println("TARGET REACHED!");
+            this.gameOver = true;
         }
         try {
             Thread.sleep(2000);
@@ -196,4 +197,14 @@ public class GameScreen {
     public boolean isGameOver() {
         return gameOver;
     }
+
+    public GameMap getTerrainMap() {
+        return terrainMap;
+    }
+
+    //For the map editor
+    public void renderMap(MasterRenderer renderer) {
+        terrainMap.renderMap(renderer, waterRenderer, playerCamera, lights);
+    }
+
 }

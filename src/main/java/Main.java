@@ -1,10 +1,7 @@
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
 import org.lwjgl.opengl.GL;
-import ui.CourseDesignerScreen;
-import ui.GameModeScreen;
-import ui.GameScreen;
-import ui.LoadingScreen;
+import ui.*;
 import ui.fontRendering.TextMaster;
 import ui.renderEngine.Loader;
 import ui.renderEngine.MasterRenderer;
@@ -36,13 +33,13 @@ public class Main {
 //        ui.guis.add(reflection);
 //        ui.guis.add(refraction);
 
-//        MousePicker picker = new MousePicker(camera, renderer.getProjectionMatrix(), terrain1);
 
         lwjgui.scene.Window guiWindow = LWJGUI.initialize(Window.getWindow());
 
         LoadingScreen loadingScreen = new LoadingScreen(loader);
         CourseDesignerScreen designerScreen = new CourseDesignerScreen();
         GameModeScreen gameModeScreen = new GameModeScreen();
+        MapEditorScreen mapEditorScreen = null;
         GameScreen gameScreen = null;
 
         PuttingSimulator puttingSimulator = null;
@@ -73,7 +70,7 @@ public class Main {
                 }
             }
 
-            //While logop for the game mode selector
+            //While loop for the game mode selector
             while (!gameModeScreen.isDoneSelecting() && !Window.closed()) {
                 gameModeScreen.update();
                 if (gameModeScreen.isDoneSelecting()) {
@@ -81,23 +78,27 @@ public class Main {
                     gameModeScreen.finish();
                     designerScreen.create(guiWindow);
                     gameScreen = new GameScreen(puttingSimulator, gameMode, loader, renderer);
+                    mapEditorScreen = new MapEditorScreen(gameScreen, renderer);
                 }
             }
 
-            //TODO: Now, set up the game!
-            while (!(gameScreen.isGameOver() || Window.closed())) {
-                gameScreen.render(renderer);
-                if (gameScreen.isGameOver()) {
-                    //Do stuff when game is over
-                    designerScreen.setDoneSelecting(false);
-                    gameModeScreen.setDoneSelecting(false);
-                }
+            //While loop for the terrain editor (sand banks, etc...)
+            while(!mapEditorScreen.isDoneEditing() && !Window.closed()) {
+                mapEditorScreen.render();
+            }
 
+
+            //TODO: Now, set up the game!
+            while (!((gameScreen != null && gameScreen.isGameOver()) || Window.closed())) {
+                gameScreen.render(renderer);
                 TextMaster.render();
 
                 Window.update();
                 Window.swapBuffers();
             }
+
+            designerScreen.setDoneSelecting(false);
+            gameModeScreen.setDoneSelecting(false);
 
             loadingScreen.cleanUp();
             loader.cleanUp();
@@ -105,6 +106,7 @@ public class Main {
             renderer.cleanUp();
             TextMaster.cleanUp();
 
+            mapEditorScreen = null;
             puttingSimulator = null;
             gameScreen = null;
 
@@ -121,19 +123,3 @@ public class Main {
     }
 
 }
-
-
-//
-////                     ----------- Ray Tracing Update -----------
-////            picker.update();
-////            Vector3f terrainPoint = picker.getCurrentTerrainPoint();
-////            if (terrainPoint != null) {
-////                allEntities.get(0)[0].setPosition(terrainPoint);
-////            }
-////                      ----------- Ray Tracing Update -----------
-//
-//            //            guiRenderer.render(ui.guis);
-//
-//
-
-
