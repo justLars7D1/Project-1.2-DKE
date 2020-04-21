@@ -44,7 +44,7 @@ public class Main {
 
         PuttingSimulator puttingSimulator = null;
         String gameMode;
-        String solverType = "RK4";
+        String solverType = "Verlet";
 
         //This is the loop that runs the entire game
         while (!Window.closed()) {
@@ -78,10 +78,11 @@ public class Main {
                     gameModeScreen.finish();
                     designerScreen.create(guiWindow);
                     gameScreen = new GameScreen(puttingSimulator, gameMode, loader, renderer);
-                    mapEditorScreen = new MapEditorScreen(gameScreen, renderer);
+                    // For phase 3: mapEditorScreen = new MapEditorScreen(gameScreen, renderer);
                 }
             }
 
+            /* Already a start on phase 3
             //While loop for the terrain editor (sand banks, etc...)
             while(!mapEditorScreen.isDoneEditing() && !Window.closed()) {
                 mapEditorScreen.render(renderer);
@@ -89,9 +90,10 @@ public class Main {
                 Window.update();
                 Window.swapBuffers();
             }
-
+            */
 
             //TODO: Now, set up the game!
+            gameScreen.setCallback();
             while (!((gameScreen != null && gameScreen.isGameOver()) || Window.closed())) {
                 gameScreen.render(renderer);
                 TextMaster.render();

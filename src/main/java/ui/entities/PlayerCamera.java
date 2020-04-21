@@ -114,4 +114,20 @@ public class PlayerCamera extends Camera {
     public UIPlayer getUIPlayer() {
         return UIPlayer;
     }
+
+    public void setCallback() {
+        GLFW.glfwSetScrollCallback(window, new GLFWScrollCallback() {
+            @Override public void invoke (long win, double dx, double dy) {
+                calculateZoom(dy);
+            }
+        });
+        GLFW.glfwSetCursorPosCallback(window, new GLFWCursorPosCallback() {
+            @Override
+            public void invoke(long window, double xpos, double ypos) {
+                curX = (float) xpos;
+                curY = (float) ypos;
+            }
+        });
+    }
+
 }

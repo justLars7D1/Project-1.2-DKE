@@ -208,4 +208,8 @@ public class GameScreen {
         terrainMap.renderMap(renderer, waterRenderer, camera, lights);
     }
 
+    public void setCallback() {
+        playerCamera.setCallback();
+    }
+
 }
