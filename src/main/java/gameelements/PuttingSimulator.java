@@ -96,9 +96,6 @@ public class PuttingSimulator {
         engine.setBallPosition(ballPosition);
         engine.setBallVelocity(ballVelocity);
 
-        //Course function
-        Function2d z = course.get_height();
-
         int numTimesCloseToCurrent = 0;
         Vector3d current = ballPosition.copy();
 
@@ -238,7 +235,7 @@ public class PuttingSimulator {
     }
 
     public static void main(String[] args) {
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("sin(x) + y*y"), new Vector3d(0, 10));
         PuttingSimulator sim1 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
         PuttingSimulator sim2 = new PuttingSimulator(course.copy(), new VerletSolver(course.copy()));
         PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));

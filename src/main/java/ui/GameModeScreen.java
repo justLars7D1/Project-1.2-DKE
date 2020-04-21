@@ -50,18 +50,26 @@ public class GameModeScreen {
             this.doneSelecting = true;
         });
 
+        this.gameModeBtns.get("bot_mode").setOnMouseClicked(e -> {
+            this.selectedGameMode = "bot_mode";
+            this.doneSelecting = true;
+        });
+
         pane.setBackground(new BackgroundNVGImage(backgroundImage.getImage()));
 
     }
 
     private void setupButtons(FloatingPane floatingPane) {
-        String[] buttonNames = {"single_player", "multi_player", "load_file_mode"};
-        String[] initialValues = {"Single player", "Multi-player", "Load from file mode"};
+        String[] buttonNames = {"single_player", "multi_player", "load_file_mode", "bot_mode"};
+        String[] initialValues = {"Single player", "Multi-player", "Load from file mode", "Player vs bot"};
         for (int i = 0; i < buttonNames.length; i++) {
             FloatingPane t = new FloatingPane();
-            t.setAbsolutePosition(0.15 * Window.getWidth() + 0.25 * i * Window.getWidth(), 0.35 * Window.getHeight());
+            if (i != buttonNames.length-1) {
+                t.setAbsolutePosition(0.15 * Window.getWidth() + 0.25 * i * Window.getWidth(), 0.35 * Window.getHeight());
+            } else {
+                t.setAbsolutePosition(0.15 * Window.getWidth() + 0.25 * Window.getWidth(), 0.625 * Window.getHeight());
+            }
             floatingPane.getChildren().add(t);
-
             Button btn = new Button(initialValues[i]);
             gameModeBtns.put(buttonNames[i], btn);
             btn.setPrefSize(300, 150);

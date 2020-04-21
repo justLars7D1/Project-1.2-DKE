@@ -27,6 +27,7 @@ public class RK4 implements PhysicsEngine {
     public void approximate() {
         Vector3d pos = ballPosition.copy();
         Vector3d vel = ballVelocity.copy();
+
         Vector3d[] ODEDerivativesK1 = RK4(pos, vel);
         Vector3d[] ODEDerivativesK2 = RK4(pos.add(ODEDerivativesK1[0].getScaled(stepSize / 2)),
                 vel.add(ODEDerivativesK1[1].getScaled(stepSize / 2)));
