@@ -85,7 +85,7 @@ public class PuttingSimulator {
      * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
-    public void take_shot(Vector3d initial_ball_velocity) {
+    public Vector3d take_shot(Vector3d initial_ball_velocity) {
 
         //Copy the initial velocity and position of the ball
         Vector3d ballVelocity = initial_ball_velocity.copy();
@@ -113,7 +113,7 @@ public class PuttingSimulator {
             current = ballPosition.copy();
 
         }
-
+    return current;
     }
 
     /**
