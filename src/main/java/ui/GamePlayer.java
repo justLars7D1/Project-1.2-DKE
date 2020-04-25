@@ -45,15 +45,16 @@ public class GamePlayer {
 
     public void takeShot(Vector3d ballVelocity) {
         this.numMovesMade++;
-        if (type.equals("user")) {
-            simulator.take_shot(ballVelocity, uiPlayer);
+        if (type.equals("bot")) {
+            //Put bot trigger here
         } else if (type.equals("file")) {
             if (currentShotIndex < shotsInFile.length) {
-                simulator.take_shot(shotsInFile[currentShotIndex++], uiPlayer);
+                ballVelocity = shotsInFile[currentShotIndex++];
             } else {
                 type = "user";
             }
         }
+        simulator.take_shot(ballVelocity, uiPlayer);
     }
 
     private static UIPlayer createPlayer(Loader loader) {
