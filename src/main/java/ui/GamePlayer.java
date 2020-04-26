@@ -46,7 +46,7 @@ public class GamePlayer {
     public void takeShot(Vector3d ballVelocity) {
         this.numMovesMade++;
         if (type.equals("bot")) {
-            //Put bot trigger here
+            //TODO: Put bot trigger here
         } else if (type.equals("file")) {
             if (currentShotIndex < shotsInFile.length) {
                 ballVelocity = shotsInFile[currentShotIndex++];

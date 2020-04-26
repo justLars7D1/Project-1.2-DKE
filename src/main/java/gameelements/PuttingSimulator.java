@@ -85,13 +85,12 @@ public class PuttingSimulator {
      * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
-    public void take_shot(Vector3d initial_ball_velocity) {
+    public void take_shot(Vector3d initial_ball_velocity, double deltaT) {
 
         //Copy the initial velocity and position of the ball
         Vector3d ballVelocity = initial_ball_velocity.copy();
 
         //Initialize the physics engine
-        final double deltaT = Math.pow(10, -4);
         engine.set_step_size(deltaT);
         engine.setBallPosition(ballPosition);
         engine.setBallVelocity(ballVelocity);
@@ -235,13 +234,13 @@ public class PuttingSimulator {
     }
 
     public static void main(String[] args) {
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("sin(x) + y*y"), new Vector3d(0, 10));
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         PuttingSimulator sim1 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
         PuttingSimulator sim2 = new PuttingSimulator(course.copy(), new VerletSolver(course.copy()));
         PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
-        sim1.take_shot(new Vector3d(0, 3));
-        sim2.take_shot(new Vector3d(0, 3));
-        sim3.take_shot(new Vector3d(0, 3));
+        sim1.take_shot(new Vector3d(0, 3), 10e-4);
+        sim2.take_shot(new Vector3d(0, 3), 10e-4);
+        sim3.take_shot(new Vector3d(0, 3), 10e-4);
         System.out.println("Euler: " + sim1.get_ball_position());
         System.out.println("Verlet: " + sim2.get_ball_position());
         System.out.println("RK4: " + sim3.get_ball_position());

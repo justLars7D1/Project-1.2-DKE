@@ -79,7 +79,7 @@ public class Vector3d extends Vector {
      * @return A new vector containing the result
      */
     public Vector3d minus(Vector3d otherVector) {
-        return new Vector3d(coords[0] - otherVector.get_x(), coords[1] - otherVector.get_y(), coords[1] - otherVector.get_z());
+        return new Vector3d(coords[0] - otherVector.get_x(), coords[1] - otherVector.get_y(), coords[2] - otherVector.get_z());
     }
 
     /**
@@ -100,6 +100,26 @@ public class Vector3d extends Vector {
         Vector3d newScaled = copy();
         newScaled.scale(scalingFactor);
         return newScaled;
+    }
+
+    /**
+     * Returns a new rotated vector around the Y-axis
+     * @param theta The angle of rotation
+     * @return The rotated vector
+     */
+    public Vector3d getRotatedYAxis(double theta) {
+        Vector3d newRotated = copy();
+        newRotated.rotateYAxis(theta);
+        return newRotated;
+    }
+
+    /**
+     * Rotates a 3d-vector around the y-axis
+     * @param theta The angle of rotation
+     */
+    public void rotateYAxis(double theta) {
+        coords[0] = Math.cos(theta)*get_x() + Math.sin(theta)*get_z();
+        coords[2] = -1*Math.sin(theta)*get_x() + Math.cos(theta)*get_z();
     }
 
 }
