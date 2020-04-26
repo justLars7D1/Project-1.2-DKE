@@ -104,7 +104,7 @@ public class PuttingSimulator {
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10,-5) && Math.abs(current.get_z() - ballPosition.get_z()) <= Math.pow(10,-5)) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1 && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
@@ -238,9 +238,9 @@ public class PuttingSimulator {
         PuttingSimulator sim1 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
         PuttingSimulator sim2 = new PuttingSimulator(course.copy(), new VerletSolver(course.copy()));
         PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
-        sim1.take_shot(new Vector3d(0, 3), 10e-4);
-        sim2.take_shot(new Vector3d(0, 3), 10e-4);
-        sim3.take_shot(new Vector3d(0, 3), 10e-4);
+        sim1.take_shot(new Vector3d(0, 3), 10e-3);
+        sim2.take_shot(new Vector3d(0, 3), 10e-3);
+        sim3.take_shot(new Vector3d(0, 3), 10e-4); //(0.08833984711499843,0.0,2.684909583202568)
         System.out.println("Euler: " + sim1.get_ball_position());
         System.out.println("Verlet: " + sim2.get_ball_position());
         System.out.println("RK4: " + sim3.get_ball_position());

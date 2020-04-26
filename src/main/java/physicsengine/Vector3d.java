@@ -118,6 +118,7 @@ public class Vector3d extends Vector {
      * @param theta The angle of rotation
      */
     public void rotateYAxis(double theta) {
+        theta = Math.toRadians(theta);
         coords[0] = Math.cos(theta)*get_x() + Math.sin(theta)*get_z();
         coords[2] = -1*Math.sin(theta)*get_x() + Math.cos(theta)*get_z();
     }
