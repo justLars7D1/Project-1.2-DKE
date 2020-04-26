@@ -73,11 +73,13 @@ public class HeuristicBot implements PuttingBot {
             Vector3d shot = shotDirection.getScaled(maxVelocity);
 
             ShotData bestShot = null;
+            double bestTargetDistance = Double.MAX_VALUE;
+
+            double precision = 10e-3;
             double i = 1;
 
             double previousDistanceToTarget = Double.MAX_VALUE;
             double currentDistanceToTarget = 0;
-            double precision = 10e-3;
 
             while (Math.abs(previousDistanceToTarget - currentDistanceToTarget) > precision) {
 
@@ -86,11 +88,12 @@ public class HeuristicBot implements PuttingBot {
 
                 shot.scale(Math.pow(ballHoleDistFactor, 1/i));
 
-                System.out.println(outcomeCenter.getDistanceToTarget());
-
-                bestShot = outcomeCenter;
                 previousDistanceToTarget = currentDistanceToTarget;
                 currentDistanceToTarget = outcomeCenter.getDistanceToTarget();
+
+                if (currentDistanceToTarget < bestTargetDistance) {
+                    bestShot = outcomeCenter;
+                }
 
                 i += 0.75;
 
@@ -103,6 +106,7 @@ public class HeuristicBot implements PuttingBot {
         public ShotData getBestShot() {
             return bestShot;
         }
+
     }
 
     public static void main(String[] args) {
