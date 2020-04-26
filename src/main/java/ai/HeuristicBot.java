@@ -99,7 +99,13 @@ public class HeuristicBot implements PuttingBot {
 
             }
 
+            if (bestShot.getShotVector().magnitude() >= maxVelocity) {
+                Vector3d maxShot = shotDirection.getScaled(maxVelocity);
+                bestShot = simulateShot(ball_position, sim, maxShot, stepSize);
+            }
             this.bestShot = bestShot;
+
+            System.out.println(this.bestShot);
 
         }
 
