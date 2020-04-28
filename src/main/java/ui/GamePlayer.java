@@ -1,5 +1,7 @@
 package ui;
 
+import ai.HeuristicBot;
+import ai.PuttingBot;
 import gameelements.PuttingSimulator;
 import org.joml.Vector3f;
 import physicsengine.Vector3d;
@@ -21,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePlayer {
+
+    private static final PuttingBot bot = new HeuristicBot();
 
     private final UIPlayer uiPlayer;
     private String type;
@@ -46,7 +50,7 @@ public class GamePlayer {
     public void takeShot(Vector3d ballVelocity) {
         this.numMovesMade++;
         if (type.equals("bot")) {
-            //TODO: Put bot trigger here
+            ballVelocity = bot.shot_velocity(simulator.getCourse(), simulator.get_ball_position());
         } else if (type.equals("file")) {
             if (currentShotIndex < shotsInFile.length) {
                 ballVelocity = shotsInFile[currentShotIndex++];
