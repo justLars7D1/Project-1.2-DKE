@@ -53,6 +53,19 @@ public abstract class Vector implements Serializable {
     }
 
     /**
+     * Calculate the dot-product with another vector
+     * @param v the other vector to use in the calculation
+     * @return the dot product
+     */
+    public double dot(Vector v) {
+        double dotProd = 0;
+        for (int i = 0; i < coords.length; i++) {
+            dotProd += coords[i] * v.coords[i];
+        }
+        return dotProd;
+    }
+
+    /**
      * Gets the string representation of the vector
      * @return The string representation of the vector
      */

@@ -123,4 +123,19 @@ public class Vector3d extends Vector {
         coords[2] = -1*Math.sin(theta)*get_x() + Math.cos(theta)*get_z();
     }
 
+    /**
+     * Calculate the cross-product with another vector
+     * @param v the other vector to use in the calculation
+     * @return the cross product
+     */
+    public Vector3d cross(Vector3d v) {
+        double crossX = coords[0] * v.coords[0]
+                - coords[2] * v.coords[1];
+        double crossY = coords[2] * v.coords[0]
+                - coords[0] * v.coords[2];
+        double crossZ = coords[0] * v.coords[1]
+                - coords[1] * v.coords[0];
+        return new Vector3d(crossX, crossY, crossZ);
+    }
+
 }
