@@ -40,41 +40,70 @@ public class HeuristicBot implements PuttingBot {
         double bestTargetDistance = Double.MAX_VALUE;
 
         // Scaling factor for scaling the shot
-        double i = 1;
+        double scalingFactorShot = 1;
 
-        // Run the loop for 7 seconds
+        // The angle of initial rotation when the ball hits water
+        double angle = 10;
+        int angleMultiplcationFactor = 2;
+        double iteration = 0;
+
+        // Run the loop for 7 seconds and while it's not in a hole
         long startTime = System.nanoTime();
-        long timeLimit = 5;
-        while ((System.nanoTime() - startTime)/10e8 <= timeLimit) { // Add or if it's in a hole
+        long timeLimit = 7;
+        boolean isInHole = false;
+        while ((System.nanoTime() - startTime)/10e8 <= timeLimit && !isInHole) {
 
             // Simulate the shot
             ShotData resultingPosition = simulateShot(ball_position, sim, shot, stepSize);
 
-            // Calculate the proportion of the start position and the flag to the ball position and the flag
-            double ballHoleDistFactor = ballFlagDistance / distanceBetween(ball_position, resultingPosition.getCalculatedPosition());
+            if (!sim.isInWater()) {
 
-            // Then we calculate the angle between the start and flag and the ball and flag
-            Vector3d startResultVector = resultingPosition.getCalculatedPosition().minus(ball_position);
-            Vector3d startFlagVector = flagPosition.minus(ball_position);
-            double ballHoleAngle = 180/Math.PI * Math.acos(
-                    (startResultVector.dot(startFlagVector)) / (startResultVector.magnitude() * startFlagVector.magnitude())
-            );
+                // Set the angle to rotate if it hits the water back to it's original value divided by two (to not change too much)
+                angle = 5;
+                iteration = 0;
 
-            // Calculate if the ball is on the left or the right of the flag using the cross product
-            Vector3d crossProductStartFlagAndStartSimulated = startFlagVector.cross(resultingPosition.getCalculatedPosition());
+                // Calculate the proportion of the start position and the flag to the ball position and the flag
+                double ballHoleDistFactor = ballFlagDistance / distanceBetween(ball_position, resultingPosition.getCalculatedPosition());
 
-            // We scale the shot by the factor we calculated
-            shot.scale(Math.pow(ballHoleDistFactor, 1/i));
+                // Then we calculate the angle between the start and flag and the ball and flag
+                Vector3d startResultVector = resultingPosition.getCalculatedPosition().minus(ball_position);
+                Vector3d startFlagVector = flagPosition.minus(ball_position);
+                double ballHoleAngle = 180/Math.PI * Math.acos(
+                        (startResultVector.dot(startFlagVector)) / (startResultVector.magnitude() * startFlagVector.magnitude())
+                );
 
-            // We rotate the shot, compensating for the old "final" position
-            shot.rotateYAxis(((crossProductStartFlagAndStartSimulated.get_y() > 0) ? -1 : 1) * (1/i) *ballHoleAngle);
+                // Calculate if the ball is on the left or the right of the flag using the cross product
+                Vector3d crossProductStartFlagAndStartSimulated = startFlagVector.cross(resultingPosition.getCalculatedPosition());
 
-            // If it ends up with a better result, we store it
-            if (resultingPosition.getDistanceToTarget() < bestTargetDistance) {
-                bestShot = resultingPosition;
+                // We scale the shot by the factor we calculated
+                shot.scale(Math.pow(ballHoleDistFactor, 0.95/scalingFactorShot));
+
+                // We rotate the shot, compensating for the old "final" position
+                shot.rotateYAxis(((crossProductStartFlagAndStartSimulated.get_y() > 0) ? -1 : 1) * (0.95/scalingFactorShot) *ballHoleAngle);
+
+                // If it ends up with a better result, we store it
+                if (resultingPosition.getDistanceToTarget() < bestTargetDistance) {
+                    bestShot = resultingPosition;
+                }
+
+                isInHole = sim.isInHole();
+
+                scalingFactorShot += 0.5;
+
+            } else {
+
+                shot.rotateYAxis(Math.pow(-1, iteration) * angle);
+                if (iteration++ % 2 == 1) {
+                    angle *= angleMultiplcationFactor;
+                }
+
+                System.out.println(shot);
+
+                if (bestShot == null || bestShot.getDistanceToTarget() > resultingPosition.getDistanceToTarget()) {
+                    bestShot = resultingPosition;
+                }
+
             }
-
-            i += 0.5;
 
         }
 
@@ -87,9 +116,9 @@ public class HeuristicBot implements PuttingBot {
     }
 
     private ShotData simulateShot(Vector3d ballPos, PuttingSimulator simulator, Vector3d shot, double stepSize) {
+        simulator.set_ball_position(ballPos);
         simulator.take_shot(shot, stepSize);
         Vector3d newPos = simulator.get_ball_position();
-        simulator.set_ball_position(ballPos);
         return new ShotData(shot, distanceBetween(newPos, simulator.getCourse().get_flag_position()), newPos);
     }
 

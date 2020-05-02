@@ -82,7 +82,7 @@ public class PuttingSimulator {
     }
 
     /**
-     * Simulate taking a shot, updating the ball live
+     * Simulate taking a shot (used for the bot)
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
     public void take_shot(Vector3d initial_ball_velocity, double deltaT) {
@@ -98,7 +98,7 @@ public class PuttingSimulator {
         int numTimesCloseToCurrent = 0;
         Vector3d current = ballPosition.copy();
 
-        while(numTimesCloseToCurrent < 1000) {
+        while(numTimesCloseToCurrent < 100) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
@@ -110,6 +110,10 @@ public class PuttingSimulator {
                 numTimesCloseToCurrent = 0;
             }
             current = ballPosition.copy();
+
+            if (isInWater()) {
+                break;
+            }
 
         }
 
@@ -159,24 +163,32 @@ public class PuttingSimulator {
                 e.printStackTrace();
             }
 
-            System.out.println(numTimesCloseToCurrent);
+            if (isInWater()) {
+                StatusMessage.setSTATUS("water");
+                break;
+            }
 
         }
 
         Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_z());
         player.setPosition(newPos);
 
-        boolean isInHole = Math.sqrt(Math.pow(ballPosition.get_x() - course.get_flag_position().get_x(), 2) +
-                                     Math.pow(ballPosition.get_z() - course.get_flag_position().get_z(), 2)) <= course.get_hole_tolerance();
-
-        if (z.evaluate(ballPosition) < 0) {
-            StatusMessage.setSTATUS("water");
-        } else if (isInHole) {
+        boolean inWater = isInWater();
+        if (!inWater && isInHole()) {
             StatusMessage.setSTATUS("finished");
-        } else {
+        } else if(!inWater) {
             StatusMessage.setSTATUS("success");
         }
 
+    }
+
+    public boolean isInHole() {
+        return  Math.sqrt(Math.pow(ballPosition.get_x() - course.get_flag_position().get_x(), 2) +
+                Math.pow(ballPosition.get_z() - course.get_flag_position().get_z(), 2)) <= course.get_hole_tolerance();
+    }
+
+    public boolean isInWater() {
+        return course.get_height().evaluate(ballPosition) < 0;
     }
 
     /**
