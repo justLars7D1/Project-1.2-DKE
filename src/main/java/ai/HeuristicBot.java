@@ -30,7 +30,7 @@ public class HeuristicBot implements PuttingBot {
         // We create the simulator to take shots with
         PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
         sim.set_ball_position(ball_position);
-        double stepSize = 10e-4;
+        double stepSize = 0.01;
 
         // Get the direction of the shot (pointing directly at the flag)
         Vector3d shot = shotDirection.getScaled(maxVelocity);
@@ -44,8 +44,8 @@ public class HeuristicBot implements PuttingBot {
 
         // Run the loop for 7 seconds
         long startTime = System.nanoTime();
-        long timeLimit = 7;
-        while ((System.nanoTime() - startTime)/10e8 <= timeLimit) {
+        long timeLimit = 5;
+        while ((System.nanoTime() - startTime)/10e8 <= timeLimit) { // Add or if it's in a hole
 
             // Simulate the shot
             ShotData resultingPosition = simulateShot(ball_position, sim, shot, stepSize);
@@ -67,7 +67,7 @@ public class HeuristicBot implements PuttingBot {
             shot.scale(Math.pow(ballHoleDistFactor, 1/i));
 
             // We rotate the shot, compensating for the old "final" position
-            shot.rotateYAxis(((crossProductStartFlagAndStartSimulated.get_y() > 0) ? -1 : 1) * ballHoleAngle);
+            shot.rotateYAxis(((crossProductStartFlagAndStartSimulated.get_y() > 0) ? -1 : 1) * (1/i) *ballHoleAngle);
 
             // If it ends up with a better result, we store it
             if (resultingPosition.getDistanceToTarget() < bestTargetDistance) {
@@ -106,7 +106,7 @@ public class HeuristicBot implements PuttingBot {
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 
-        sim.take_shot(shot, 10e-4);
+        sim.take_shot(shot, 0.01);
         System.out.println(sim.get_ball_position());
     }
 
