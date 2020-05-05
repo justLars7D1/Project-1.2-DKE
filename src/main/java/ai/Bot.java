@@ -5,10 +5,15 @@ import gameelements.PuttingSimulator;
 
 import org.joml.Vector3f;
 import physicsengine.Vector3d;
+import physicsengine.engines.RK4;
+import physicsengine.functions.FunctionParserRPN;
+import ui.entities.Camera;
+import ui.entities.PlayerCamera;
+import ui.entities.UIPlayer;
 
 import static java.lang.Math.sqrt;
 
-public class Bot {
+public class Bot implements PuttingBot{
     private float direction;
     private physicsengine.Vector3d velocity;
     private physicsengine.Vector3d ballPosition;
@@ -22,6 +27,9 @@ public class Bot {
         this.velocity = velocity;
         this.ballPosition = ballPosition;
         this.flagPosition = flagPosition;
+    }
+
+    Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position);
     }
 
     private physicsengine.Vector3d simulateShot(physicsengine.Vector3d v, PuttingSimulator simulator){
@@ -85,5 +93,18 @@ public class Bot {
         }
         return false;
     }
+
+    public static void main(String[] args) {
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+
+        PuttingBot bot = new Bot(50, ,course.get_start_position(),course.get_flag_position());
+
+        Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
+
+        //sim.take_shot(shot, 0.01);
+        System.out.println(sim.get_ball_position());
+    }
+
 
 }
