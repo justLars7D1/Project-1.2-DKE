@@ -4,6 +4,7 @@ import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 
 import org.joml.Vector3f;
+import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
 import physicsengine.functions.FunctionParserRPN;
@@ -11,10 +12,12 @@ import ui.entities.Camera;
 import ui.entities.PlayerCamera;
 import ui.entities.UIPlayer;
 
+import java.lang.invoke.VarHandle;
+
 import static java.lang.Math.sqrt;
 
 public class Bot implements PuttingBot{
-    private float direction;
+    private Vector3d direction;
     private physicsengine.Vector3d velocity;
     private physicsengine.Vector3d ballPosition;
     private physicsengine.Vector3d flagPosition;
@@ -22,7 +25,7 @@ public class Bot implements PuttingBot{
     private PuttingSimulator simulator;
     private PuttingCourse course;
 
-    public Bot(float direction, physicsengine.Vector3d velocity, physicsengine.Vector3d ballPosition, physicsengine.Vector3d flagPosition){
+    public Bot(Vector3d direction, physicsengine.Vector3d velocity, physicsengine.Vector3d ballPosition, physicsengine.Vector3d flagPosition){
         this.direction = direction;
         this.velocity = velocity;
         this.ballPosition = ballPosition;
@@ -40,10 +43,10 @@ public class Bot implements PuttingBot{
                 updateVelocity(new Vector3d(velocity.get_x()/2,velocity.get_y()/2,velocity.get_z()/2) );
             }
             if(landInWater(ballPosition, flagPosition, course)){
-                setDirection(5, direction);
+                setDirection(new Vector3d(3,3,0), direction);
             }
             else{
-                setDirection(1, direction);
+                setDirection(new Vector3d(1,1,0), direction);
             }
 
         }
@@ -59,10 +62,11 @@ public class Bot implements PuttingBot{
     private boolean landInWater( physicsengine.Vector3d bP,  physicsengine.Vector3d fP, PuttingCourse course){
         // WE DON'T KNOW HOW TO DO
         // TO COMPLETE
+        return false;
     }
 
-    private float setDirection(float angle, float direction){
-        direction+=angle;
+    private Vector3d setDirection(Vector3d angle, Vector3d direction){
+        direction =new Vector3d(angle.get_x()+direction.get_x(), angle.get_y()+direction.get_y(), angle.get_z()+direction.get_z());
         return direction;
     }
 
