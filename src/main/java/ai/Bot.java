@@ -119,7 +119,7 @@ public class Bot implements PuttingBot{
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
 
-        PuttingBot bot = new Bot(50, ,course.get_start_position(),course.get_flag_position());
+        PuttingBot bot = new Bot(new Vector3d(0,10),new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 
