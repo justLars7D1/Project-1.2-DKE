@@ -29,7 +29,25 @@ public class Bot implements PuttingBot{
         this.flagPosition = flagPosition;
     }
 
-    Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position);
+    public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
+        simulateShot(velocity, simulator);
+
+        while(!reachHole(flagPosition, simulatedBallPosition)) {
+            if (undershot(flagPosition, ballPosition,simulator, velocity)){
+                updateVelocity(new Vector3d(velocity.get_x()-velocity.get_x()/2,velocity.get_y()-velocity.get_y()/2,velocity.get_z()-velocity.get_z()/2) );
+            }
+            if (overshot(flagPosition, ballPosition,simulator, velocity)){
+                updateVelocity(new Vector3d(velocity.get_x()/2,velocity.get_y()/2,velocity.get_z()/2) );
+            }
+            if(landInWater(ballPosition, flagPosition, course)){
+                setDirection(5, direction);
+            }
+            else{
+                setDirection(1, direction);
+            }
+
+        }
+        return null;
     }
 
     private physicsengine.Vector3d simulateShot(physicsengine.Vector3d v, PuttingSimulator simulator){
@@ -50,7 +68,6 @@ public class Bot implements PuttingBot{
 
     private Vector3d updateBallPosition(Vector3d simulatedBallPosition ){
         this.ballPosition=simulatedBallPosition;
-
         return ballPosition;
     }
 
