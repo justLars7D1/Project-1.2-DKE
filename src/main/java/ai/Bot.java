@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
+import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Camera;
 import ui.entities.PlayerCamera;
@@ -25,7 +26,7 @@ public class Bot implements PuttingBot{
     private PuttingSimulator simulator;
     private PuttingCourse course;
 
-    public Bot(Vector3d direction, physicsengine.Vector3d velocity, physicsengine.Vector3d ballPosition, physicsengine.Vector3d flagPosition){
+    public Bot(Vector3d direction, Vector3d velocity, Vector3d ballPosition, Vector3d flagPosition){
         this.direction = direction;
         this.velocity = velocity;
         this.ballPosition = ballPosition;
@@ -36,14 +37,22 @@ public class Bot implements PuttingBot{
         simulateShot(velocity, simulator);
 
         while(!reachHole(flagPosition, simulatedBallPosition)) {
-            if (undershot(flagPosition, ballPosition,simulator, velocity)){
+
+           while (landInWater(ballPosition, flagPosition, course)){
+                setDirection(new Vector3d(3,3,0), direction);
+
+                simulateShot(velocity, simulator);
+
+                if( !landInWater(ballPosition, flagPosition, course)){
+                    updateBallPosition(simulatedBallPosition);
+                }
+            }
+
+           if (undershot(flagPosition, ballPosition,simulator, velocity)){
                 updateVelocity(new Vector3d(velocity.get_x()-velocity.get_x()/2,velocity.get_y()-velocity.get_y()/2,velocity.get_z()-velocity.get_z()/2) );
             }
             if (overshot(flagPosition, ballPosition,simulator, velocity)){
                 updateVelocity(new Vector3d(velocity.get_x()/2,velocity.get_y()/2,velocity.get_z()/2) );
-            }
-            if(landInWater(ballPosition, flagPosition, course)){
-                setDirection(new Vector3d(3,3,0), direction);
             }
             else{
                 setDirection(new Vector3d(1,1,0), direction);
@@ -53,15 +62,19 @@ public class Bot implements PuttingBot{
         return null;
     }
 
-    private physicsengine.Vector3d simulateShot(physicsengine.Vector3d v, PuttingSimulator simulator){
+    private Vector3d simulateShot(Vector3d v, PuttingSimulator simulator){
         simulatedBallPosition = simulator.take_shot(v);
 
         return simulatedBallPosition;
     }
 
-    private boolean landInWater( physicsengine.Vector3d bP,  physicsengine.Vector3d fP, PuttingCourse course){
-        // WE DON'T KNOW HOW TO DO
-        // TO COMPLETE
+    private boolean landInWater( Vector3d bP,  Vector3d fP, PuttingCourse course){
+        Vector3d wayOfTheBall=new Vector3d(bP.get_x()+ fP.get_x(),bP.get_y()+fP.get_y(), bP.get_z() + fP.get_z()) ;
+        Function2d z = course.get_height();
+
+        if (z.evaluate(wayOfTheBall) < 0) {
+            return true;
+        }
         return false;
     }
 
@@ -119,11 +132,11 @@ public class Bot implements PuttingBot{
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
 
-        PuttingBot bot = new Bot(new Vector3d(0,10),new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
+        PuttingBot bot = new Bot(new Vector3d(course.get_start_position().get_x()-course.get_flag_position().get_x(), course.get_start_position().get_y()-course.get_flag_position().get_y(), course.get_start_position().get_z()-course.get_flag_position().get_z()), new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 
-        //sim.take_shot(shot, 0.01);
+        sim.take_shot(shot, 0.01);
         System.out.println(sim.get_ball_position());
     }
 
