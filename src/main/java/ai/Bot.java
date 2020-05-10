@@ -136,7 +136,7 @@ public class Bot implements PuttingBot{
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 
-        sim.take_shot(shot, 0.01);
+        sim.take_shot(shot);
         System.out.println(sim.get_ball_position());
     }
 
