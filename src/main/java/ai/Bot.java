@@ -25,6 +25,7 @@ public class Bot implements PuttingBot{
     private physicsengine.Vector3d simulatedBallPosition;
     private PuttingSimulator simulator;
     private PuttingCourse course;
+    private int nbrOfShots= 0;
 
     public Bot(Vector3d direction, Vector3d velocity, Vector3d ballPosition, Vector3d flagPosition){
         this.direction = direction;
@@ -45,6 +46,7 @@ public class Bot implements PuttingBot{
 
                 if( !landInWater(ballPosition, flagPosition, course)){
                     updateBallPosition(simulatedBallPosition);
+                    nbrOfShots++;
                 }
             }
 
@@ -59,8 +61,13 @@ public class Bot implements PuttingBot{
             }
 
         }
+        takeAShot(direction, velocity,ballPosition, simulatedBallPosition, simulator);
+        nbrOfShots++;
+
+        System.out.println("The bot used : "+nbrOfShots+ "shots to put the ball in the hole");
         return null;
     }
+
 
     private Vector3d simulateShot(Vector3d v, PuttingSimulator simulator){
         simulatedBallPosition = simulator.take_shot(v);
@@ -96,7 +103,7 @@ public class Bot implements PuttingBot{
         }
     }
 
-    private Vector3d takeAShot(float d, Vector3d v, Vector3d bP, Vector3d sBP, PuttingSimulator s){
+    private Vector3d takeAShot(Vector3d d, Vector3d v, Vector3d bP, Vector3d sBP, PuttingSimulator s){
         Vector3d ballInHole= s.take_shot(v);
         return ballInHole;
     }
