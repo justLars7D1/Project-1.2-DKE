@@ -4,6 +4,7 @@ import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 
 import org.joml.Vector3f;
+import physicsengine.PhysicsEngine;
 import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
@@ -26,6 +27,7 @@ public class Bot implements PuttingBot{
     private PuttingSimulator simulator;
     private PuttingCourse course;
     private int nbrOfShots= 0;
+    private PhysicsEngine engine;
 
     public Bot(Vector3d direction, Vector3d velocity, Vector3d ballPosition, Vector3d flagPosition){
         this.direction = direction;
@@ -34,18 +36,22 @@ public class Bot implements PuttingBot{
         this.flagPosition = flagPosition;
     }
 
+    public Vector3d getSimulatedBallPosition(){
+        return this.simulatedBallPosition;
+    }
+
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
-        simulateShot(velocity, simulator);
+        simulateShot(this.velocity);
 
         while(!reachHole(flagPosition, simulatedBallPosition)) {
 
            while (landInWater(ballPosition, flagPosition, course)){
                 setDirection(new Vector3d(3,3,0), direction);
 
-                simulateShot(velocity, simulator);
+                simulateShot(velocity);
 
                 if( !landInWater(ballPosition, flagPosition, course)){
-                    updateBallPosition(simulatedBallPosition);
+                    simulatedBallPosition = updateBallPosition(simulatedBallPosition);
                     nbrOfShots++;
                 }
             }
@@ -69,10 +75,37 @@ public class Bot implements PuttingBot{
     }
 
 
-    private Vector3d simulateShot(Vector3d v, PuttingSimulator simulator){
-        simulatedBallPosition = simulator.take_shot(v);
 
-        return simulatedBallPosition;
+
+
+
+
+
+    public Vector3d simulateShot(Vector3d v){
+
+        Vector3d ballVelocity= v.copy();
+
+        //Initialize the physics engine
+        final double deltaT = Math.pow(10, -4);
+        engine.set_step_size(deltaT);
+        engine.setBallPosition(ballPosition);
+        engine.setBallVelocity(ballVelocity);
+
+        int numTimesCloseToCurrent = 0;
+        Vector3d current = ballPosition.copy();
+        while(numTimesCloseToCurrent < 1000) {
+            engine.approximate();
+            ballPosition = engine.getBallPosition();
+            ballVelocity = engine.getBallVelocity();
+
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= Math.pow(10, -5) && Math.abs(current.get_z() - ballPosition.get_z()) <= Math.pow(10, -5)) {
+                numTimesCloseToCurrent++;
+            } else {
+                numTimesCloseToCurrent = 0;
+            }
+            current = ballPosition.copy();
+        }
+        return current;
     }
 
     private boolean landInWater( Vector3d bP,  Vector3d fP, PuttingCourse course){
@@ -139,11 +172,10 @@ public class Bot implements PuttingBot{
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
 
-        PuttingBot bot = new Bot(new Vector3d(course.get_start_position().get_x()-course.get_flag_position().get_x(), course.get_start_position().get_y()-course.get_flag_position().get_y(), course.get_start_position().get_z()-course.get_flag_position().get_z()), new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
+        Bot bot = new Bot(new Vector3d(course.get_start_position().get_x()-course.get_flag_position().get_x(), course.get_start_position().get_y()-course.get_flag_position().get_y(), course.get_start_position().get_z()-course.get_flag_position().get_z()), new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
 
-        Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
-
-        sim.take_shot(shot);
+       // bot.setSimulatedBallPosition();
+        sim.set_ball_position(bot.getSimulatedBallPosition());
         System.out.println(sim.get_ball_position());
     }
 
