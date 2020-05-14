@@ -3,18 +3,11 @@ package ai;
 import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 
-import org.joml.Vector3f;
 import physicsengine.PhysicsEngine;
-import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
-import ui.entities.Camera;
-import ui.entities.PlayerCamera;
-import ui.entities.UIPlayer;
-
-import java.lang.invoke.VarHandle;
 
 import static java.lang.Math.sqrt;
 
@@ -41,8 +34,9 @@ public class Bot implements PuttingBot{
     }
 
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
-        simulateShot(this.velocity);
+        this.simulatedBallPosition= simulateShot(this.velocity);
 
+       // System.out.println("OMG yeah");
         while(!reachHole(flagPosition, simulatedBallPosition)) {
 
            while (landInWater(ballPosition, flagPosition, course)){
@@ -71,17 +65,11 @@ public class Bot implements PuttingBot{
         nbrOfShots++;
 
         System.out.println("The bot used : "+nbrOfShots+ "shots to put the ball in the hole");
-        return null;
+        return this.simulatedBallPosition;
     }
 
 
-
-
-
-
-
-
-    public Vector3d simulateShot(Vector3d v){
+    private Vector3d simulateShot(Vector3d v){
 
         Vector3d ballVelocity= v.copy();
 
@@ -172,10 +160,12 @@ public class Bot implements PuttingBot{
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
 
+
         Bot bot = new Bot(new Vector3d(course.get_start_position().get_x()-course.get_flag_position().get_x(), course.get_start_position().get_y()-course.get_flag_position().get_y(), course.get_start_position().get_z()-course.get_flag_position().get_z()), new Vector3d(10, 10),course.get_start_position(),course.get_flag_position());
 
-       // bot.setSimulatedBallPosition();
-        sim.set_ball_position(bot.getSimulatedBallPosition());
+        bot.shot_velocity(course, course.get_start_position());
+
+       // sim.set_ball_position(bot.getSimulatedBallPosition());
         System.out.println(sim.get_ball_position());
     }
 
