@@ -44,7 +44,7 @@ public class Main {
 
         PuttingSimulator puttingSimulator = null;
         String gameMode;
-        String solverType = "Verlet";
+        String solverType = "RK4";
 
         //This is the loop that runs the entire game
         while (!Window.closed()) {
@@ -92,7 +92,7 @@ public class Main {
             }
             */
 
-            //TODO: Now, set up the game!
+            //Now, set up the game!
             gameScreen.setCallback();
             while (!((gameScreen != null && gameScreen.isGameOver()) || Window.closed())) {
                 gameScreen.render(renderer);
@@ -108,14 +108,13 @@ public class Main {
             loadingScreen.cleanUp();
             loader.cleanUp();
             gameScreen.cleanUp();
-            renderer.cleanUp();
+
             TextMaster.cleanUp();
+            TextMaster.init(loader);
 
             mapEditorScreen = null;
             puttingSimulator = null;
             gameScreen = null;
-
-            renderer = new MasterRenderer(loader);
 
         }
 

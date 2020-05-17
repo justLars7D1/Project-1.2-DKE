@@ -186,4 +186,20 @@ public class GUIText {
 	public void setText(String textString) {
 		this.textString = textString;
 	}
+
+	@Override
+	public String toString() {
+		return "GUIText{" +
+				"textString='" + textString + '\'' +
+				", fontSize=" + fontSize +
+				", textMeshVao=" + textMeshVao +
+				", vertexCount=" + vertexCount +
+				", colour=" + colour +
+				", position=" + position +
+				", lineMaxSize=" + lineMaxSize +
+				", numberOfLines=" + numberOfLines +
+				", font=" + font +
+				", centerText=" + centerText +
+				'}';
+	}
 }
