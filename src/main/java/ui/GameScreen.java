@@ -61,6 +61,9 @@ public class GameScreen {
         this.waterRenderer = new WaterRenderer(loader, terrainMap.getWaterShader(), renderer.getProjectionMatrix(), terrainMap.getFbos());
     }
 
+    /**
+     * Take the next shot in the game
+     */
     private void takeShot() {
         GamePlayer currentShooter = players.get(currentCameraPlayerFocus);
         Vector3d oldPosition = currentShooter.getPosition();
@@ -99,6 +102,11 @@ public class GameScreen {
     }
 
     private boolean isShooting = false;
+
+    /**
+     * Render the game
+     * @param renderer The renderer that will handle rendering everything
+     */
     public void render(MasterRenderer renderer) {
 
         if (!isShooting) {
@@ -138,11 +146,18 @@ public class GameScreen {
 
     }
 
+    /**
+     * Move to the next player
+     */
     private void nextPlayer() {
         if (++currentCameraPlayerFocus >= players.size()) currentCameraPlayerFocus = 0;
         playerCamera.switchPlayer(players.get(currentCameraPlayerFocus).getUiPlayer());
     }
 
+    /**
+     * Create the game map
+     * @param loader
+     */
     private void createMap(Loader loader) {
         Vector3d ballPos = gameCourse.get_start_position();
         Vector3d flagPos = gameCourse.get_flag_position();
@@ -153,6 +168,9 @@ public class GameScreen {
         this.terrainMap = new GameMap(minX - 20, minZ - 20, maxX + 20, maxZ + 20, gameCourse.get_height(), loader);
     }
 
+    /**
+     * Create the flag
+     */
     private void createFlag() {
         Vector3d flagPos = gameCourse.get_flag_position();
         float targetLightHeight = (float)(gameCourse.get_height().evaluate(flagPos) + 1);
@@ -160,6 +178,11 @@ public class GameScreen {
         lights.add(new Light(new Vector3f((float) flagPos.get_x(), targetLightHeight, (float) flagPos.get_z()), new Vector3f(0, 0, 5), new Vector3f(.1f, .1f, .1f)));
     }
 
+    /**
+     * Add the players to the game
+     * @param gamemode The gamemode
+     * @param loader The loader to load player data into the UI
+     */
     private void setupPlayers(String gamemode, Loader loader) {
         Vector3d startPos2d = gameCourse.get_start_position();
         float startPosHeight = (float)(gameCourse.get_height().evaluate(startPos2d));

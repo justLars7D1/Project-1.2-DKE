@@ -17,6 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 public class HeuristicBot implements PuttingBot {
 
+    /**
+     * Calculates the velocity needed for a shot from the data it receives
+     * @param course The game course
+     * @param ball_position The position of the ball
+     * @return The calculated velocity for an optimal shot
+     */
     @Override
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
         Vector3d flagPosition = course.get_flag_position();
@@ -115,6 +121,14 @@ public class HeuristicBot implements PuttingBot {
         return bestShot.getShotVector();
     }
 
+    /**
+     * Simulate a shot in the game
+     * @param ballPos The positon of the ball
+     * @param simulator The simulator
+     * @param shot The velocity of the shot
+     * @param stepSize The engine's step size
+     * @return The data of the resulting shot
+     */
     private ShotData simulateShot(Vector3d ballPos, PuttingSimulator simulator, Vector3d shot, double stepSize) {
         simulator.set_ball_position(ballPos);
         simulator.take_shot(shot, stepSize);
@@ -122,6 +136,12 @@ public class HeuristicBot implements PuttingBot {
         return new ShotData(shot, distanceBetween(newPos, simulator.getCourse().get_flag_position()), newPos);
     }
 
+    /**
+     * Calculate euclidean distance between two vectors
+     * @param v1 Vector 1
+     * @param v2 Vector 2
+     * @return The euclidean distance
+     */
     private double distanceBetween(Vector3d v1, Vector3d v2) {
         return Math.sqrt(Math.pow(v1.get_x() - v2.get_x(), 2)
                 + Math.pow(v1.get_z() - v2.get_z(), 2));

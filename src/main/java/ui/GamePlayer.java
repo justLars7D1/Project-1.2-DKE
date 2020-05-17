@@ -22,18 +22,41 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a player that can play the game
+ */
 public class GamePlayer {
 
+    /**
+     * The type of bot that will do the calculations when the player is a bot
+     */
     private static final PuttingBot bot = new HeuristicBot();
 
+    /**
+     * The UI data of the player
+     */
     private final UIPlayer uiPlayer;
+
+    /**
+     * The type of player
+     */
     private String type;
 
+    /**
+     * The simulator for the player
+     */
     private final PuttingSimulator simulator;
 
     private int numMovesMade;
 
+    /**
+     * Shots loaded from a file if applicable
+     */
     private Vector3d[] shotsInFile;
+
+    /**
+     * The current shot in the file if applicable
+     */
     int currentShotIndex;
 
     public GamePlayer(String type, Loader loader, Vector3f position, GameMap map, PuttingSimulator simulator) {
@@ -47,9 +70,14 @@ public class GamePlayer {
         }
     }
 
+    /**
+     * Take a shot as a player
+     * @param ballVelocity The given velocity from the UI
+     */
     public void takeShot(Vector3d ballVelocity) {
         this.numMovesMade++;
         if (type.equals("bot")) {
+            // If it's a bot, use the by bot calculated velocity instead
             ballVelocity = bot.shot_velocity(simulator.getCourse(), simulator.get_ball_position());
         } else if (type.equals("file")) {
             if (currentShotIndex < shotsInFile.length) {
@@ -61,16 +89,17 @@ public class GamePlayer {
         simulator.take_shot(ballVelocity, uiPlayer);
     }
 
+    /**
+     * Create the UI data for the player (textures, etc...)
+     * @param loader The loader to load the data into memory
+     * @return The UI data for the player
+     */
     private static UIPlayer createPlayer(Loader loader) {
         ModelData data = OBJLoader.loadOBJ("game/entities/golfBall/golfBall");
         RawModel model = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
         ModelTexture texture = new ModelTexture(loader.loadTexture("game/entities/bunny/white"));
         TexturedModel texturedModel = new TexturedModel(model, texture);
         return new UIPlayer(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, .1f);
-    }
-
-    public void addMove() {
-        this.numMovesMade++;
     }
 
     public int getNumMovesMade() {
@@ -92,6 +121,9 @@ public class GamePlayer {
         uiPlayer.setPosition(newPos);
     }
 
+    /**
+     * Loads the shot data from a file
+     */
     private void getShotDataFromFile() {
         Thread t = new Thread(() -> {
             JFileChooser chooser = new JFileChooser();
@@ -115,6 +147,10 @@ public class GamePlayer {
         t.start();
     }
 
+    /**
+     * Parse a string of a shot to a vector class
+     * @param reader The file reader
+     */
     private void parseShotsFileToVectors(BufferedReader reader) throws IOException {
         List<Vector3d> shotVectors = new ArrayList<>();
         String line;

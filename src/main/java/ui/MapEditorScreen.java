@@ -7,6 +7,8 @@ import ui.renderEngine.MasterRenderer;
 import ui.renderEngine.Window;
 import ui.toolbox.MousePicker;
 
+@Deprecated
+//Marked as deprecated since it's not done with development yet (phase 3 material)
 public class MapEditorScreen {
 
     private boolean isDoneEditing = true;

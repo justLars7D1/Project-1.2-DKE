@@ -26,6 +26,10 @@ public class GameModeScreen {
         this.pane = new StackPane();
     }
 
+    /**
+     * Create the screen
+     * @param guiWindow The window to create the screen on
+     */
     public void create(lwjgui.scene.Window guiWindow) {
         guiWindow.getScene().setRoot(pane);
 

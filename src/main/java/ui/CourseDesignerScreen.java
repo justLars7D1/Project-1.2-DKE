@@ -38,6 +38,10 @@ public class CourseDesignerScreen {
         this.pane = new StackPane();
     }
 
+    /**
+     * Creates the screen
+     * @param guiWindow The window to put the screen on
+     */
     public void create(lwjgui.scene.Window guiWindow) {
         guiWindow.getScene().setRoot(pane);
 
