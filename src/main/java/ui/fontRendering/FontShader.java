@@ -6,14 +6,15 @@ import ui.shaders.ShaderProgram;
 
 public class FontShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "src/main/java/ui/fontRendering/fontVertex.txt";
-	private static final String FRAGMENT_FILE = "src/main/java/ui/fontRendering/fontFragment.txt";
+	//To add on IntelIJ: src/main/java/
+	private static final String VERTEX_FILE = "fontVertex.txt";
+	private static final String FRAGMENT_FILE = "fontFragment.txt";
 	
 	private int location_colour;
 	private int location_translation;
 	
 	public FontShader() {
-		super(VERTEX_FILE, FRAGMENT_FILE);
+		super(FontShader.class.getResourceAsStream(VERTEX_FILE), FontShader.class.getResourceAsStream(FRAGMENT_FILE));
 	}
 
 	@Override
