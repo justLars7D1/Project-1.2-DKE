@@ -1,9 +1,16 @@
 ## Java
 
+*.json
+*.xml
+
 *.class
 *.war
 *.ear
 hs_err_pid*
+
+### Gradle ###
+.gradle
+/build/
 
 ## Robovm
 /ios/robovm-build/

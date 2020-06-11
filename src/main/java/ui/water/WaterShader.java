@@ -8,8 +8,8 @@ import ui.entities.PlayerCamera;
 
 public class WaterShader extends ShaderProgram {
 
-	private final static String VERTEX_FILE = "waterVertex.shader";
-	private final static String FRAGMENT_FILE = "waterFragment.shader";
+	private final static String VERTEX_FILE = "src/main/java/ui/water/waterVertex.shader";
+	private final static String FRAGMENT_FILE = "src/main/java/ui/water/waterFragment.shader";
 
 	private int location_modelMatrix;
 	private int location_viewMatrix;
@@ -22,7 +22,7 @@ public class WaterShader extends ShaderProgram {
 	private int location_cameraPosition;
 
 	public WaterShader() {
-		super(WaterShader.class.getResourceAsStream(VERTEX_FILE), WaterShader.class.getResourceAsStream(FRAGMENT_FILE));
+		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 
 	@Override
