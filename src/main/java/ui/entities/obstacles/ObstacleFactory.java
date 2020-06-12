@@ -3,6 +3,7 @@ package ui.entities.obstacles;
 import org.joml.Vector3f;
 import ui.entities.Obstacle;
 import ui.models.TexturedModel;
+import ui.objloader.OBJLoader;
 
 public class ObstacleFactory {
 
@@ -12,13 +13,16 @@ public class ObstacleFactory {
             return null;
         }
         if(obstacleType.equalsIgnoreCase("WALL")){
-            return new Wall( model,  position,  scale);
+            OBJLoader.loadOBJ(obstacleType);
+            return new Wall( position,  scale);
 
         } else if(obstacleType.equalsIgnoreCase("TREE")){
-            return new Tree( model,  position,  scale);
+            OBJLoader.loadOBJ(obstacleType);
+            return new Tree(position,  scale);
 
         } else if(obstacleType.equalsIgnoreCase("BOX")){
-            return new Box( model,  position,  scale);
+            OBJLoader.loadOBJ(obstacleType);
+            return new Box( position,  scale);
         }
         return null;
     }

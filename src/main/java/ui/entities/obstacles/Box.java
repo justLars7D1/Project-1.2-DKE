@@ -6,8 +6,9 @@ import ui.models.TexturedModel;
 
 public class Box extends Entity implements Obstacle {
 
+    public static TexturedModel model;
 
-    public Box(TexturedModel model, Vector3f position,float scale) {
+    public Box(Vector3f position,float scale) {
         super(model, position, 0, 0, 0, scale);
     }
 

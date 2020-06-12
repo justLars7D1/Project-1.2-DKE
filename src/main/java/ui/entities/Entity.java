@@ -3,12 +3,16 @@ package ui.entities;
 import ui.models.TexturedModel;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Entity {
 
     private TexturedModel model;
     private Vector3f position;
     private float rotX, rotY, rotZ;
     private float scale;
+    private List<Vector3f> obstaclePositions= new ArrayList<>();
 
     private int textureIndex;
 
@@ -67,6 +71,7 @@ public class Entity {
 
     public void setPosition(Vector3f position) {
         this.position = position;
+        obstaclePositions.add(position);
     }
 
     public float getRotX() {
