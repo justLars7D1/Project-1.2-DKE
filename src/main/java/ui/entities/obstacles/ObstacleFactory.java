@@ -7,7 +7,7 @@ import ui.objloader.OBJLoader;
 
 public class ObstacleFactory {
 
-    //use getShape method to get object of type shape
+    //use getObstacle method to get object of type obstacle
     public Obstacle getObstacle(String obstacleType,TexturedModel model, Vector3f position, float scale){
         if(obstacleType == null){
             return null;

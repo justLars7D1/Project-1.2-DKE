@@ -5,7 +5,7 @@ import ui.entities.Entity;
 import ui.entities.Obstacle;
 import ui.models.TexturedModel;
 
-public class Wall extends Entity implements Obstacle {
+public class Wall extends Obstacle {
 
     public static TexturedModel model;
 
