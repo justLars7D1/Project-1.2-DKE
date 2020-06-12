@@ -2,6 +2,7 @@ package gameelements;
 
 import org.joml.Vector3f;
 import physicsengine.PhysicsEngine;
+import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
 import physicsengine.engines.RK4;
@@ -95,10 +96,15 @@ public class PuttingSimulator {
         engine.setBallPosition(ballPosition);
         engine.setBallVelocity(ballVelocity);
 
+        Function2d z = course.get_height();
+
         int numTimesCloseToCurrent = 0;
         Vector3d current = ballPosition.copy();
+        boolean ballHigherThanGround = false;
+        boolean ballLastInAir;
+        Vector3d lastBouncePosition = new Vector3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 
-        while(numTimesCloseToCurrent < 100) {
+        while(numTimesCloseToCurrent < 100 || ballHigherThanGround) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
@@ -109,7 +115,22 @@ public class PuttingSimulator {
             } else {
                 numTimesCloseToCurrent = 0;
             }
+            ballLastInAir = ballHigherThanGround;
+            ballHigherThanGround = ballPosition.get_y() >= z.evaluate(ballPosition);
+
+            double curHeight = z.evaluate(ballPosition);
+            if (ballPosition.get_y() < curHeight) ballPosition.set_y(curHeight);
+
+            double bounceDistance = Math.sqrt(Math.pow(lastBouncePosition.get_x() - ballPosition.get_x(), 2) +
+                    Math.pow(lastBouncePosition.get_z() - ballPosition.get_z(), 2));
+            if (ballLastInAir && !ballHigherThanGround && bounceDistance > 0.2) {
+                lastBouncePosition = ballPosition.copy();
+                engine.setBallVelocity(reflectionVectorOnBounce(ballVelocity, z.gradient(ballPosition)));
+            }
+
             current = ballPosition.copy();
+
+            System.out.println(ballPosition);
 
             if (isInWater()) {
                 break;
@@ -117,6 +138,12 @@ public class PuttingSimulator {
 
         }
 
+    }
+
+    private static Vector3d reflectionVectorOnBounce(Vector3d velocityVector, Vector3d fieldGradient) {
+        Vector3d normalizedGradient = fieldGradient.getNormalized();
+        double dotResult = 2*velocityVector.dot(normalizedGradient);
+        return velocityVector.minus(normalizedGradient.getScaled(dotResult)).getScaled(PuttingCourse.getBallBounciness());
     }
 
     /**
@@ -140,8 +167,11 @@ public class PuttingSimulator {
 
         int numTimesCloseToCurrent = 0;
         Vector3d current = ballPosition.copy();
+        boolean ballHigherThanGround = false;
+        boolean ballLastInAir;
+        Vector3d lastBouncePosition = new Vector3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 
-        while(numTimesCloseToCurrent < 100) {
+        while(numTimesCloseToCurrent < 100 || ballHigherThanGround) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
@@ -152,9 +182,22 @@ public class PuttingSimulator {
             } else {
                 numTimesCloseToCurrent = 0;
             }
+            ballLastInAir = ballHigherThanGround;
+            ballHigherThanGround = ballPosition.get_y() >= z.evaluate(ballPosition);
+
+            double curHeight = z.evaluate(ballPosition);
+            if (ballPosition.get_y() < curHeight) ballPosition.set_y(curHeight);
+
+            double bounceDistance = Math.sqrt(Math.pow(lastBouncePosition.get_x() - ballPosition.get_x(), 2) +
+                    Math.pow(lastBouncePosition.get_z() - ballPosition.get_z(), 2));
+            if (ballLastInAir && !ballHigherThanGround && bounceDistance > 0.2) {
+                lastBouncePosition = ballPosition.copy();
+                engine.setBallVelocity(reflectionVectorOnBounce(ballVelocity, z.gradient(ballPosition)));
+            }
+
             current = ballPosition.copy();
 
-            Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_z());
+            Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)ballPosition.get_y(), (float)ballPosition.get_z());
             player.setPosition(newPos);
 
             try {
@@ -188,7 +231,7 @@ public class PuttingSimulator {
     }
 
     public boolean isInWater() {
-        return course.get_height().evaluate(ballPosition) < 0;
+        return course.get_height().evaluate(ballPosition) < 0 && ballPosition.get_y() < 0;
     }
 
     /**
@@ -254,15 +297,9 @@ public class PuttingSimulator {
     }
 
     public static void main(String[] args) {
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
-        PuttingSimulator sim1 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
-        PuttingSimulator sim2 = new PuttingSimulator(course.copy(), new VerletSolver(course.copy()));
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("5*sin(0.1*x)*sin(0.1*y)+1"), new Vector3d(0, 10));
         PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
-        sim1.take_shot(new Vector3d(0, 3), 0.01);
-        sim2.take_shot(new Vector3d(0, 3), 0.01);
-        sim3.take_shot(new Vector3d(0, 3), 0.01); //(0.08833984711499843,0.0,2.684909583202568)
-        System.out.println("Euler: " + sim1.get_ball_position());
-        System.out.println("Verlet: " + sim2.get_ball_position());
+        sim3.take_shot(new Vector3d(20, 0, 20), 0.01); //(0.08833984711499843,0.0,2.684909583202568)
         System.out.println("RK4: " + sim3.get_ball_position());
     }
 

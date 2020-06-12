@@ -71,7 +71,7 @@ public class GameScreen {
         if (currentShooter.getType().equals("user")) {
             //Calculate the direction (and magnitude) of the shot
             Vector3d curBallPos = currentShooter.getPosition();
-            Vector3d curCamPos = new Vector3d(playerCamera.getPosition().x, playerCamera.getPosition().z);
+            Vector3d curCamPos = new Vector3d(playerCamera.getPosition().x, playerCamera.getPosition().y, playerCamera.getPosition().z);
             Vector3d normDirection = curBallPos.minus(curCamPos).getNormalized();
             normDirection.scale(ballVelocity);
             shot = normDirection;

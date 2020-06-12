@@ -107,11 +107,11 @@ public class FunctionParserRPN implements Function2d {
     public Vector3d gradient(Vector3d p) {
         double partialDerivativeX = partialDerivativeX(p.get_x(), p.get_z());
         double partialDerivativeY = partialDerivativeY(p.get_x(), p.get_z());
-        return new Vector3d(partialDerivativeX, partialDerivativeY);
+        return new Vector3d(partialDerivativeX, -1, partialDerivativeY);
     }
 
     public Vector3d gradient(double x, double y) {
-        return new Vector3d(partialDerivativeX(x, y), partialDerivativeY(x, y));
+        return new Vector3d(partialDerivativeX(x, y), -1, partialDerivativeY(x, y));
     }
 
     public double partialDerivativeX(double x, double y) {

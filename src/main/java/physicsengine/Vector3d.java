@@ -56,6 +56,14 @@ public class Vector3d extends Vector {
     }
 
     /**
+     * Set the y-coordinate (height)
+     * @param y The new y-coordinate
+     */
+    public void set_y(double y) {
+        this.coords[1] = y;
+    }
+
+    /**
      * Return a copy of the normalized version of a vector
      * @return Normalized vector
      */
@@ -136,6 +144,13 @@ public class Vector3d extends Vector {
         double crossZ = coords[0] * v.coords[1]
                 - coords[1] * v.coords[0];
         return new Vector3d(crossX, crossY, crossZ);
+    }
+
+    public double calculateAngle(Vector3d otherVector) {
+        double dotProd = dot(otherVector);
+        double multipliedMagnitude = magnitude() * otherVector.magnitude();
+        double cosTheta = dotProd/multipliedMagnitude;
+        return Math.acos(cosTheta);
     }
 
 }
