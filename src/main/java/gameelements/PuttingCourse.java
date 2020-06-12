@@ -49,6 +49,8 @@ public class PuttingCourse implements Serializable {
      */
     private double ballMass = 45.93;
 
+    private static final double ballBounciness = 0.6;
+
     /**
      * Constructor
      * @param height Set the height function
@@ -174,6 +176,10 @@ public class PuttingCourse implements Serializable {
      */
     public void setBallMass(double ballMass) {
         this.ballMass = ballMass;
+    }
+
+    public static double getBallBounciness() {
+        return ballBounciness;
     }
 
     /**
