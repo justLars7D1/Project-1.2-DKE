@@ -13,6 +13,15 @@ public class MainDijkstra {
 		for (int v : path.keySet()) {
 			System.out.print(v + "(" + path.get(v) + ") - ");
 		}
-	}
+/*
+		System.out.println();
+		System.out.println();
 
+		HashMap<Integer, Double> shortest = Dijkstra.dijkstraForGame(g, 9, 0);
+		for (int c : shortest.keySet()) {
+			System.out.print(c + "(" + shortest.get(c) + ")");
+		}
+		System.out.println();
+*/
+	}
 }

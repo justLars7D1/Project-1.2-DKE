@@ -5,7 +5,7 @@ import ui.models.TexturedModel;
 
 import java.util.List;
 
-public abstract class Obstacle extends Entity{
+public abstract class Obstacle extends Entity {
 
     private List<Obstacle> listOfObstacles;
 
@@ -14,4 +14,8 @@ public abstract class Obstacle extends Entity{
     }
 
     protected abstract boolean isHit();
+
+    public void setListOfObstacles(Obstacle obs) {
+        listOfObstacles.add(obs);
+    }
 }

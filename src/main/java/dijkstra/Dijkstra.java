@@ -5,7 +5,7 @@ import java.util.*;
 public class Dijkstra {
 
 	public static HashMap<Integer, Double> dijkstra(Graph g, int source) {
-		int n = g.nodeCount();
+		int n = g.nodeCount(); //number of nodes in the graph
 		HashMap<Integer, Double> dist = new HashMap<Integer, Double>();
 		IndexMinPQ<Double> pq = new IndexMinPQ<Double>(n);
 
@@ -16,6 +16,7 @@ public class Dijkstra {
 		pq.insert(source, 0.0);
 
 		HashMap<Integer, Double> cloud = new HashMap<Integer, Double>();
+
 		while (!pq.isEmpty()) {
 			int v = pq.delMin();
 			cloud.put(v, dist.get(v));

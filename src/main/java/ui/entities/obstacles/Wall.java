@@ -15,7 +15,6 @@ public class Wall extends Obstacle {
 
     @Override
     public boolean isHit() {
-
         return false;
     }
 

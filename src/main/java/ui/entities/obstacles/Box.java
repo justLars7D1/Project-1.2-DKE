@@ -14,6 +14,7 @@ public class Box extends Obstacle {
 
     @Override
     public boolean isHit() {
+
         return false;
     }
 }

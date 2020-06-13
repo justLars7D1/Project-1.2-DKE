@@ -15,6 +15,6 @@ public class Tree extends Obstacle {
 
     @Override
     public boolean isHit() {
-        return false;
+            return false;
     }
 }
