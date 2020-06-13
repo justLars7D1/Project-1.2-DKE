@@ -3,21 +3,22 @@ package dijkstra;
 public class GraphAL implements Graph {
 
 	private class Edge {
-		int vertex, weight;
+		int vertex;
+		double weight;
 		Edge prev, next;
-		
-		Edge(int v, int w, Edge p, Edge n) {
+
+		Edge(int v, double w, Edge p, Edge n) {
 			vertex = v;
 			weight = w;
 			prev = p;
 			next = n;
 		}
 	}
-	
+
 	private Edge[] nodeArray;
-	private Object[] nodeValues;
+	private Object[] nodeValues;// coordinators (x, y, z) correspond to the mesh
 	private int numEdge;
-	
+
 	@Override
 	public void init(int n) {
 		nodeArray = new Edge[n];
@@ -48,7 +49,7 @@ public class GraphAL implements Graph {
 	}
 
 	@Override
-	public void addEdge(int v, int w, int wgt) {
+	public void addEdge(int v, int w, double wgt) {
 		if (wgt == 0) return;
 		Edge curr = find(v, w);
 		if ((curr.next != null) && (curr.next.vertex == w)) {
@@ -69,7 +70,7 @@ public class GraphAL implements Graph {
 	}
 
 	@Override
-	public int weight(int v, int w) {
+	public double weight(int v, int w) {
 		Edge curr = find(v, w);
 		if ((curr.next == null) || (curr.next.vertex != w)) return 0;
 		else return curr.next.weight;
@@ -98,7 +99,7 @@ public class GraphAL implements Graph {
 		return neighbors;
 	}
 
-	public void printGraph() {
+	public void print() {
 		for (int v = 0; v < nodeArray.length; v++) {
 			System.out.print(v + ": ");
 			Edge curr;
@@ -107,5 +108,5 @@ public class GraphAL implements Graph {
 			System.out.println();
 		}
 	}
-	
+
 }
