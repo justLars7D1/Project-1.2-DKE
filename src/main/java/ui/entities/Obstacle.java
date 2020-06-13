@@ -14,4 +14,8 @@ public abstract class Obstacle extends Entity{
     }
 
     protected abstract boolean isHit();
+
+    public void setListOfObstacles(Obstacle obs){
+        listOfObstacles.add(obs);
+    }
 }

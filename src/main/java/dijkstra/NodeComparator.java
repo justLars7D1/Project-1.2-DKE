@@ -12,5 +12,5 @@ public class NodeComparator implements Comparator<double[]> {
 			return -1;
 		return 0;
 	}
-	
+
 }

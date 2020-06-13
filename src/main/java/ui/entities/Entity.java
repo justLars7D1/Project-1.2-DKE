@@ -12,7 +12,7 @@ public class Entity {
     private Vector3f position;
     private float rotX, rotY, rotZ;
     private float scale;
-    private List<Vector3f> obstaclePositions= new ArrayList<>();
+    //private List<Vector3f> obstaclePositions= new ArrayList<>();
 
     private int textureIndex;
 
@@ -71,7 +71,7 @@ public class Entity {
 
     public void setPosition(Vector3f position) {
         this.position = position;
-        obstaclePositions.add(position);
+       // obstaclePositions.add(position);
     }
 
     public float getRotX() {
