@@ -165,7 +165,7 @@ public class GameScreen {
         int maxX = (int) Math.round(Math.max(ballPos.get_x(), flagPos.get_x()));
         int minZ = (int) Math.round(Math.min(ballPos.get_z(), flagPos.get_z()));
         int maxZ = (int) Math.round(Math.max(ballPos.get_z(), flagPos.get_z()));
-        this.terrainMap = new GameMap(minX - 20, minZ - 20, maxX + 20, maxZ + 20, gameCourse.get_height(), loader);
+        this.terrainMap = new GameMap(minX - 50, minZ - 50, maxX + 50, maxZ + 50, gameCourse.get_height(), loader);
     }
 
     /**
