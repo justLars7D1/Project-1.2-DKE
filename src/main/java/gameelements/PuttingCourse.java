@@ -49,7 +49,7 @@ public class PuttingCourse implements Serializable {
      */
     private double ballMass = 45.93;
 
-    private static final double ballBounciness = 0.6;
+    private static final double ballBounciness = 0.675;
 
     /**
      * Constructor
