@@ -2,8 +2,10 @@ package gameelements;
 
 import physicsengine.functions.Function2d;
 import physicsengine.Vector3d;
+import ui.entities.Obstacle;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Represents a course for the Crazy Putting! game
@@ -50,6 +52,11 @@ public class PuttingCourse implements Serializable {
     private double ballMass = 45.93;
 
     private static final double ballBounciness = 0.675;
+
+    /**
+     * List of all possible obstacles to be put int he course
+     */
+    private List<Obstacle> listOfObstacles;
 
     /**
      * Constructor

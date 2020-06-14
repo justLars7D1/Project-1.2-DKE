@@ -13,7 +13,7 @@ import ui.textures.ModelTexture;
 public class Box extends Obstacle {
 
     private static TexturedModel model;
-    private static final float widthX = 0, widthY = 0, widthZ = 0;
+    private static final float widthX = (float) 2.190922, widthY = (float) 2.170072, widthZ = (float) 2.198802;
 
     static {
         Loader loader = new Loader();
