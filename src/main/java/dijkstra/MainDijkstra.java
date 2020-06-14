@@ -9,19 +9,27 @@ public class MainDijkstra {
 		GraphAL g = ((GraphAL) g0);
 		g.print();
 		System.out.println();
-		HashMap<Integer, Double> path = Dijkstra.dijkstra(g, 2);
-		for (int v : path.keySet()) {
-			System.out.print(v + "(" + path.get(v) + ") - ");
-		}
-/*
-		System.out.println();
-		System.out.println();
-
-		HashMap<Integer, Double> shortest = Dijkstra.dijkstraForGame(g, 9, 0);
-		for (int c : shortest.keySet()) {
-			System.out.print(c + "(" + shortest.get(c) + ")");
+		HashMap<Integer, Double> distancesTo = Dijkstra.dijkstra(g, 2);
+		for (int v : distancesTo.keySet()) {
+			System.out.println(v + "(" + distancesTo.get(v) + ") ");
 		}
 		System.out.println();
-*/
+		getShortestPathTo(g, 2, 0);
+		getShortestPathTo(g, 2, 1);
+		getShortestPathTo(g, 2, 3);
+		getShortestPathTo(g, 2, 4);
+		getShortestPathTo(g, 2, 5);
+		getShortestPathTo(g, 2, 6);
+		getShortestPathTo(g, 2, 7);
 	}
+
+	public static void getShortestPathTo(Graph g, int source, int destination) {
+		int[] shortestPathTo = Dijkstra.getShortestPath(g, source, destination);
+		System.out.print(source + " to " + destination + ": ");
+		for (int i = 0; i < shortestPathTo.length; i++) {
+			System.out.print(shortestPathTo[i] + " ");
+		}
+		System.out.println();
+	}
+
 }
