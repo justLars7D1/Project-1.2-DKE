@@ -189,6 +189,12 @@ public class PuttingCourse implements Serializable {
         return ballBounciness;
     }
 
+    public void addObstacle(Obstacle obs) {
+        listOfObstacles.add(obs);
+    }
+
+    public List<Obstacle> getObstacles(){ return listOfObstacles; }
+
     /**
      * Gets the string representation of the course
      * @return String representation of the course

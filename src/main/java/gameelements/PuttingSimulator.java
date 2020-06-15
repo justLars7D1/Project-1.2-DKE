@@ -9,6 +9,7 @@ import physicsengine.engines.RK4;
 import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
+import ui.entities.Obstacle;
 import ui.entities.UIPlayer;
 import ui.status.StatusMessage;
 
@@ -176,6 +177,13 @@ public class PuttingSimulator {
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
+
+            for(Obstacle obs : course.getObstacles()){
+                if(obs.isHit(ballPosition)){
+                    ballVelocity.scale(-1);
+                    break;
+                }
+            }
 
             if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1 && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
                 numTimesCloseToCurrent++;

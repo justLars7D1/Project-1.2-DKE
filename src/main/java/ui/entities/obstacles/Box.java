@@ -29,9 +29,14 @@ public class Box extends Obstacle {
 
     @Override
     public boolean isHit(Vector3d ballPosition) {
-        Vector3f maxPosition = new Vector3f(this.getPosition().x() + (widthX/2), this.getPosition().y() + (widthY/2), this.getPosition().z() + (widthZ/2));
-        Vector3f minPosition = new Vector3f(this.getPosition().x() - (widthX/2), this.getPosition().y() - (widthY/2), this.getPosition().z() - (widthZ/2));
-        // Vector3f finalPosition = maxPosition - minPosition;
+        Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + (widthY/2), this.getPosition().z() + (widthZ/2));
+        Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y() - (widthY/2), this.getPosition().z() - (widthZ/2));
+
+        if(ballPosition.get_x()>= minPosition.get_x() && ballPosition.get_x()<= maxPosition.get_x()){
+            if( ballPosition.get_z()>= minPosition.get_z() && ballPosition.get_z()<= maxPosition.get_z()){
+                if( ballPosition.get_y()>= minPosition.get_y() && ballPosition.get_y()<= maxPosition.get_y()){
+                    return true;}}}
+
         return false;
     }
 }
