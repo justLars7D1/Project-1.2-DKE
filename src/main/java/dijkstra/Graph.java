@@ -1,5 +1,7 @@
 package dijkstra;
 
+import java.awt.*;
+
 public interface Graph {
 	// Initialize a n-vertices graph
 	void init(int n);
@@ -27,4 +29,5 @@ public interface Graph {
 
 	// Return an array containing the indices of the neighbors of v
 	int[] neighbors(int v);
+
 }
