@@ -30,6 +30,10 @@ public class Tree extends Obstacle {
 
     @Override
     public boolean isHit(Vector3d ballPosition) {
+        /* if(ballPosition.get_x()>= minTreepostion.get_x() && ballPosition.get_x()<= maxTreepostion.get_x())
+              if( ballPosition.get_z()>= minTreepostion.get_z() && ballPosition.get_z()<= maxTreepostion.get_z())
+                return true;
+         */
             return false;
     }
 }

@@ -30,6 +30,10 @@ public class Wall extends Obstacle {
 
     @Override
     public boolean isHit(Vector3d ballPosition) {
+        /* if(ballPosition.get_x()>= minWallpostion.get_x() && ballPosition.get_x()<= maxWallpostion.get_x())
+              if( ballPosition.get_z()>= minWallpostion.get_z() && ballPosition.get_z()<= maxWallpostion.get_z())
+                return true;
+         */
         return false;
     }
 
