@@ -238,6 +238,11 @@ public class PuttingSimulator {
                 Math.pow(ballPosition.get_z() - course.get_flag_position().get_z(), 2)) <= course.get_hole_tolerance();
     }
 
+    public boolean isGoal(Vector3d goal) {
+        return  Math.sqrt(Math.pow(ballPosition.get_x() - goal.get_x(), 2) +
+                Math.pow(ballPosition.get_z() - goal.get_z(), 2)) <= course.get_hole_tolerance();
+    }
+
     public boolean isInWater() {
         return course.get_height().evaluate(ballPosition) < 0 && ballPosition.get_y() < 0;
     }

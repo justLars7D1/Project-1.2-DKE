@@ -1,5 +1,7 @@
 package dijkstra;
+import gameelements.PuttingCourse;
 import physicsengine.Vector3d;
+import physicsengine.functions.FunctionParserRPN;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +34,7 @@ public class ReadFile {
         return G;
     }
 
-    public static Graph setCoordinates(String fileName) {
+    public static Graph setCoordinates(String fileName, PuttingCourse course) {
         Graph G = null;
         try{
             File file = new File(fileName);
@@ -49,7 +51,7 @@ public class ReadFile {
                 int index = Integer.parseInt(s[0]);
                 double x = Double.parseDouble(s[1]);
                 double z = Double.parseDouble(s[2]);
-                G.setValue(i, new Vector3d(x, z));
+                G.setValue(i, new Vector3d(x, course.get_height().evaluate(x, z) ,z));
             }
             for (int i = 0; i < edges; i++) {
                 String line = sc.nextLine();
@@ -74,7 +76,12 @@ public class ReadFile {
     }
 
     public static void main(String[] args) {
-        Graph g = setCoordinates("src/main/java/dijkstra/maze-on-course") ;
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("x + y"), new Vector3d(0, 10));
+        Graph g = setCoordinates("src/main/java/dijkstra/maze-on-course", course) ;
         ((GraphAL) g).print();
+        for (int i = 0; i < g.nodeCount(); i++) {
+            Vector3d v = (Vector3d) g.getValue(i);
+            System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
+        }
     }
 }

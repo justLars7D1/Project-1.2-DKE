@@ -3,16 +3,20 @@ package ui.maze;
 import dijkstra.Graph;
 import dijkstra.GraphAL;
 import dijkstra.ReadFile;
+import gameelements.PuttingCourse;
+import physicsengine.Vector3d;
+import physicsengine.functions.FunctionParserRPN;
 
 public class MazeLoader {
 
-    public static Graph loadMaze(String maze_design) {
-        Graph maze = ReadFile.setCoordinates(maze_design);
+    public static Graph loadMaze(String maze_design, PuttingCourse course) {
+        Graph maze = ReadFile.setCoordinates(maze_design, course);
         return maze;
     }
 
     public static void main(String[] args) {
-        Graph maze = loadMaze("src/main/java/dijkstra/maze-on-course");
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("x + y"), new Vector3d(0, 10));
+        Graph maze = loadMaze("src/main/java/dijkstra/maze-on-course", course);
         ((GraphAL) maze).print();
     }
 }
