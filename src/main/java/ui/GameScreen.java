@@ -59,6 +59,7 @@ public class GameScreen {
         Light sun = new Light(new Vector3f(Integer.MAX_VALUE,Integer.MAX_VALUE, Integer.MAX_VALUE), new Vector3f(1, 1, 1));
         lights.add(sun);
         this.waterRenderer = new WaterRenderer(loader, terrainMap.getWaterShader(), renderer.getProjectionMatrix(), terrainMap.getFbos());
+        terrainMap.addObstacles(gameCourse.getObstacles());
     }
 
     /**
