@@ -4,10 +4,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL30;
 import physicsengine.functions.Function2d;
-import ui.entities.Camera;
-import ui.entities.PlayerCamera;
-import ui.entities.Entity;
-import ui.entities.Light;
+import ui.entities.*;
 import ui.models.RawModel;
 import ui.models.TexturedModel;
 import ui.objloader.ModelData;
@@ -65,6 +62,10 @@ public class GameMap {
 
     public FunctionalHeightsGenerator getHeightsGenerator() {
         return this.heightsGenerator;
+    }
+
+    public void addObstacles(List<Obstacle> entities) {
+        allEntities.addAll(entities);
     }
 
     public List<Entity> getAllEntities() {
