@@ -6,21 +6,22 @@ public class MainDijkstra {
 
 	public static void main(String[] args) {
 		Graph g0 = ReadFile.read("src/main/java/dijkstra/maze");
+		//Graph g0 = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course");
 		GraphAL g = ((GraphAL) g0);
 		g.print();
 		System.out.println();
-		HashMap<Integer, Double> distancesTo = Dijkstra.dijkstra(g, 2);
+		HashMap<Integer, Double> distancesTo = Dijkstra.dijkstra(g, 5);
 		for (int v : distancesTo.keySet()) {
 			System.out.println(v + "(" + distancesTo.get(v) + ") ");
 		}
 		System.out.println();
-		getShortestPathTo(g, 2, 0);
-		getShortestPathTo(g, 2, 1);
-		getShortestPathTo(g, 2, 3);
-		getShortestPathTo(g, 2, 4);
-		getShortestPathTo(g, 2, 5);
-		getShortestPathTo(g, 2, 6);
-		getShortestPathTo(g, 2, 7);
+		getShortestPathTo(g, 5, 0);
+		getShortestPathTo(g, 5, 1);
+		getShortestPathTo(g, 5, 3);
+		getShortestPathTo(g, 5, 4);
+		getShortestPathTo(g, 5, 5);
+		getShortestPathTo(g, 5, 6);
+		getShortestPathTo(g, 5, 7);
 	}
 
 	public static void getShortestPathTo(Graph g, int source, int destination) {

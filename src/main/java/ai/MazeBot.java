@@ -6,10 +6,10 @@ import gameelements.PuttingSimulator;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
 
-public class MazeBot extends HeuristicBot {
+public class MazeBot {
 
     public Vector3d single_shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position) {
-        double ballFlagDistance = distanceBetween(ball_position, goal_position);
+        double ballGoalDistance = distanceBetween(ball_position, goal_position);
 
         double maxVelocity = course.get_maximum_velocity();
 
@@ -52,7 +52,7 @@ public class MazeBot extends HeuristicBot {
                 iteration = 0;
 
                 // Calculate the proportion of the start position and the flag to the ball position and the flag
-                double ballHoleDistFactor = ballFlagDistance / distanceBetween(ball_position, resultingPosition.getCalculatedPosition());
+                double ballHoleDistFactor = ballGoalDistance / distanceBetween(ball_position, resultingPosition.getCalculatedPosition());
 
                 // Then we calculate the angle between the start and flag and the ball and flag
                 Vector3d startResultVector = resultingPosition.getCalculatedPosition().minus(ball_position);
