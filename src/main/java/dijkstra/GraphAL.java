@@ -13,6 +13,7 @@ public class GraphAL implements Graph {
 			prev = p;
 			next = n;
 		}
+
 	}
 
 	private Edge[] nodeArray;

@@ -14,7 +14,7 @@ import ui.textures.ModelTexture;
 public class Wall extends Obstacle {
 
     public static TexturedModel model;
-    private static final float widthX = (float) 0, widthY = (float) 0, widthZ = (float) 0;
+    private static final float widthX = (float) 13.61974 , widthY = (float) 6.92379,  widthZ = (float) 40.32656;
 
     public Wall(Vector3f position, float scale) {
         super(model, position, 0, 0, 0, scale);
