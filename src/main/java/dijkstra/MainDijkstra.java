@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class MainDijkstra {
 
 	public static void main(String[] args) {
-		Graph g0 = ReadFile.read("src\\dijkstra\\maze");
+		Graph g0 = ReadFile.read("src/main/java/dijkstra/maze");
 		GraphAL g = ((GraphAL) g0);
 		g.print();
 		System.out.println();
