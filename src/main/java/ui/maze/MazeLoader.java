@@ -6,6 +6,7 @@ import dijkstra.ReadFile;
 import gameelements.PuttingCourse;
 import physicsengine.Vector3d;
 import physicsengine.functions.FunctionParserRPN;
+import ui.entities.obstacles.Tree;
 
 public class MazeLoader {
 
@@ -18,5 +19,11 @@ public class MazeLoader {
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("x + y"), new Vector3d(0, 10));
         Graph maze = loadMaze("src/main/java/dijkstra/maze-on-course", course);
         ((GraphAL) maze).print();
+
+
+    }
+
+    public void buildMaze(GraphAL maze, Tree t){
+
     }
 }
