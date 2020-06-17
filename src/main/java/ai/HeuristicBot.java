@@ -6,6 +6,7 @@ import physicsengine.Vector;
 import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
 import physicsengine.engines.RK4;
+import physicsengine.engines.RK5;
 import physicsengine.functions.FunctionParserRPN;
 
 import java.sql.Time;
@@ -34,7 +35,8 @@ public class HeuristicBot implements PuttingBot {
         Vector3d shotDirection = flagPosition.minus(ball_position).getNormalized();
 
         // We create the simulator to take shots with
-        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
         sim.set_ball_position(ball_position);
         double stepSize = 0.01;
 
@@ -150,7 +152,8 @@ public class HeuristicBot implements PuttingBot {
     public static void main(String[] args) {
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("-0.01*x + 0.003*x^2 + 0.04 * y"), new Vector3d(0, 10));
         course.setMaximumVelocity(10);
-        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
         PuttingBot bot = new HeuristicBot();
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());

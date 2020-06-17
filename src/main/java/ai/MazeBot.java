@@ -5,6 +5,7 @@ import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import physicsengine.Vector3d;
 import physicsengine.engines.RK4;
+import physicsengine.engines.RK5;
 import physicsengine.functions.FunctionParserRPN;
 
 public class MazeBot {
@@ -18,7 +19,8 @@ public class MazeBot {
         Vector3d shotDirection = goal_position.minus(ball_position).getNormalized();
 
         // We create the simulator to take shots with
-        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
         sim.set_ball_position(ball_position);
         double stepSize = 0.01;
 
@@ -146,7 +148,8 @@ public class MazeBot {
     public static void main(String[] args) {
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("0.0000001*x^2 + 0.0000001*y^2"), new Vector3d(0, 10));
         course.setMaximumVelocity(10);
-        PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
         Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
         MazeBot bot = new MazeBot();
         bot.shot_sequence(course, sim, 5, 0, maze);
