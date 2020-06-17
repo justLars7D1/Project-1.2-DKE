@@ -17,9 +17,9 @@ public class Box extends Obstacle {
 
     static {
         Loader loader = new Loader();
-        ModelData data = OBJLoader.loadOBJ("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\box\\box.obj");
+        ModelData data = OBJLoader.loadOBJ("game/entities/box/box");
         RawModel rawModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
-        ModelTexture texture = new ModelTexture(loader.loadTexture("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\box\\box.png"));
+        ModelTexture texture = new ModelTexture(loader.loadTexture("game/entities/box/box"));
         model = new TexturedModel(rawModel, texture);
     }
 

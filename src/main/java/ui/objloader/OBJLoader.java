@@ -23,6 +23,7 @@ public class OBJLoader {
 		} catch (FileNotFoundException e) {
 			System.err.println("File not found in res: Don't use any extension");
 		}
+
 		BufferedReader reader = new BufferedReader(isr);
 		String line;
 		List<Vertex> vertices = new ArrayList<>();

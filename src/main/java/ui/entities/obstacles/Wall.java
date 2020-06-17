@@ -22,9 +22,9 @@ public class Wall extends Obstacle {
 
     static {
         Loader loader = new Loader();
-        ModelData data = OBJLoader.loadOBJ("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\wall\\wall.obj");
+        ModelData data = OBJLoader.loadOBJ("game/entities/wall/wall");
         RawModel rawModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
-        ModelTexture texture = new ModelTexture(loader.loadTexture("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\wall\\wall.jpg"));
+        ModelTexture texture = new ModelTexture(loader.loadTexture("game/entities/wall/stoneTexture"));
         model = new TexturedModel(rawModel, texture);
     }
 
