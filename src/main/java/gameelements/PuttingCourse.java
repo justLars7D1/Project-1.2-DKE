@@ -6,6 +6,7 @@ import ui.entities.Obstacle;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -194,6 +195,10 @@ public class PuttingCourse implements Serializable {
         listOfObstacles.add(obs);
     }
 
+    public void addObstacles(List<Obstacle> obs) {
+        listOfObstacles.addAll(obs);
+    }
+
     public List<Obstacle> getObstacles(){ return listOfObstacles; }
 
     /**
@@ -220,6 +225,7 @@ public class PuttingCourse implements Serializable {
         course.setBallMass(ballMass);
         course.setHoleTolerance(holeTolerance);
         course.set_friction_coefficient(frictionalCoefficient);
+        course.addObstacles(listOfObstacles);
         return course;
     }
 

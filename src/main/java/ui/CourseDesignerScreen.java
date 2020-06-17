@@ -4,10 +4,12 @@ import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
 import lwjgui.scene.control.Button;
+import lwjgui.scene.control.Slider;
 import lwjgui.scene.control.TextField;
 import lwjgui.scene.layout.StackPane;
 import lwjgui.scene.layout.floating.FloatingPane;
 import lwjgui.style.BackgroundNVGImage;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL30;
 import physicsengine.PhysicsEngine;
 import physicsengine.Vector3d;
@@ -17,13 +19,19 @@ import physicsengine.engines.RK5;
 import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
+import ui.entities.Obstacle;
+import ui.entities.obstacles.ObstacleFactory;
 import ui.renderEngine.Window;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CourseDesignerScreen {
+
+    private List<Obstacle> allObstacles = new ArrayList<>();
 
     private static final BackgroundImg backgroundImage = new BackgroundImg("./res/coursedesigner/BackgroundImg.png");
     private final StackPane pane;
@@ -34,6 +42,10 @@ public class CourseDesignerScreen {
     private boolean doneSelecting;
 
     public CourseDesignerScreen() {
+        //TODO: Remove test before submission
+        allObstacles.add(ObstacleFactory.getFactory().createObstacle("Tree", new Vector3f(10, 0, 0), 1));
+        allObstacles.add(ObstacleFactory.getFactory().createObstacle("Box", new Vector3f(-10, 0, 0), 1));
+
         this.courseSettingsFields = new HashMap<>();
         this.courseSettingsBtns = new HashMap<>();
         this.pane = new StackPane();
@@ -142,6 +154,7 @@ public class CourseDesignerScreen {
         Vector3d holePoint = fieldToVec2d(getContent("target_point"));
 
         PuttingCourse course = new PuttingCourse(courseFunction, startPoint, holePoint);
+        course.addObstacles(allObstacles);
         course.setHoleTolerance(Double.parseDouble(getContent("goal_tolerance")));
         course.setBallMass(Double.parseDouble(getContent("ball_mass")));
         course.setGravitationalConstant(Double.parseDouble(getContent("gravity")));

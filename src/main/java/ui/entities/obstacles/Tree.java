@@ -18,9 +18,9 @@ public class Tree extends Obstacle {
 
     static {
         Loader loader = new Loader();
-        ModelData data = OBJLoader.loadOBJ("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\trees\\tree.obj");
+        ModelData data = OBJLoader.loadOBJ("game/entities/trees/tree");
         RawModel rawModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
-        ModelTexture texture = new ModelTexture(loader.loadTexture("D:\\Projects\\Project-1.2-DKE\\res\\game\\entities\\trees\\tree.png"));
+        ModelTexture texture = new ModelTexture(loader.loadTexture("game/entities/trees/tree"));
         model = new TexturedModel(rawModel, texture);
     }
 
@@ -30,8 +30,8 @@ public class Tree extends Obstacle {
 
     @Override
     public boolean isHit(Vector3d ballPosition) {
-        Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + (widthY/2), this.getPosition().z() + (widthZ/2));
-        Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y() - (widthY/2), this.getPosition().z() - (widthZ/2));
+        Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + widthY, this.getPosition().z() + (widthZ/2));
+        Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y(), this.getPosition().z() - (widthZ/2));
 
         if(ballPosition.get_x()>= minPosition.get_x() && ballPosition.get_x()<= maxPosition.get_x()){
             if( ballPosition.get_z()>= minPosition.get_z() && ballPosition.get_z()<= maxPosition.get_z()){
