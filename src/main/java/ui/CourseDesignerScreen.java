@@ -129,8 +129,8 @@ public class CourseDesignerScreen {
     }
 
     private void setupButtons(FloatingPane floatingPane) {
-        String[] buttonNames = {"continue", "save", "load"};
-        String[] initialValues = {"Continue", "Save to file", "Load from file"};
+        String[] buttonNames = {"continue", "save", "load", "load maze"};
+        String[] initialValues = {"Continue", "Save to file", "Load from file", "load maze from file"};
         for (int i = 0; i < buttonNames.length; i++) {
             FloatingPane t = new FloatingPane();
             t.setAbsolutePosition(0.25 * Window.getWidth() + 0.175 * i * Window.getWidth(), 0.8 * Window.getHeight());
@@ -207,16 +207,16 @@ public class CourseDesignerScreen {
             t.setAbsolutePosition(floatingPane.getX()+16, floatingPane.getY() + 0.065 * i * Window.getHeight());
             floatingPane.getChildren().add(t);
 
-            // Put a label in the floating pane
-            TextField tmpField = new TextField(initialValues[i]);
+             // Put a label in the floating pane
+    TextField tmpField = new TextField(initialValues[i]);
             courseSettingsFields.put(textFieldNames[i], tmpField);
-            tmpField.setFontSize(22);
-            tmpField.setPrefSize(400, 20);
-            t.getChildren().add(tmpField);
-        }
+                    tmpField.setFontSize(22);
+                    tmpField.setPrefSize(400, 20);
+                    t.getChildren().add(tmpField);
+            }
     }
 
-    private void setCourseText(PuttingCourse course) {
+private void setCourseText(PuttingCourse course) {
         courseSettingsFields.get("height_function").setText(course.get_height().toString());
         courseSettingsFields.get("starting_point").setText(course.get_start_position().toString());
         courseSettingsFields.get("target_point").setText(course.get_flag_position().toString());
@@ -225,9 +225,9 @@ public class CourseDesignerScreen {
         courseSettingsFields.get("gravity").setText(String.valueOf(course.get_gravitational_constant()));
         courseSettingsFields.get("friction").setText(String.valueOf(course.get_friction_coefficient()));
         courseSettingsFields.get("maximum_velocity").setText(String.valueOf(course.get_maximum_velocity()));
-    }
+        }
 
-    public void setDoneSelecting(boolean doneSelecting) {
+public void setDoneSelecting(boolean doneSelecting) {
         this.doneSelecting = doneSelecting;
-    }
+        }
 }
