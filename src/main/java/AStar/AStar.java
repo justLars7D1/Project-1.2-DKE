@@ -1,3 +1,4 @@
+/*
 package AStar;
 
 import java.util.ArrayList;
@@ -13,12 +14,14 @@ public class AStar {
     private final List<Node> openList;
     private final List<Node> closeList;
 
-    /**
+    */
+/**
      * @param grid The grid in which the shortest path must be determined.
      * @param start Starting node.
      * @param end Ending node.
      * @param checkDiagonals Whether to consider diagonal movements as valid.
-     */
+     *//*
+
     public AStar(Node[][] grid, Node start, Node end, boolean checkDiagonals) {
         this.grid = grid;
         this.start = start;
@@ -28,9 +31,11 @@ public class AStar {
         this.closeList = new ArrayList<>();
     }
 
-    /**
+    */
+/**
      * @return The shortest path to go from the starting node to the ending node or "@code null" if a valid path cannot be found.
-     */
+     *//*
+
     public List<Node> computePath() {
         this.openList.add(this.start);
 
@@ -90,9 +95,11 @@ public class AStar {
         return path;
     }
 
-    /**
+    */
+/**
      * @return Node with the lowest F value.
-     */
+     *//*
+
     private Node getCurrent() {
         Node current = null;
         for (final Node node : this.openList) {
@@ -103,10 +110,12 @@ public class AStar {
         return current;
     }
 
-    /**
+    */
+/**
      * @param node The node that we must retrieve surrounding nodes.
      * @return A list of surrounding nodes.
-     */
+     *//*
+
     private List<Node> getSurroundingNodes(Node node) {
         final List<Node> around = new ArrayList<>();
 
@@ -144,16 +153,20 @@ public class AStar {
         return around;
     }
 
-    /**
+    */
+/**
      * @return "@code true" if the coordinates are not out of bounds, "@code false" otherwise.
-     */
+     *//*
+
     private boolean isPossible(int x, int y) {
         return x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length;
     }
 
-    /**
+    */
+/**
      * @return The number of moves required to move from the starting node to the provided node.
-     */
+     *//*
+
     private int calculateG(Node node) {
         int step = 0;
         Node tempNode = node;
@@ -164,3 +177,4 @@ public class AStar {
         return step;
     }
 }
+*/

@@ -98,4 +98,5 @@ public class Node {
     public void isObstacle(boolean isObstacle) {
         this.isObstacle = isObstacle;
     }
+
 }
