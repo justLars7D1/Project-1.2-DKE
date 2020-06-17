@@ -13,6 +13,7 @@ import physicsengine.PhysicsEngine;
 import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
 import physicsengine.engines.RK4;
+import physicsengine.engines.RK5;
 import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
@@ -153,6 +154,9 @@ public class CourseDesignerScreen {
                 break;
             case "verlet":
                 engine = new VerletSolver(course);
+                break;
+            case "rk5":
+                engine = new RK5(course);
                 break;
             case "rk4":
             default:

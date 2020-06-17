@@ -5,6 +5,7 @@ import physicsengine.Vector3d;
 import ui.entities.Obstacle;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class PuttingCourse implements Serializable {
     /**
      * List of all possible obstacles to be put int he course
      */
-    private List<Obstacle> listOfObstacles;
+    private List<Obstacle> listOfObstacles = new ArrayList<>();
 
     /**
      * Constructor

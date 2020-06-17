@@ -44,7 +44,7 @@ public class Main {
 
         PuttingSimulator puttingSimulator = null;
         String gameMode;
-        String solverType = "RK4";
+        String solverType = "RK5";
 
         //This is the loop that runs the entire game
         while (!Window.closed()) {
