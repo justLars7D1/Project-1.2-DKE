@@ -31,6 +31,7 @@ public class MainDijkstra {
 		getShortestPathTo(g, 5, 5);
 		getShortestPathTo(g, 5, 6);
 		getShortestPathTo(g, 5, 7);
+		getShortestPathTo(g, 5, 8);
 	}
 
 	public static void getShortestPathTo(Graph g, int source, int destination) {
