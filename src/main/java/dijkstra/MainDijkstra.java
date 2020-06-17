@@ -4,6 +4,7 @@ import gameelements.PuttingCourse;
 import physicsengine.Vector3d;
 import physicsengine.functions.FunctionParserRPN;
 
+import java.sql.SQLOutput;
 import java.util.HashMap;
 
 public class MainDijkstra {
@@ -31,6 +32,7 @@ public class MainDijkstra {
 		getShortestPathTo(g, 5, 5);
 		getShortestPathTo(g, 5, 6);
 		getShortestPathTo(g, 5, 7);
+
 	}
 
 	public static void getShortestPathTo(Graph g, int source, int destination) {

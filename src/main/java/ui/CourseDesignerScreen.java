@@ -129,8 +129,8 @@ public class CourseDesignerScreen {
     }
 
     private void setupButtons(FloatingPane floatingPane) {
-        String[] buttonNames = {"continue", "save", "load"};
-        String[] initialValues = {"Continue", "Save to file", "Load from file"};
+        String[] buttonNames = {"continue", "save", "load", "load maze"};
+        String[] initialValues = {"Continue", "Save to file", "Load from file", "load maze from file"};
         for (int i = 0; i < buttonNames.length; i++) {
             FloatingPane t = new FloatingPane();
             t.setAbsolutePosition(0.25 * Window.getWidth() + 0.175 * i * Window.getWidth(), 0.8 * Window.getHeight());
