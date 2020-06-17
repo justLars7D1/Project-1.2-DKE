@@ -1,3 +1,5 @@
+package AStar;
+
 public class Node {
 
     /** Parent node (node that allowed "to arrive" to this node). */
