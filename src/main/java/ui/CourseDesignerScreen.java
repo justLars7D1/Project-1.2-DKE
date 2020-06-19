@@ -14,6 +14,7 @@ import org.lwjgl.opengl.GL30;
 import physicsengine.PhysicsEngine;
 import physicsengine.Vector3d;
 import physicsengine.engines.EulerSolver;
+import physicsengine.engines.RK3;
 import physicsengine.engines.RK4;
 import physicsengine.engines.RK5;
 import physicsengine.engines.VerletSolver;
@@ -167,6 +168,9 @@ public class CourseDesignerScreen {
                 break;
             case "verlet":
                 engine = new VerletSolver(course);
+                break;
+            case "rk3":
+                engine = new RK3(course);
                 break;
             case "rk5":
                 engine = new RK5(course);
