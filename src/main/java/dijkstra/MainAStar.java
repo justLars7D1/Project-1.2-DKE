@@ -40,7 +40,7 @@ public class MainAStar {
 
 
     public static void getShortestPathTo(Graph g, int source, int destination) {
-        int[] shortestPathTo = AStar.getShortestPath(g, source, destination); //CHANGED
+        int[] shortestPathTo = AStar.computePath(g, source, destination); //CHANGED
         System.out.print(source + " to " + destination + ": ");
         for (int i = 0; i < shortestPathTo.length; i++) {
             System.out.print(shortestPathTo[i] + " ");
