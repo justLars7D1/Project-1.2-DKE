@@ -149,6 +149,22 @@ public class PuttingSimulator {
         return velocityVector.minus(normalizedGradient.getScaled(dotResult)).getScaled(PuttingCourse.getBallBounciness());
     }
 
+    private static Vector3d calculateSurfaceNormal(Vector3d ballPosition, Vector3f objectPosition) {
+        Vector3d obstaclePos = new Vector3d(objectPosition.x, objectPosition.y, objectPosition.z);
+        Vector3d resultVec = obstaclePos.minus(ballPosition);
+        Vector3d result;
+        double absX = Math.abs(resultVec.get_x()), absY = Math.abs(resultVec.get_y()), absZ = Math.abs(resultVec.get_z());
+        double largestAbs = Math.max(Math.max(absX, absY), absZ);
+        if (largestAbs == absX) {
+            result = new Vector3d((resultVec.get_x() < 0) ? -1 : 1, 0, 0);
+        } else if (largestAbs == absY) {
+            result = new Vector3d(0, (resultVec.get_y() < 0) ? -1 : 1, 0);
+        } else {
+            result = new Vector3d(0, 0, (resultVec.get_z() < 0) ? -1 : 1);
+        }
+        return result;
+    }
+
     /**
      * Simulate taking a shot, updating the ball live
      * @param initial_ball_velocity The initial ball velocity of a shot
@@ -182,7 +198,7 @@ public class PuttingSimulator {
 
             for(Obstacle obs : course.getObstacles()){
                 if(obs.isHit(ballPosition)){
-                    ballVelocity.scale(-1);
+                    ballVelocity = reflectionVectorOnBounce(ballVelocity, calculateSurfaceNormal(ballPosition, obs.getPosition()));
                     break;
                 }
             }
