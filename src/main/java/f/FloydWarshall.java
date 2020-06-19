@@ -4,6 +4,7 @@ import dijkstra.Graph;
 import dijkstra.GraphAL;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FloydWarshall {
 
@@ -27,10 +28,7 @@ public class FloydWarshall {
             int[] uNeighbor = g.neighbors(u);
             for (int n : uNeighbor) {
                 distanceTable[u][n] = g.weight(u, n);
-               // next[u][n] = n;
             }
-            distanceTable[u][u] = 0;
-           // next[u][u] = u;
         }
 
         for (int k=0; k<v; k++){
@@ -43,5 +41,20 @@ public class FloydWarshall {
             }
         }
     return distanceTable;
+    }
+
+    public List<Integer> getShortest(Graph g, int source, int dest){
+        List<Integer> pathList= new ArrayList<>();
+        pathList.add(source);
+
+        double dist[][]= distTable(g);
+
+        while(source!=dest) {
+            if (dist[source][dest]!=0){
+                pathList.add((int)dist[source][dest]);
+            }
+        }
+
+        return pathList;
     }
 }
