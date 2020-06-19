@@ -7,9 +7,10 @@ import java.util.ArrayList;
 
 public class FloydWarshall {
 
-    public static int[][] distTable(Graph g) {
+    public static double[][] distTable(Graph g) {
         int v= g.nodeCount();
-        int[][] distanceTable= new int[v][v];
+        double[][] distanceTable= new double[v][v];
+       // int[][] next= new int[v][v];
 
         for(int i=0; i<v; i++){
             for (int j=0; j<v; j++){
@@ -22,10 +23,16 @@ public class FloydWarshall {
             }
         }
 
-        /*
-        TO FILL WITH THE EDGES
-         */
-        
+        for (int u = 0; u < v; u++) {
+            int[] uNeighbor = g.neighbors(u);
+            for (int n : uNeighbor) {
+                distanceTable[u][n] = g.weight(u, n);
+               // next[u][n] = n;
+            }
+            distanceTable[u][u] = 0;
+           // next[u][u] = u;
+        }
+
         for (int k=0; k<v; k++){
             for(int l=0; l<v; l++){
                 for(int m=0; m<v; m++){
