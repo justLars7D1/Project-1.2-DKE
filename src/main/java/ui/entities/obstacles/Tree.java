@@ -28,15 +28,19 @@ public class Tree extends Obstacle {
         super(model, position, 0, 0, 0, scale);
     }
 
+    private static final double error = 10e-2;
     @Override
     public boolean isHit(Vector3d ballPosition) {
         Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + widthY, this.getPosition().z() + (widthZ/2));
         Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y(), this.getPosition().z() - (widthZ/2));
 
-        if(ballPosition.get_x() >= minPosition.get_x() && ballPosition.get_x() <= maxPosition.get_x()){
-            if( ballPosition.get_z() >= minPosition.get_z() && ballPosition.get_z() <= maxPosition.get_z()){
-                return ballPosition.get_y() >= minPosition.get_y() && ballPosition.get_y() <= maxPosition.get_y();
-            }}
+        if(ballPosition.get_x() >= minPosition.get_x()-error && ballPosition.get_x() <= maxPosition.get_x()+error){
+            if( ballPosition.get_z() >= minPosition.get_z()-error && ballPosition.get_z() <= maxPosition.get_z()+error){
+                if( ballPosition.get_y() >= minPosition.get_y()-error && ballPosition.get_y() <= maxPosition.get_y()+error){
+                    return true;
+                }
+            }
+        }
 
         return false;
     }

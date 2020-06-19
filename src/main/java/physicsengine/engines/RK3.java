@@ -38,9 +38,9 @@ public class RK3 implements PhysicsEngine {
                 .add(ODEDerivativesK2[0].getScaled(4))
                 .add(ODEDerivativesK3[0]).getScaled(stepSize / 6);
 
-        Vector3d addToVelocity = ODEDerivativesK1[0]
-                .add(ODEDerivativesK2[0].getScaled(4))
-                .add(ODEDerivativesK3[0]).getScaled(stepSize / 6);
+        Vector3d addToVelocity = ODEDerivativesK1[1]
+                .add(ODEDerivativesK2[1].getScaled(4))
+                .add(ODEDerivativesK3[1]).getScaled(stepSize / 6);
 
 
         ballPosition = ballPosition.add(addToPosition);
