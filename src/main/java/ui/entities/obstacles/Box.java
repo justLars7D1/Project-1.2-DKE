@@ -1,5 +1,6 @@
 package ui.entities.obstacles;
 import org.joml.Vector3f;
+import org.lwjgl.odbc.SQL_YEAR_MONTH_STRUCT;
 import physicsengine.Vector3d;
 import ui.entities.Entity;
 import ui.entities.Obstacle;
@@ -27,15 +28,22 @@ public class Box extends Obstacle {
         super(model, position, 0, 0, 0, scale);
     }
 
+    public void resetMinimum() {
+        setPosition(getPosition().add(0, widthY/2, 0));
+    }
+
     @Override
     public boolean isHit(Vector3d ballPosition) {
         Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + (widthY/2), this.getPosition().z() + (widthZ/2));
         Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y() - (widthY/2), this.getPosition().z() - (widthZ/2));
 
-        if(ballPosition.get_x()>= minPosition.get_x() && ballPosition.get_x()<= maxPosition.get_x()){
-            if( ballPosition.get_z()>= minPosition.get_z() && ballPosition.get_z()<= maxPosition.get_z()){
-                if( ballPosition.get_y()>= minPosition.get_y() && ballPosition.get_y()<= maxPosition.get_y()){
-                    return true;}}}
+        System.out.println(ballPosition);
+
+        if(ballPosition.get_x() >= minPosition.get_x() && ballPosition.get_x() <= maxPosition.get_x()){
+            if( ballPosition.get_z() >= minPosition.get_z() && ballPosition.get_z() <= maxPosition.get_z()){
+                return ballPosition.get_y() >= minPosition.get_y() && ballPosition.get_y() <= maxPosition.get_y();
+            }
+        }
 
         return false;
     }

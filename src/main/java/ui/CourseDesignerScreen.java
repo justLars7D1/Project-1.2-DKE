@@ -4,8 +4,10 @@ import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
 import lwjgui.scene.control.Button;
+import lwjgui.scene.control.Label;
 import lwjgui.scene.control.Slider;
 import lwjgui.scene.control.TextField;
+import lwjgui.scene.layout.HBox;
 import lwjgui.scene.layout.StackPane;
 import lwjgui.scene.layout.floating.FloatingPane;
 import lwjgui.style.BackgroundNVGImage;
@@ -20,6 +22,7 @@ import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Obstacle;
+import ui.entities.obstacles.Box;
 import ui.entities.obstacles.ObstacleFactory;
 import ui.renderEngine.Window;
 
@@ -31,7 +34,13 @@ import java.util.List;
 
 public class CourseDesignerScreen {
 
+    private static final ObstacleFactory OBSTACLE_FACTORY = ObstacleFactory.getFactory();
     private List<Obstacle> allObstacles = new ArrayList<>();
+    private static final String[] OBSTACLES = {"Tree", "Box"};
+    private int obstacleCounter = 0;
+    private TextField positionInField = new TextField("(0.0, 0.0)");
+
+    private Label obstacleLabel = new Label(OBSTACLES[0]);
 
     private static final BackgroundImg backgroundImage = new BackgroundImg("./res/coursedesigner/BackgroundImg.png");
     private final StackPane pane;
@@ -42,10 +51,6 @@ public class CourseDesignerScreen {
     private boolean doneSelecting;
 
     public CourseDesignerScreen() {
-        //TODO: Remove test before submission
-        allObstacles.add(ObstacleFactory.getFactory().createObstacle("Tree", new Vector3f(10, 0, 0), 1));
-        allObstacles.add(ObstacleFactory.getFactory().createObstacle("Box", new Vector3f(-10, 0, 0), 1));
-
         this.courseSettingsFields = new HashMap<>();
         this.courseSettingsBtns = new HashMap<>();
         this.pane = new StackPane();
@@ -63,6 +68,7 @@ public class CourseDesignerScreen {
         floatingPane.setAbsolutePosition(Window.getWidth()/2f - floatingPane.getWidth()/2, 0.245 * Window.getHeight());
 
         setupTextFields(floatingPane);
+        setupObstacleInput(floatingPane);
         setupButtons(floatingPane);
 
         this.courseSettingsBtns.get("continue").setOnMouseClicked(e -> doneSelecting = true);
@@ -128,6 +134,57 @@ public class CourseDesignerScreen {
         return doneSelecting;
     }
 
+    private void setupObstacleInput(FloatingPane pane) {
+        FloatingPane labelPane = new FloatingPane();
+        FloatingPane sliderPane = new FloatingPane();
+        FloatingPane textfieldPane = new FloatingPane();
+        FloatingPane buttonPane = new FloatingPane();
+
+        labelPane.setAbsolutePosition(0.85*Window.getWidth(), 0.4*Window.getHeight());
+        sliderPane.setAbsolutePosition(0.8*Window.getWidth(), 0.45*Window.getHeight());
+        textfieldPane.setAbsolutePosition(0.8*Window.getWidth(), 0.5*Window.getHeight());
+        buttonPane.setAbsolutePosition(0.8*Window.getWidth(), 0.55*Window.getHeight());
+
+        Slider obstacleSlider = new Slider();
+        obstacleSlider.setMin(0);
+        obstacleSlider.setMax(10);
+        obstacleSlider.setValue(0);
+        obstacleSlider.setOnValueChangedEvent((event -> {
+            if (obstacleCounter + 1 >= OBSTACLES.length) obstacleCounter = 0;
+            else obstacleCounter++;
+            obstacleLabel.setText(OBSTACLES[obstacleCounter]);
+        }));
+        obstacleSlider.setBlockIncrement(10);
+
+        positionInField.setPrefSize(200, 30);
+        positionInField.setFontSize(22);
+        courseSettingsFields.put("obstacles", positionInField);
+
+        Button obstacleBtn = new Button("Add Obstacle!");
+        obstacleBtn.setPrefSize(200, 30);
+        obstacleBtn.setFontSize(22);
+        obstacleBtn.setOnMouseClicked(e -> addObstacleToCourse());
+
+        obstacleSlider.setPrefSize(200, 30);
+        obstacleLabel.setFontSize(30);
+
+        labelPane.getChildren().add(obstacleLabel);
+        sliderPane.getChildren().add(obstacleSlider);
+        textfieldPane.getChildren().add(positionInField);
+        buttonPane.getChildren().add(obstacleBtn);
+
+        pane.getChildren().addAll(labelPane, sliderPane, textfieldPane, buttonPane);
+        //obstacleSlider.setAbsolutePosition(900, 500);
+    }
+
+    private void addObstacleToCourse() {
+        Vector3d position = fieldToVec2d(positionInField.getText());
+        Vector3f fieldPosition = new Vector3f((float)position.get_x(), (float)position.get_y(), (float)position.get_z());
+        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle(obstacleLabel.getText(), fieldPosition, 1);
+        allObstacles.add(obstacle);
+        positionInField.setText("(0.0, 0.0)");
+    }
+
     private void setupButtons(FloatingPane floatingPane) {
         String[] buttonNames = {"continue", "save", "load", "load maze"};
         String[] initialValues = {"Continue", "Save to file", "Load from file", "load maze from file"};
@@ -154,6 +211,13 @@ public class CourseDesignerScreen {
         Vector3d holePoint = fieldToVec2d(getContent("target_point"));
 
         PuttingCourse course = new PuttingCourse(courseFunction, startPoint, holePoint);
+        for (Obstacle o: allObstacles) {
+            Vector3f position = o.getPosition();
+            double heightOnMap = courseFunction.evaluate(position.x, position.z);
+            Vector3f newHeight = new Vector3f(position.x, (float) heightOnMap, position.z);
+            o.setPosition(newHeight);
+            if (o instanceof Box) ((Box) o).resetMinimum();
+        }
         course.addObstacles(allObstacles);
         course.setHoleTolerance(Double.parseDouble(getContent("goal_tolerance")));
         course.setBallMass(Double.parseDouble(getContent("ball_mass")));

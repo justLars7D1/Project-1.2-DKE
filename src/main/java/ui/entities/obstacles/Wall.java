@@ -11,6 +11,7 @@ import ui.objloader.OBJLoader;
 import ui.renderEngine.Loader;
 import ui.textures.ModelTexture;
 
+@Deprecated
 public class Wall extends Obstacle {
 
     public static TexturedModel model;

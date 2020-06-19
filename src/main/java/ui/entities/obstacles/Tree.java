@@ -33,10 +33,10 @@ public class Tree extends Obstacle {
         Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + widthY, this.getPosition().z() + (widthZ/2));
         Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y(), this.getPosition().z() - (widthZ/2));
 
-        if(ballPosition.get_x()>= minPosition.get_x() && ballPosition.get_x()<= maxPosition.get_x()){
-            if( ballPosition.get_z()>= minPosition.get_z() && ballPosition.get_z()<= maxPosition.get_z()){
-                if( ballPosition.get_y()>= minPosition.get_y() && ballPosition.get_y()<= maxPosition.get_y()){
-                    return true;}}}
+        if(ballPosition.get_x() >= minPosition.get_x() && ballPosition.get_x() <= maxPosition.get_x()){
+            if( ballPosition.get_z() >= minPosition.get_z() && ballPosition.get_z() <= maxPosition.get_z()){
+                return ballPosition.get_y() >= minPosition.get_y() && ballPosition.get_y() <= maxPosition.get_y();
+            }}
 
         return false;
     }
