@@ -31,11 +31,11 @@ public class MainFloyd {
 
     }
     public static void getDistanceTable(Graph g) {
-        int[][] table = FloydWarshall.distTable(g);
+        double[][] table = FloydWarshall.distTable(g);
 
         for(int i=0; i<table.length; i++){
             for (int j=0; j<table[0].length; j++){
-                System.out.print(table[i][j]+ " ");
+                System.out.print(table[i][j]+ "\t \t");
             }
             System.out.println();
         }
