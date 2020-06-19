@@ -1,8 +1,7 @@
 package ui.entities.obstacles;
+
 import org.joml.Vector3f;
-import org.lwjgl.odbc.SQL_YEAR_MONTH_STRUCT;
 import physicsengine.Vector3d;
-import ui.entities.Entity;
 import ui.entities.Obstacle;
 import ui.models.RawModel;
 import ui.models.TexturedModel;
@@ -13,8 +12,8 @@ import ui.textures.ModelTexture;
 
 public class Box extends Obstacle {
 
-    private static TexturedModel model;
     private static final float widthX = (float) 2.190922, widthY = (float) 2.170072, widthZ = (float) 2.198802;
+    private static TexturedModel model;
 
     static {
         Loader loader = new Loader();
@@ -29,19 +28,20 @@ public class Box extends Obstacle {
     }
 
     public void resetMinimum() {
-        setPosition(getPosition().add(0, widthY/2, 0));
+        setPosition(getPosition().add(0, widthY / 2, 0));
     }
 
+    private static final double error = 10e-2;
     @Override
     public boolean isHit(Vector3d ballPosition) {
-        Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX/2), this.getPosition().y() + (widthY/2), this.getPosition().z() + (widthZ/2));
-        Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX/2), this.getPosition().y() - (widthY/2), this.getPosition().z() - (widthZ/2));
+        Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX / 2), this.getPosition().y() + (widthY / 2), this.getPosition().z() + (widthZ / 2));
+        Vector3d minPosition = new Vector3d(this.getPosition().x() - (widthX / 2), this.getPosition().y() - (widthY / 2), this.getPosition().z() - (widthZ / 2));
 
-        System.out.println(ballPosition);
-
-        if(ballPosition.get_x() >= minPosition.get_x() && ballPosition.get_x() <= maxPosition.get_x()){
-            if( ballPosition.get_z() >= minPosition.get_z() && ballPosition.get_z() <= maxPosition.get_z()){
-                return ballPosition.get_y() >= minPosition.get_y() && ballPosition.get_y() <= maxPosition.get_y();
+        if(ballPosition.get_x() >= minPosition.get_x()-error && ballPosition.get_x() <= maxPosition.get_x()+error){
+            if( ballPosition.get_z() >= minPosition.get_z()-error && ballPosition.get_z() <= maxPosition.get_z()+error){
+                if( ballPosition.get_y() >= minPosition.get_y()-error && ballPosition.get_y() <= maxPosition.get_y()+error){
+                    return true;
+                }
             }
         }
 
