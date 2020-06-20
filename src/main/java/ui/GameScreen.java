@@ -236,4 +236,8 @@ public class GameScreen {
         playerCamera.setCallback();
     }
 
+    public double getBallVelocity(){
+        return this.ballVelocity;
+    }
+
 }
