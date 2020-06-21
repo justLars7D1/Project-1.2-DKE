@@ -25,6 +25,14 @@ public class MainDijkstra {
 			System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
 		}
 		System.out.println();
+		getShortestPathTo(g, 6, 0);
+		getShortestPathTo(g, 6, 1);
+		getShortestPathTo(g, 6, 3);
+		getShortestPathTo(g, 6, 4);
+		getShortestPathTo(g, 6, 5);
+		getShortestPathTo(g, 6, 6);
+		getShortestPathTo(g, 6, 7);
+		getShortestPathTo(g, 6, 8);
 		getShortestPathTo(g, 5, 0);
 		getShortestPathTo(g, 5, 1);
 		getShortestPathTo(g, 5, 3);

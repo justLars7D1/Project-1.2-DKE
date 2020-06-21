@@ -26,6 +26,16 @@ public class MazeLoader {
     }
 
     public void buildMaze(GraphAL maze){
+
+        /*
+         private void addObstacleToCourse() {
+        Vector3d position = fieldToVec2d(positionInField.getText());
+        Vector3f fieldPosition = new Vector3f((float)position.get_x(), (float)position.get_y(), (float)position.get_z());
+        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle(obstacleLabel.getText(), fieldPosition, 1);
+        allObstacles.add(obstacle);
+        positionInField.setText("(0.0, 0.0)");
+    }
+         */
         for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());

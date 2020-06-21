@@ -1,9 +1,5 @@
 package dijkstra;
 
-import gameelements.PuttingCourse;
-import physicsengine.Vector3d;
-import physicsengine.functions.FunctionParserRPN;
-
 import java.util.LinkedList;
 import java.util.Queue;
 

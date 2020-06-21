@@ -156,11 +156,11 @@ public class PuttingSimulator {
         double absX = Math.abs(resultVec.get_x()), absY = Math.abs(resultVec.get_y()), absZ = Math.abs(resultVec.get_z());
         double largestAbs = Math.max(Math.max(absX, absY), absZ);
         if (largestAbs == absX) {
-            result = new Vector3d((resultVec.get_x() < 0) ? -1 : 1, 0, 0);
+            result = new Vector3d((resultVec.get_x() < 0) ? 1 : -1, 0, 0);
         } else if (largestAbs == absY) {
-            result = new Vector3d(0, (resultVec.get_y() < 0) ? -1 : 1, 0);
+            result = new Vector3d(0, (resultVec.get_y() < 0) ? 1 : -1, 0);
         } else {
-            result = new Vector3d(0, 0, (resultVec.get_z() < 0) ? -1 : 1);
+            result = new Vector3d(0, 0, (resultVec.get_z() < 0) ? 1 : -1);
         }
         return result;
     }
@@ -190,20 +190,15 @@ public class PuttingSimulator {
         boolean ballLastInAir;
         Vector3d lastBouncePosition = new Vector3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 
-        while(numTimesCloseToCurrent < 100 || ballHigherThanGround) {
+        while(numTimesCloseToCurrent < 100) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            for(Obstacle obs : course.getObstacles()){
-                if(obs.isHit(ballPosition)){
-                    ballVelocity = reflectionVectorOnBounce(ballVelocity, calculateSurfaceNormal(ballPosition, obs.getPosition()));
-                    break;
-                }
-            }
-
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1 && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1
+                    && Math.abs(current.get_y() - ballPosition.get_y()) <= deltaT*0.1
+                    && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
@@ -225,6 +220,14 @@ public class PuttingSimulator {
 
             Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)ballPosition.get_y(), (float)ballPosition.get_z());
             player.setPosition(newPos);
+
+            for(Obstacle obs : course.getObstacles()){
+                if(obs.isHit(ballPosition)){
+                    ballVelocity = reflectionVectorOnBounce(ballVelocity, calculateSurfaceNormal(ballPosition, obs.getPosition()));
+                    engine.setBallVelocity(ballVelocity);
+                    break;
+                }
+            }
 
             try {
                 Thread.sleep(5);
