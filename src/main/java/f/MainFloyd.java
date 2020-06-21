@@ -29,17 +29,20 @@ public class MainFloyd {
         System.out.println();
         getDistanceTable(g);
         System.out.println();
-        List<Integer> p= getShortest(g, 1, 3);
+        /*List<Integer> p= getShortest(g, 1, 3);
         for(int i=0; i<p.size(); i++){
             System.out.println(p.get(i));
         }
+
+         */
     }
 
-    private static List<Integer> getShortest(GraphAL g, int src, int dst) {
+   /* private static List<Integer> getShortest(GraphAL g, int src, int dst) {
         List<Integer> path= getShortest(g, src, dst);
 
         return path;
     }
+    */
 
     public static void getDistanceTable(Graph g) {
         double[][] table = FloydWarshall.distTable(g);

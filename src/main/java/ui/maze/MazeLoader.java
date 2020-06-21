@@ -29,10 +29,14 @@ public class MazeLoader {
         for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
-            Vector3f posLeft= new Vector3f((float) v.get_x()+2,(float)v.get_y(), (float) v.get_z()+2);
-            Vector3f posRight= new Vector3f((float) v.get_x()-2,(float)v.get_y(), (float) v.get_z()-2);
-            Box left= new Box(posLeft, 1 );
-            Box right= new Box(posRight, 1);
+
+            Vector3f pos1= new Vector3f((float) v.get_x()+2,(float)v.get_y(), (float) v.get_z()+2);
+            Vector3f pos2= new Vector3f((float) v.get_x()-2,(float)v.get_y(), (float) v.get_z()-2);
+
+            for (int neighbour: maze.neighbors(i)){
+                Vector3d n= (Vector3d) maze.getValue(neighbour);
+
+            }
         }
 
         for(int j=0; j<maze.nodeCount(); j++){
