@@ -18,7 +18,7 @@ public class WindPhysics {
     private double windForce = ballConstant*(ballSpeed-windSpeed);
     private double finalSpeed = ballForce + windForce;
     private double currentVelocity;
-    private double currentPosition;
+    private Vector3d currentPosition;
 
     public double getBallVelocity(double time){
         double ballVelocity = currentVelocity + time*(finalSpeed/ballMass);
@@ -26,8 +26,11 @@ public class WindPhysics {
         return ballVelocity;
     }
 
-    public double getBallPosition(double time){
-        double ballPosition = currentPosition + time*getBallVelocity(time);
+    public Vector3d getBallPosition(double time){
+        Vector3d ballPosition = currentPosition;
+        ballPosition.get_x() += time*getBallVelocity(time);
+        ballPosition.get_y() += time*getBallVelocity(time);
+        ballPosition.get_z() += time*getBallVelocity(time);
         currentPosition = ballPosition;
         return ballPosition;
     }
