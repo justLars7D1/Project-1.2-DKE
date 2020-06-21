@@ -121,7 +121,7 @@ public class CourseDesignerScreen {
             }).start();
         });
 
-        this.courseSettingsBtns.get("loadMaze").setOnMouseClicked(e -> {
+        this.courseSettingsBtns.get("load maze").setOnMouseClicked(e -> {
             new Thread(() -> {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setDialogTitle("Load Maze!");
@@ -138,6 +138,7 @@ public class CourseDesignerScreen {
                     //If the file is successfully loaded in, set the simulation
                     if (worked) {
                         PuttingCourse course = s.getCourse();
+                        setCourseText(course);
                         Graph maze= MazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
                         MazeBuilder.buildMaze(maze);
                     } else {
@@ -147,7 +148,15 @@ public class CourseDesignerScreen {
             }).start();
         });
 
+
+
+
         pane.setBackground(new BackgroundNVGImage(backgroundImage.getImage()));
+
+        /*if (worked) {
+                        PuttingCourse course = s.getCourse();
+                        Graph maze= MazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
+                        MazeBuilder.buildMaze(maze);*/
     }
 
     public void update() {
