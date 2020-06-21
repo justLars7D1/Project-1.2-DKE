@@ -7,6 +7,7 @@ import gameelements.PuttingCourse;
 import org.joml.Vector3f;
 import physicsengine.Vector3d;
 import physicsengine.functions.FunctionParserRPN;
+import ui.CourseDesignerScreen;
 import ui.entities.Obstacle;
 import ui.entities.obstacles.Box;
 import ui.entities.obstacles.ObstacleFactory;
@@ -29,7 +30,7 @@ public class MazeLoader {
 
     }
 
-    public void buildMaze(GraphAL maze){
+    public static void buildMaze(Graph maze){
 
         /*
          private void addObstacleToCourse() {

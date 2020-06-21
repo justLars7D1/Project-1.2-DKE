@@ -1,5 +1,7 @@
 package ui;
 
+import dijkstra.Graph;
+import dijkstra.GraphAL;
 import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
@@ -25,6 +27,7 @@ import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Obstacle;
 import ui.entities.obstacles.Box;
 import ui.entities.obstacles.ObstacleFactory;
+import ui.maze.MazeLoader;
 import ui.renderEngine.Window;
 
 import javax.swing.*;
@@ -119,6 +122,32 @@ public class CourseDesignerScreen {
 
         pane.setBackground(new BackgroundNVGImage(backgroundImage.getImage()));
 
+        this.courseSettingsBtns.get("loadMaze").setOnMouseClicked(e -> {
+            new Thread(() -> {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setDialogTitle("Load Maze!");
+                JFrame f = new JFrame();
+                f.setVisible(true);
+                f.toFront();
+                f.setVisible(false);
+                int res = chooser.showOpenDialog(f);
+                f.dispose();
+                if (res == JFileChooser.APPROVE_OPTION) {
+                    File fileToLoad = chooser.getSelectedFile();
+                    PuttingSimulator s = new PuttingSimulator();
+                    boolean worked = s.loadCourse(fileToLoad.getAbsolutePath());
+                    //If the file is successfully loaded in, set the simulation
+                    if (worked) {
+                        PuttingCourse course = s.getCourse();
+                        MazeLoader mazeLoader= new MazeLoader();
+                        Graph maze= mazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
+                        mazeLoader.buildMaze(maze);
+                    } else {
+                        System.out.println("Error... Could not load in the specified course!");
+                    }
+                }
+            }).start();
+        });
     }
 
     public void update() {
