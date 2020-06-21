@@ -27,6 +27,7 @@ import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Obstacle;
 import ui.entities.obstacles.Box;
 import ui.entities.obstacles.ObstacleFactory;
+import ui.maze.MazeBuilder;
 import ui.maze.MazeLoader;
 import ui.renderEngine.Window;
 
@@ -120,8 +121,6 @@ public class CourseDesignerScreen {
             }).start();
         });
 
-        pane.setBackground(new BackgroundNVGImage(backgroundImage.getImage()));
-
         this.courseSettingsBtns.get("loadMaze").setOnMouseClicked(e -> {
             new Thread(() -> {
                 JFileChooser chooser = new JFileChooser();
@@ -139,15 +138,16 @@ public class CourseDesignerScreen {
                     //If the file is successfully loaded in, set the simulation
                     if (worked) {
                         PuttingCourse course = s.getCourse();
-                        MazeLoader mazeLoader= new MazeLoader();
-                        Graph maze= mazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
-                        mazeLoader.buildMaze(maze);
+                        Graph maze= MazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
+                        MazeBuilder.buildMaze(maze);
                     } else {
                         System.out.println("Error... Could not load in the specified course!");
                     }
                 }
             }).start();
         });
+
+        pane.setBackground(new BackgroundNVGImage(backgroundImage.getImage()));
     }
 
     public void update() {
