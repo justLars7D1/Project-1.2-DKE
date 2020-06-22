@@ -8,9 +8,14 @@ import physicsengine.engines.RK4;
 import physicsengine.engines.RK5;
 import physicsengine.functions.FunctionParserRPN;
 
-public class MazeBot {
+public class MazeBot implements PuttingBot {
 
-    public Vector3d single_shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position) {
+    @Override
+    public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
+        return new Vector3d();
+    }
+
+    public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position) {
         double ballGoalDistance = distanceBetween(ball_position, goal_position);
 
         double maxVelocity = course.get_maximum_velocity();
@@ -139,7 +144,7 @@ public class MazeBot {
         sim.set_ball_position(ball_position);
         for (int i = 1; i < path.length; i ++) {
             Vector3d goal_position = (Vector3d) maze.getValue(path[i]);
-            single_shot_velocity(course, sim.get_ball_position(), goal_position);
+            shot_velocity(course, sim.get_ball_position(), goal_position);
             ball_position = goal_position.copy();
             sim.set_ball_position(ball_position);
         }

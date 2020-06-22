@@ -10,14 +10,11 @@ import ui.objloader.OBJLoader;
 import ui.renderEngine.Loader;
 import ui.textures.ModelTexture;
 
+@Deprecated
 public class Lamppost extends Obstacle {
 
     private static final float widthX = (float) 1.934912, widthY = (float) 8.85824, widthZ = (float) 1.933775;
     private static TexturedModel model;
-
-    public Lamppost(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
-        super(model, position, rotX, rotY, rotZ, scale);
-    }
 
     static {
         Loader loader = new Loader();
@@ -25,6 +22,10 @@ public class Lamppost extends Obstacle {
         RawModel rawModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
         ModelTexture texture = new ModelTexture(loader.loadTexture("game/entities/lamppost/lamppost"));
         model = new TexturedModel(rawModel, texture);
+    }
+
+    public Lamppost(Vector3f position, float scale) {
+        super(model, position, 0, 0, 0, scale);
     }
 
     private static final double error = 10e-2;

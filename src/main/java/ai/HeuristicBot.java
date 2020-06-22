@@ -123,6 +123,11 @@ public class HeuristicBot implements PuttingBot {
         return bestShot.getShotVector();
     }
 
+    @Override
+    public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position) {
+        return new Vector3d();
+    }
+
     /**
      * Simulate a shot in the game
      * @param ballPos The positon of the ball

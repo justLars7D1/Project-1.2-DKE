@@ -1,5 +1,6 @@
 package gameelements;
 
+import dijkstra.GraphAL;
 import physicsengine.functions.Function2d;
 import physicsengine.Vector3d;
 import ui.entities.Obstacle;
@@ -59,6 +60,8 @@ public class PuttingCourse implements Serializable {
      * List of all possible obstacles to be put int he course
      */
     private List<Obstacle> listOfObstacles = new ArrayList<>();
+
+    private GraphAL mazeGraph;
 
     /**
      * Constructor
@@ -185,6 +188,18 @@ public class PuttingCourse implements Serializable {
      */
     public void setBallMass(double ballMass) {
         this.ballMass = ballMass;
+    }
+
+    public GraphAL getMaze() {
+        return mazeGraph;
+    }
+
+    public void setMaze(GraphAL mazeGraph) {
+        this.mazeGraph = mazeGraph;
+    }
+
+    public boolean doesMazeExist() {
+        return mazeGraph != null;
     }
 
     public static double getBallBounciness() {

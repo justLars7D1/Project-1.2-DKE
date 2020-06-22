@@ -5,4 +5,5 @@ import physicsengine.Vector3d;
 
 public interface PuttingBot {
     Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position);
+    Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position);
 }

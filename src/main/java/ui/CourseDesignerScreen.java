@@ -2,6 +2,7 @@ package ui;
 
 import dijkstra.Graph;
 import dijkstra.GraphAL;
+import dijkstra.ReadFile;
 import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import lwjgui.LWJGUI;
@@ -26,6 +27,7 @@ import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Obstacle;
 import ui.entities.obstacles.Box;
+import ui.entities.obstacles.Lamppost;
 import ui.entities.obstacles.ObstacleFactory;
 import ui.maze.MazeBuilder;
 import ui.maze.MazeLoader;
@@ -44,6 +46,8 @@ public class CourseDesignerScreen {
     private static final String[] OBSTACLES = {"Tree", "Box"};
     private int obstacleCounter = 0;
     private TextField positionInField = new TextField("(0.0, 0.0)");
+
+    private File graphFile;
 
     private Label obstacleLabel = new Label(OBSTACLES[0]);
 
@@ -132,18 +136,7 @@ public class CourseDesignerScreen {
                 int res = chooser.showOpenDialog(f);
                 f.dispose();
                 if (res == JFileChooser.APPROVE_OPTION) {
-                    File fileToLoad = chooser.getSelectedFile();
-                    PuttingSimulator s = new PuttingSimulator();
-                    boolean worked = s.loadCourse(fileToLoad.getAbsolutePath());
-                    //If the file is successfully loaded in, set the simulation
-                    if (worked) {
-                        PuttingCourse course = s.getCourse();
-                        setCourseText(course);
-                        Graph maze= MazeLoader.loadMaze("src/main/java/dijkstra/maze-on-course", course );
-                        MazeBuilder.buildMaze(maze);
-                    } else {
-                        System.out.println("Error... Could not load in the specified course!");
-                    }
+                    graphFile = chooser.getSelectedFile();
                 }
             }).start();
         });
@@ -282,6 +275,10 @@ public class CourseDesignerScreen {
                 engine = new RK4(course);
                 break;
         }
+
+        GraphAL mazeGraph = (GraphAL) ReadFile.setCoordinates(graphFile.getAbsolutePath(), course);
+        course.setMaze(mazeGraph);
+        MazeBuilder.buildMaze(mazeGraph, allObstacles, courseFunction);
 
         return new PuttingSimulator(course, engine);
     }
