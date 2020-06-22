@@ -18,36 +18,41 @@ public class MazeBuilder {
 
         for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
+
+            Vector3f boxPos = new Vector3f((float) v.get_x(), (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z());
+
+            System.out.println(v);
+            Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
+            obstacleList.add(obstacle);
+
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
 
-            for (int neighbour: maze.neighbors(i)){
-                Vector3d n= (Vector3d) maze.getValue(neighbour);
 
-                for (int x= (int) v.get_x()+1; x<n.get_x()+1; x++) {
-                    for (int z =(int) v.get_z()-1; z<n.get_z()-1; z++) {
-                        Vector3d currentPosX = (Vector3d) maze.getValue(x);
-                        Vector3d currentPosZ = (Vector3d) maze.getValue(z);
-                        Vector3f boxPos = new Vector3f((float) currentPosX.get_x(),
-                                (float) function2d.evaluate(currentPosX.get_x(), currentPosZ.get_z()),
-                                (float) currentPosZ.get_z());
 
-                        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
-                        obstacleList.add(obstacle);
-                    }
-                }
-                for (int x= (int) v.get_x()-1; x<n.get_x()-1; x++) {
-                    for (int z =(int) v.get_z()+1; z<n.get_z()+1; z++) {
-                        Vector3d currentPosX = (Vector3d) maze.getValue(x);
-                        Vector3d currentPosZ = (Vector3d) maze.getValue(z);
-                        Vector3f boxPos = new Vector3f((float) currentPosX.get_x(),
-                                (float) function2d.evaluate(currentPosX.get_x(), currentPosZ.get_z()),
-                                (float) currentPosZ.get_z());
-
-                        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
-                        obstacleList.add(obstacle);
-                    }
-                }
-            }
+//            for (int neighbour: maze.neighbors(i)){
+//                Vector3d n= (Vector3d) maze.getValue(neighbour);
+//
+//                for (int x= (int) v.get_x()+1; x<n.get_x()+1; x++) {
+//                    for (int z =(int) v.get_z()-1; z<n.get_z()-1; z++) {
+////                        Vector3d currentPosX = (Vector3d) maze.getValue(x);
+////                        Vector3d currentPosZ = (Vector3d) maze.getValue(z);
+//                        Vector3f boxPos = new Vector3f(x, (float) function2d.evaluate(x, z), (float) z);
+//
+//                        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
+//                        obstacleList.add(obstacle);
+//                    }
+//                }
+//                for (int x= (int) v.get_x()-1; x<n.get_x()-1; x++) {
+//                    for (int z =(int) v.get_z()+1; z<n.get_z()+1; z++) {
+////                        Vector3d currentPosX = (Vector3d) maze.getValue(x);
+////                        Vector3d currentPosZ = (Vector3d) maze.getValue(z);
+//                        Vector3f boxPos = new Vector3f(x, (float) function2d.evaluate(x, z), (float) z);
+//
+//                        Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
+//                        obstacleList.add(obstacle);
+//                    }
+//                }
+//            }
         }
 
     }

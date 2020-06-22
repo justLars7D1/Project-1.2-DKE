@@ -241,14 +241,21 @@ public class CourseDesignerScreen {
         Function2d courseFunction = new FunctionParserRPN(getContent("height_function"));
         Vector3d startPoint = fieldToVec2d(getContent("starting_point"));
         Vector3d holePoint = fieldToVec2d(getContent("target_point"));
-
         PuttingCourse course = new PuttingCourse(courseFunction, startPoint, holePoint);
+
+        if (graphFile != null) {
+            GraphAL mazeGraph = (GraphAL) ReadFile.setCoordinates(graphFile.getAbsolutePath(), course);
+            course.setMaze(mazeGraph);
+            MazeBuilder.buildMaze(mazeGraph, allObstacles, courseFunction);
+        }
+
         for (Obstacle o: allObstacles) {
             Vector3f position = o.getPosition();
             double heightOnMap = courseFunction.evaluate(position.x, position.z);
             Vector3f newHeight = new Vector3f(position.x, (float) heightOnMap, position.z);
             o.setPosition(newHeight);
             if (o instanceof Box) ((Box) o).resetMinimum();
+            System.out.println("P: " + position);
         }
         course.addObstacles(allObstacles);
         course.setHoleTolerance(Double.parseDouble(getContent("goal_tolerance")));
@@ -274,12 +281,6 @@ public class CourseDesignerScreen {
             default:
                 engine = new RK4(course);
                 break;
-        }
-
-        if (graphFile != null) {
-            GraphAL mazeGraph = (GraphAL) ReadFile.setCoordinates(graphFile.getAbsolutePath(), course);
-            course.setMaze(mazeGraph);
-            MazeBuilder.buildMaze(mazeGraph, allObstacles, courseFunction);
         }
 
         return new PuttingSimulator(course, engine);
