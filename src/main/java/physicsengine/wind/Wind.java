@@ -39,14 +39,4 @@ public class Wind {
         return velocity;
     }
 
-   /* public void setRandomVelocity() {
-        int min = 0;
-        int max = 130;
-        this.velocity = min + (int)(Math.random() * ((max - min) + 1));
-    }
-
-    public void setRandomDirection(){
-        this.direction = Directions.randomDirection();
-    }*/
-
 }

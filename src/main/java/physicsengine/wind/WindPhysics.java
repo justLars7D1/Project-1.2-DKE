@@ -28,9 +28,9 @@ public class WindPhysics {
 
     public Vector3d getBallPosition(double time){
         Vector3d ballPosition = currentPosition;
-        ballPosition.get_x() += time*getBallVelocity(time);
-        ballPosition.get_y() += time*getBallVelocity(time);
-        ballPosition.get_z() += time*getBallVelocity(time);
+        ballPosition.set_x(ballPosition.get_x() + time*getBallVelocity(time));
+        ballPosition.set_y(ballPosition.get_y() + time*getBallVelocity(time));
+        ballPosition.set_z(ballPosition.get_z() + time*getBallVelocity(time));
         currentPosition = ballPosition;
         return ballPosition;
     }
