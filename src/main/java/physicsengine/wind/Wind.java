@@ -14,7 +14,7 @@ public class Wind {
         this.direction = Directions.randomDirection();
         int min = 0;
         int max = 130;
-        this.velocity = min + (int)(Math.random() * ((max - min) + 1));
+        this.velocity = 0;
     }
 
     public enum Directions{

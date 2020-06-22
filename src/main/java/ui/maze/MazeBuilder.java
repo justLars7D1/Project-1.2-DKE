@@ -16,7 +16,7 @@ public class MazeBuilder {
 
     public static void buildMaze(Graph maze, List<Obstacle> obstacleList, Function2d function2d){
 
-        for (int i = 0; i < maze.nodeCount(); i++) {
+        /*for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
             int index = graph.getvalue();
 
@@ -54,9 +54,9 @@ public class MazeBuilder {
             Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
             obstacleList.add(obstacle);
 
-        }
+        }*/
 
-        /*for (int i = 0; i < maze.nodeCount(); i++) {
+        for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
 
             for (int neighbor: maze.neighbors(i)) {
@@ -78,7 +78,7 @@ public class MazeBuilder {
                     obstacleList.add(obstacleR);
                 }
 
-            }*/
+            }
 
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
 
