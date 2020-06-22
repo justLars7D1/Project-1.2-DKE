@@ -10,7 +10,6 @@ import ui.objloader.OBJLoader;
 import ui.renderEngine.Loader;
 import ui.textures.ModelTexture;
 
-@Deprecated
 public class Lamppost extends Obstacle {
 
     private static final float widthX = (float) 1.934912, widthY = (float) 8.85824, widthZ = (float) 1.933775;

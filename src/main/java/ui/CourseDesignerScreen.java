@@ -43,7 +43,7 @@ public class CourseDesignerScreen {
 
     private static final ObstacleFactory OBSTACLE_FACTORY = ObstacleFactory.getFactory();
     private List<Obstacle> allObstacles = new ArrayList<>();
-    private static final String[] OBSTACLES = {"Tree", "Box"};
+    private static final String[] OBSTACLES = {"Tree", "Box","Lamppost"};
     private int obstacleCounter = 0;
     private TextField positionInField = new TextField("(0.0, 0.0)");
 
