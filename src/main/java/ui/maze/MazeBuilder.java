@@ -18,6 +18,46 @@ public class MazeBuilder {
 
         for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
+            int index = graph.getvalue();
+
+            if(index<100) {
+                Vector3f boxPos = new Vector3f((float) v.get_x() + 2, (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z());
+
+            } else if(index<200) {
+                Vector3f boxPos = new Vector3f((float) v.get_x(), (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z()+2);
+
+            } else {
+                Vector3f boxPos = new Vector3f((float) v.get_x(), (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z()+2);
+            }
+
+            System.out.println(v);
+            Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
+            obstacleList.add(obstacle);
+
+        }
+
+        for (int i = 0; i < maze.nodeCount(); i++) {
+            Vector3d v = (Vector3d) maze.getValue(i);
+            int index = GraphAL.getvalue();
+
+            if(index<100) {
+                Vector3f boxPos = new Vector3f((float) v.get_x() - 2, (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z());
+
+            } else if(index<200) {
+                Vector3f boxPos = new Vector3f((float) v.get_x(), (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z()-2);
+
+            } else {
+                Vector3f boxPos = new Vector3f((float) v.get_x()+2, (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z());
+            }
+
+            System.out.println(v);
+            Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
+            obstacleList.add(obstacle);
+
+        }
+
+        /*for (int i = 0; i < maze.nodeCount(); i++) {
+            Vector3d v = (Vector3d) maze.getValue(i);
 
             for (int neighbor: maze.neighbors(i)) {
                 Vector3d n = (Vector3d) maze.getValue(neighbor);
@@ -38,7 +78,7 @@ public class MazeBuilder {
                     obstacleList.add(obstacleR);
                 }
 
-            }
+            }*/
 
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
 
