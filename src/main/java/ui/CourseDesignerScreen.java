@@ -276,9 +276,11 @@ public class CourseDesignerScreen {
                 break;
         }
 
-        GraphAL mazeGraph = (GraphAL) ReadFile.setCoordinates(graphFile.getAbsolutePath(), course);
-        course.setMaze(mazeGraph);
-        MazeBuilder.buildMaze(mazeGraph, allObstacles, courseFunction);
+        if (graphFile != null) {
+            GraphAL mazeGraph = (GraphAL) ReadFile.setCoordinates(graphFile.getAbsolutePath(), course);
+            course.setMaze(mazeGraph);
+            MazeBuilder.buildMaze(mazeGraph, allObstacles, courseFunction);
+        }
 
         return new PuttingSimulator(course, engine);
     }
