@@ -19,11 +19,26 @@ public class MazeBuilder {
         for (int i = 0; i < maze.nodeCount(); i++) {
             Vector3d v = (Vector3d) maze.getValue(i);
 
-            Vector3f boxPos = new Vector3f((float) v.get_x(), (float) function2d.evaluate(v.get_x(), v.get_z()), (float) v.get_z());
+            for (int neighbor: maze.neighbors(i)) {
+                Vector3d n = (Vector3d) maze.getValue(neighbor);
+                Vector3d currentNodeToNeighbor = n.minus(v);
+                double length = currentNodeToNeighbor.magnitude();
+                currentNodeToNeighbor.normalize();
 
-            System.out.println(v);
-            Obstacle obstacle = OBSTACLE_FACTORY.createObstacle("box", boxPos, 1);
-            obstacleList.add(obstacle);
+                for (double j = length/2.190922; j < length; j += length/2.190922) {
+                    Vector3d firstPoint = currentNodeToNeighbor.getScaled(j);
+                    Vector3d rotateLeft = firstPoint.getRotatedYAxis(90).getNormalized().getScaled(2.190922);
+                    Vector3d boxPostitionLeft = v.add(firstPoint).add(rotateLeft);
+                    Vector3d boxPostitionRight = v.add(firstPoint).minus(rotateLeft);
+                    Vector3f uiPositionLeft = new Vector3f((float)boxPostitionLeft.get_x(), (float)boxPostitionLeft.get_y(), (float)boxPostitionLeft.get_z());
+                    Vector3f uiPositionRight = new Vector3f((float)boxPostitionRight.get_x(), (float)boxPostitionRight.get_y(), (float)boxPostitionRight.get_z());
+                    Obstacle obstacleL = OBSTACLE_FACTORY.createObstacle("box", uiPositionLeft, 1);
+                    Obstacle obstacleR = OBSTACLE_FACTORY.createObstacle("box", uiPositionRight, 1);
+                    obstacleList.add(obstacleL);
+                    obstacleList.add(obstacleR);
+                }
+
+            }
 
             //System.out.println("vertex " + i + " has x=" + v.get_x() + " y=" + v.get_y() + " z=" + v.get_z());
 

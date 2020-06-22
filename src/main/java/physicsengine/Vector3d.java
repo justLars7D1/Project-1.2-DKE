@@ -127,8 +127,9 @@ public class Vector3d extends Vector {
      */
     public void rotateYAxis(double theta) {
         theta = Math.toRadians(theta);
-        coords[0] = Math.cos(theta)*get_x() + Math.sin(theta)*get_z();
-        coords[2] = -1*Math.sin(theta)*get_x() + Math.cos(theta)*get_z();
+        double tmpX = get_x(), tmpZ = get_z();
+        coords[0] = Math.cos(theta)*tmpX + Math.sin(theta)*tmpZ;
+        coords[2] = -1*Math.sin(theta)*tmpX + Math.cos(theta)*tmpZ;
     }
 
     /**
