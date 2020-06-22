@@ -57,10 +57,26 @@ public class Vector3d extends Vector {
 
     /**
      * Set the y-coordinate (height)
+     * @param x The new y-coordinate
+     */
+    public void set_x(double x) {
+        this.coords[1] = x;
+    }
+
+    /**
+     * Set the y-coordinate (height)
      * @param y The new y-coordinate
      */
     public void set_y(double y) {
         this.coords[1] = y;
+    }
+
+    /**
+     * Set the y-coordinate (height)
+     * @param z The new y-coordinate
+     */
+    public void set_z(double z) {
+        this.coords[1] = z;
     }
 
     /**

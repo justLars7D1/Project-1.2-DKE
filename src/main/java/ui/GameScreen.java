@@ -6,6 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import physicsengine.Vector3d;
+import physicsengine.wind.Wind;
 import ui.entities.Camera;
 import ui.entities.PlayerCamera;
 import ui.entities.Light;
@@ -27,6 +28,8 @@ public class GameScreen {
 
     private final FontType font;
     private GUIText velocityText;
+    private GUIText windText;
+    Wind wind = new Wind();
     private double ballVelocity;
 
     private boolean gameOver;
@@ -46,6 +49,7 @@ public class GameScreen {
 
     public GameScreen(PuttingSimulator gameSimulator, String gamemode, Loader loader, MasterRenderer renderer) {
         this.font = new FontType(loader.loadTexture("skins/arial"), new File("./res/skins/arial.fnt"));
+        this.windText = new GUIText ("Wind: " + wind.getVelocity() + "km/h", 1, font, new Vector2f(0.65f, 0.15f), 0.5f, true);
         this.velocityText = new GUIText("Velocity: " + ballVelocity + " m/s", 1, font, new Vector2f(0.65f, 0.05f), 0.5f, true);
         this.players = new ArrayList<>();
         this.gameSimulator = gameSimulator;
@@ -234,6 +238,10 @@ public class GameScreen {
 
     public void setCallback() {
         playerCamera.setCallback();
+    }
+
+    public double getBallVelocity(){
+        return this.ballVelocity;
     }
 
 }
