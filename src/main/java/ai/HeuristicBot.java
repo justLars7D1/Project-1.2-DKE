@@ -124,11 +124,8 @@ public class HeuristicBot implements PuttingBot {
                     if (bestShot == null || bestShot.getDistanceToTarget() > resultingPosition.getDistanceToTarget()) {
                         bestShot = resultingPosition;
                     }
-
                 }
-
             }
-
         }
 
         if (bestShot.getShotVector().magnitude() >= maxVelocity) {

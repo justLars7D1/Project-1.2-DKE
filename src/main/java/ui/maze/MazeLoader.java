@@ -26,6 +26,7 @@ public class MazeLoader {
         return maze;
     }
 
+    // test
     public static void main(String[] args) {
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("x + y"), new Vector3d(0, 10));
 

@@ -1,5 +1,6 @@
 package gameelements;
 
+import dijkstra.Graph;
 import dijkstra.GraphAL;
 import physicsengine.functions.Function2d;
 import physicsengine.Vector3d;
@@ -61,6 +62,9 @@ public class PuttingCourse implements Serializable {
      */
     private List<Obstacle> listOfObstacles = new ArrayList<>();
 
+    /**
+     * Graph representing the maze
+     */
     private GraphAL mazeGraph;
 
     /**
