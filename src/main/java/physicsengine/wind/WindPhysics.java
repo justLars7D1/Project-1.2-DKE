@@ -4,6 +4,7 @@ import gameelements.PuttingCourse;
 import physicsengine.Vector3d;
 import ui.GameScreen;
 
+@Deprecated
 public class WindPhysics {
 
     private double gravity = 9.8;
@@ -34,10 +35,5 @@ public class WindPhysics {
         currentPosition = ballPosition;
         return ballPosition;
     }
-
-    /*
-    * PROBLEM:
-    * iteration deltaT >> other class
-    */
 
 }
