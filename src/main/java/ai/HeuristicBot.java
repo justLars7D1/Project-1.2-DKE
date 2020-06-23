@@ -1,9 +1,5 @@
 package ai;
 
-import dijkstra.Dijkstra;
-import dijkstra.Graph;
-import dijkstra.GraphAL;
-import dijkstra.ReadFile;
 import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import physicsengine.Vector;
@@ -23,9 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 public class HeuristicBot implements PuttingBot {
 
-    private int[] path = getShortestPath();
-    private int index = -1;
-
     /**
      * Calculates the velocity needed for a shot from the data it receives
      * @param course The game course
@@ -34,10 +27,7 @@ public class HeuristicBot implements PuttingBot {
      */
     @Override
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
-        //Vector3d flagPosition = course.get_flag_position();
-        increaseIndex();
-        GraphAL graph = new GraphAL();
-        Vector3d flagPosition = (Vector3d) graph.nodeValues[path[index]];
+        Vector3d flagPosition = course.get_flag_position();
         Vector3d ballPosition =  ball_position;
         double ballFlagDistance = distanceBetween(ball_position, flagPosition);
 
@@ -110,7 +100,7 @@ public class HeuristicBot implements PuttingBot {
 
                     isInHole = sim.isInHole();
 
-                    scalingFactorShot += 0.1;
+                    scalingFactorShot += 0.5;
 
                 } else {
 
@@ -124,8 +114,11 @@ public class HeuristicBot implements PuttingBot {
                     if (bestShot == null || bestShot.getDistanceToTarget() > resultingPosition.getDistanceToTarget()) {
                         bestShot = resultingPosition;
                     }
+
                 }
+
             }
+
         }
 
         if (bestShot.getShotVector().magnitude() >= maxVelocity) {
@@ -134,20 +127,6 @@ public class HeuristicBot implements PuttingBot {
         }
 
         return bestShot.getShotVector();
-    }
-
-    private void increaseIndex() {
-        index++;
-    }
-
-    private int[] getShortestPath(){
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("0.0000001*x^2 + 0.0000001*y^2"), new Vector3d(0, 10));
-        course.setMaximumVelocity(10);
-        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
-        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
-        Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
-        int[] path = Dijkstra.getShortestPath(maze, 5, 0);
-        return path;
     }
 
     @Override
@@ -186,15 +165,7 @@ public class HeuristicBot implements PuttingBot {
         course.setMaximumVelocity(10);
         // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
         PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
-
-        Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
-        ((GraphAL) maze).print();
-        int[] path = Dijkstra.getShortestPath(maze, 5, 0);
-        for (int i = 0; i < path.length; i++) {
-            System.out.print(path[i] + " ");
-        }
         PuttingBot bot = new HeuristicBot();
-
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 
