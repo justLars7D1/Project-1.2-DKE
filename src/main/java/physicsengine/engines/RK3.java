@@ -5,6 +5,11 @@ import physicsengine.PhysicsEngine;
 import physicsengine.PhysicsLaws;
 import physicsengine.Vector3d;
 
+/**
+ * Approximates the position and velocity of the ball
+ * using Runge Kutta 3rd order
+ */
+
 public class RK3 implements PhysicsEngine {
 
     private PhysicsLaws physicsLaws;

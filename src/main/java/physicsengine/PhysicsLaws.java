@@ -11,6 +11,13 @@ public class PhysicsLaws {
         this.course = course;
     }
 
+    /**
+     * Calculates the acceleration of the ball
+     * @param ballPosition : the position of the ball
+     * @param ballVelocity : the velocity of the ball
+     * @return the acceleration of the ball
+     */
+
     public Vector3d ballAcceleration(Vector3d ballPosition, Vector3d ballVelocity) {
         boolean isInAir = (ballPosition.get_y() > course.get_height().evaluate(ballPosition));
         Vector3d fieldGradient = course.get_height().gradient(ballPosition);
@@ -24,6 +31,12 @@ public class PhysicsLaws {
         return totalAcceleration;
     }
 
+    /**
+     * Calculates the gravitational force that applies to the ball
+     * @param fieldGradient : the gradient of the field
+     * @param isInAir : whether the ball is in the air (boolean)
+     * @return the force of gravitation that applies to the ball
+     */
     private Vector3d gravitationalForce(Vector3d fieldGradient, boolean isInAir) {
         double constantPart = -1 * course.get_ball_mass() * course.get_gravitational_constant();
         Vector3d forceVector;
@@ -42,6 +55,11 @@ public class PhysicsLaws {
         return forceVector;
     }
 
+    /**
+     * Calculates the velocity of the ball taking into account the frictional force that apply on it
+     * @param ballVelocity : the velocity of the ball
+     * @return the resulting velocity of the ball
+     */
     private Vector3d frictionalForce(Vector3d ballVelocity) {
         double constantPart = -1 * course.get_friction_coefficient() * course.get_ball_mass() * course.get_gravitational_constant();
         Vector3d normalizedVelocity = ballVelocity.getNormalized();

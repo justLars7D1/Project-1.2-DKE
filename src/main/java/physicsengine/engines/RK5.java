@@ -5,6 +5,11 @@ import physicsengine.PhysicsEngine;
 import physicsengine.PhysicsLaws;
 import physicsengine.Vector3d;
 
+/**
+* Approximates the position and velocity of the ball
+* using Runge Kutta 5th order
+ */
+
 public class RK5 implements PhysicsEngine {
     private PhysicsLaws physicsLaws;
     private double stepSize;
@@ -19,7 +24,6 @@ public class RK5 implements PhysicsEngine {
 
     @Override
     public void set_step_size(double step_size) {
-
     }
 
     @Override
@@ -55,7 +59,7 @@ public class RK5 implements PhysicsEngine {
 
     }
 
-        public void setBallPosition(Vector3d ballPosition) {
+    public void setBallPosition(Vector3d ballPosition) {
         this.ballPosition = ballPosition;
     }
 
