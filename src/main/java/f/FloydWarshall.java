@@ -43,17 +43,13 @@ public class FloydWarshall {
     return distanceTable;
     }
 
-    public List<Integer> getShortest(Graph g, int source, int dest){
+    public static List<Integer> getShortest(Graph g, int source, int dest){
         List<Integer> pathList= new ArrayList<>();
         pathList.add(source);
 
         double dist[][]= distTable(g);
 
-        while(source!=dest) {
-            if (dist[source][dest]!=0){
-                pathList.add((int)dist[source][dest]);
-            }
-         }
+        if ((int)dist[source][dest] < (int) dist[source][])
 
         return pathList;
     }
