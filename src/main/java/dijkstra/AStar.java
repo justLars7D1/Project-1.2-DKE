@@ -6,6 +6,13 @@ import java.util.*;
 
 public class AStar {
 
+    /**
+     * Construct the shortest path
+     * @param cameFrom Map
+     * @param curr integer
+     * @return The shortest path
+     */
+
     private static List<Integer> reconstruct_path(Map<Integer, Integer> cameFrom, int curr) {
         List<Integer> shortestPath = new LinkedList<>();
         shortestPath.add(0, curr);
@@ -15,6 +22,14 @@ public class AStar {
         }
         return shortestPath;
     }
+
+    /**
+     * Calculate the shortest path in the graph from a start point to a goal point
+     * @param g Graph
+     * @param start Vertex 1 integer
+     * @param goal Vertex 2 integer
+     * @return The shortest path between two vertices
+     */
 
     public static List<Integer> aStar(Graph g, int start, int goal) {
         int n = g.nodeCount();
@@ -60,6 +75,13 @@ public class AStar {
         return new ArrayList<>();
     }
 
+    /**
+     * Calculate the distance in the graph from a source to a destination
+     * @param g Graph
+     * @param i Vertex 1 integer
+     * @param goal Vertex 2 integer
+     * @return The distance
+     */
     private static double heuristic(Graph g, int i, int goal) {
         Vector3d vv = ((Vector3d) g.getValue(i)).copy();
         Vector3d ww = ((Vector3d) g.getValue(goal)).copy();
