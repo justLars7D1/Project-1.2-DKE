@@ -46,7 +46,9 @@ public class RK5 implements PhysicsEngine {
 
         Vector3d addToPosition = ODEDerivativesK1[0].getScaled(7)
                 .add(ODEDerivativesK3[0].getScaled(32))
-                .add(ODEDerivativesK4[0].getScaled(12)).add(ODEDerivativesK5[0].getScaled(32)).add(ODEDerivativesK6[0].getScaled(7)).getScaled(stepSize / 90);
+                .add(ODEDerivativesK4[0].getScaled(12))
+                .add(ODEDerivativesK5[0].getScaled(32))
+                .add(ODEDerivativesK6[0].getScaled(7)).getScaled(stepSize / 90);
 
         Vector3d addToVelocity = ODEDerivativesK1[1].getScaled(7)
                 .add(ODEDerivativesK3[1].getScaled(32))
