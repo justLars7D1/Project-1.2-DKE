@@ -46,7 +46,7 @@ public class MainFloyd {
 
     public static void getDistanceTable(Graph g) {
         double[][] table = FloydWarshall.distTable(g);
-
+        System.out.println((int) Double.POSITIVE_INFINITY);
         for(int i=0; i<table.length; i++){
             for (int j=0; j<table[0].length; j++){
                 System.out.print((int)table[i][j]+ "\t");
