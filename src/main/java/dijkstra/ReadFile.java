@@ -8,6 +8,12 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class ReadFile {
+
+    /**
+     * Construct the graph from a file
+     * @param fileName File string
+     * @return the graph
+     */
     public static Graph read(String fileName){
         Graph G = null;
         try{
@@ -33,6 +39,13 @@ public class ReadFile {
 
         return G;
     }
+
+    /**
+     * Construct the graph from a file in function of a course
+     * @param fileName File string
+     * @param course PuttingCourse
+     * @return the graph
+     */
 
     public static Graph setCoordinates(String fileName, PuttingCourse course) {
         Graph G = null;
@@ -68,6 +81,13 @@ public class ReadFile {
         return G;
     }
 
+    /**
+     * Calculate the weight between two vertices
+     * @param g Graph
+     * @param v Vertex1 integer
+     * @param w Vertex2 integer
+     * @return the weight
+     */
     private static double setWeight(Graph g, int v, int w) {
         Vector3d vv = ((Vector3d) g.getValue(v)).copy();
         Vector3d ww = ((Vector3d) g.getValue(w)).copy();

@@ -70,7 +70,7 @@ public class HeuristicBot implements PuttingBot {
             for(Obstacle obs : course.getObstacles()) {
                 if (obs.isHit(ballPosition)) {
 
-                    // Set the angle to rotate if it hits the water back to it's original value divided by two (to not change too much)
+                    // Set the angle to rotate if it hits an obstacle back to it's original value divided by two (to not change too much)
                     angle = 5;
                     iteration = 0;
 
@@ -100,7 +100,7 @@ public class HeuristicBot implements PuttingBot {
 
                     isInHole = sim.isInHole();
 
-                    scalingFactorShot += 0.5;
+                    scalingFactorShot += 0.1;
 
                 } else {
 

@@ -4,6 +4,14 @@ import java.util.*;
 
 public class Dijkstra {
 
+	/**
+	 * Calculate the shortest path in the graph from a source to a destination
+	 * @param g Graph
+	 * @param source Vertex 1 integer
+	 * @param destination Vertex 2 integer
+	 * @return The shortest path
+	 */
+
 	public static int[] getShortestPath(Graph g, int source, int destination) {
 
 		int n = g.nodeCount();
