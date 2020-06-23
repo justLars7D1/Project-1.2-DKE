@@ -23,7 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class HeuristicBot implements PuttingBot {
 
-    public int index=-1;
+    private int[] path = getShortestPath();
+    private int index = -1;
 
     /**
      * Calculates the velocity needed for a shot from the data it receives
@@ -36,7 +37,7 @@ public class HeuristicBot implements PuttingBot {
         //Vector3d flagPosition = course.get_flag_position();
         increaseIndex();
         GraphAL graph = new GraphAL();
-        Vector3d flagposition = (Vector3d) graph.nodeValues[index];
+        Vector3d flagPosition = (Vector3d) graph.nodeValues[path[index]];
         Vector3d ballPosition =  ball_position;
         double ballFlagDistance = distanceBetween(ball_position, flagPosition);
 
@@ -140,6 +141,16 @@ public class HeuristicBot implements PuttingBot {
 
     private void increaseIndex() {
         index++;
+    }
+
+    private int[] getShortestPath(){
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("0.0000001*x^2 + 0.0000001*y^2"), new Vector3d(0, 10));
+        course.setMaximumVelocity(10);
+        // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
+        PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
+        Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
+        int[] path = Dijkstra.getShortestPath(maze, 5, 0);
+        return path;
     }
 
     @Override
