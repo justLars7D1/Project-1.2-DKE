@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class HeuristicBot implements PuttingBot {
 
+    public int index=-1;
+
     /**
      * Calculates the velocity needed for a shot from the data it receives
      * @param course The game course
@@ -32,7 +34,9 @@ public class HeuristicBot implements PuttingBot {
     @Override
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
         //Vector3d flagPosition = course.get_flag_position();
-        Vector3d flagposition = (Vector3d) maze.getValue(path[i]);
+        increaseIndex();
+        GraphAL graph = new GraphAL();
+        Vector3d flagposition = (Vector3d) graph.nodeValues[index];
         Vector3d ballPosition =  ball_position;
         double ballFlagDistance = distanceBetween(ball_position, flagPosition);
 
@@ -132,6 +136,10 @@ public class HeuristicBot implements PuttingBot {
         }
 
         return bestShot.getShotVector();
+    }
+
+    private void increaseIndex() {
+        index++;
     }
 
     @Override
