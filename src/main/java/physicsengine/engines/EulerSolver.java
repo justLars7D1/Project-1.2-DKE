@@ -5,6 +5,11 @@ import physicsengine.PhysicsEngine;
 import physicsengine.PhysicsLaws;
 import physicsengine.Vector3d;
 
+/**
+ * Approximates the position and velocity of the ball
+ * using Euler's method
+ */
+
 public class EulerSolver implements PhysicsEngine {
 
     private PhysicsLaws physicsLaws;

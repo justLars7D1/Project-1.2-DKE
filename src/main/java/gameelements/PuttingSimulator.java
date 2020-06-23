@@ -133,7 +133,7 @@ public class PuttingSimulator {
 
             current = ballPosition.copy();
 
-            System.out.println(ballPosition);
+            //System.out.println(ballPosition);
 
             if (isInWater()) {
                 break;

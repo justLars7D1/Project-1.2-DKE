@@ -32,6 +32,7 @@ public class Box extends Obstacle {
     }
 
     private static final double error = 10e-2;
+
     @Override
     public boolean isHit(Vector3d ballPosition) {
         Vector3d maxPosition = new Vector3d(this.getPosition().x() + (widthX / 2), this.getPosition().y() + (widthY / 2), this.getPosition().z() + (widthZ / 2));
@@ -44,7 +45,6 @@ public class Box extends Obstacle {
                 }
             }
         }
-
         return false;
     }
 }

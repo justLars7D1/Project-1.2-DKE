@@ -163,6 +163,11 @@ public class Vector3d extends Vector {
         return new Vector3d(crossX, crossY, crossZ);
     }
 
+    /**
+     * Calculates the angle of a vector
+     * @param otherVector : a Vector3d
+     * @return the angle
+     */
     public double calculateAngle(Vector3d otherVector) {
         double dotProd = dot(otherVector);
         double multipliedMagnitude = magnitude() * otherVector.magnitude();

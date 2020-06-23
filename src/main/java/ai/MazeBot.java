@@ -144,9 +144,11 @@ public class MazeBot implements PuttingBot {
         sim.set_ball_position(ball_position);
         for (int i = 1; i < path.length; i ++) {
             Vector3d goal_position = (Vector3d) maze.getValue(path[i]);
-            shot_velocity(course, sim.get_ball_position(), goal_position);
-            ball_position = goal_position.copy();
-            sim.set_ball_position(ball_position);
+            Vector3d bestShot = shot_velocity(course, sim.get_ball_position(), goal_position);
+            sim.take_shot(bestShot, 0.005);
+            //ball_position = goal_position.copy();
+            //sim.set_ball_position(sim.get_ball_position());
+            System.out.println(sim.get_ball_position());
         }
     }
 
@@ -156,6 +158,12 @@ public class MazeBot implements PuttingBot {
         // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
         PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
         Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
+        ((GraphAL) maze).print();
+        int[] path = Dijkstra.getShortestPath(maze, 5, 0);
+        for (int i = 0; i < path.length; i++) {
+            System.out.print(path[i] + " ");
+        }
+        System.out.println();
         MazeBot bot = new MazeBot();
         bot.shot_sequence(course, sim, 5, 0, maze);
         System.out.println("Final ball position: " + sim.get_ball_position());

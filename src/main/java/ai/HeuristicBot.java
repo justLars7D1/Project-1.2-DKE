@@ -1,5 +1,9 @@
 package ai;
 
+import dijkstra.Dijkstra;
+import dijkstra.Graph;
+import dijkstra.GraphAL;
+import dijkstra.ReadFile;
 import gameelements.PuttingCourse;
 import gameelements.PuttingSimulator;
 import physicsengine.Vector;
@@ -19,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 public class HeuristicBot implements PuttingBot {
 
+    public int index=-1;
+
     /**
      * Calculates the velocity needed for a shot from the data it receives
      * @param course The game course
@@ -27,7 +33,10 @@ public class HeuristicBot implements PuttingBot {
      */
     @Override
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position) {
-        Vector3d flagPosition = course.get_flag_position();
+        //Vector3d flagPosition = course.get_flag_position();
+        increaseIndex();
+        GraphAL graph = new GraphAL();
+        Vector3d flagposition = (Vector3d) graph.nodeValues[index];
         Vector3d ballPosition =  ball_position;
         double ballFlagDistance = distanceBetween(ball_position, flagPosition);
 
@@ -129,6 +138,10 @@ public class HeuristicBot implements PuttingBot {
         return bestShot.getShotVector();
     }
 
+    private void increaseIndex() {
+        index++;
+    }
+
     @Override
     public Vector3d shot_velocity(PuttingCourse course, Vector3d ball_position, Vector3d goal_position) {
         return new Vector3d();
@@ -165,7 +178,15 @@ public class HeuristicBot implements PuttingBot {
         course.setMaximumVelocity(10);
         // PuttingSimulator sim = new PuttingSimulator(course, new RK4(course));
         PuttingSimulator sim = new PuttingSimulator(course, new RK5(course));
+
+        Graph maze = ReadFile.setCoordinates("src/main/java/dijkstra/maze-on-course", course);
+        ((GraphAL) maze).print();
+        int[] path = Dijkstra.getShortestPath(maze, 5, 0);
+        for (int i = 0; i < path.length; i++) {
+            System.out.print(path[i] + " ");
+        }
         PuttingBot bot = new HeuristicBot();
+
 
         Vector3d shot = bot.shot_velocity(course, sim.get_ball_position());
 

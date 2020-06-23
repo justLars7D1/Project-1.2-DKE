@@ -13,11 +13,10 @@ public class GraphAL implements Graph {
 			prev = p;
 			next = n;
 		}
-
 	}
 
 	private Edge[] nodeArray;
-	private Object[] nodeValues;// coordinators (x, y, z) correspond to the mesh
+	public static Object[] nodeValues;// coordinators (x, y, z) correspond to the mesh
 	private int numEdge;
 
 	@Override
@@ -109,6 +108,4 @@ public class GraphAL implements Graph {
 			System.out.println();
 		}
 	}
-
-
 }
