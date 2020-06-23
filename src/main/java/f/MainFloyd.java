@@ -29,20 +29,14 @@ public class MainFloyd {
         System.out.println();
         getDistanceTable(g);
         System.out.println();
-        /*List<Integer> p= getShortest(g, 1, 3);
-        for(int i=0; i<p.size(); i++){
-            System.out.println(p.get(i));
-        }
+        List<Integer> l= FloydWarshall.getShortest(g, 6, 1);
+        System.out.print("shortest path: ");
+        for(int i=0; i<l.size(); i++){
+            System.out.print(l.get(i)+ ", ");
 
-         */
+        }System.out.println();
     }
 
-   /* private static List<Integer> getShortest(GraphAL g, int src, int dst) {
-        List<Integer> path= getShortest(g, src, dst);
-
-        return path;
-    }
-    */
 
     public static void getDistanceTable(Graph g) {
         double[][] table = FloydWarshall.distTable(g);
@@ -53,7 +47,5 @@ public class MainFloyd {
             }
             System.out.println();
         }
-
     }
-
 }
