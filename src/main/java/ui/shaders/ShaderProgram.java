@@ -18,7 +18,7 @@ public abstract class ShaderProgram {
 
     private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-    public ShaderProgram(String vertexFile, String fragmentFile) {
+    public ShaderProgram(InputStream vertexFile, InputStream fragmentFile) {
         this.vertexShaderID = loadShader(vertexFile, GL30.GL_VERTEX_SHADER);
         this.fragmentShaderID = loadShader(fragmentFile, GL30.GL_FRAGMENT_SHADER);
         this.programID = GL30.glCreateProgram();
@@ -89,10 +89,10 @@ public abstract class ShaderProgram {
     }
 
 
-    private static int loadShader(String file, int type) {
+    private static int loadShader(InputStream file, int type) {
         StringBuilder shaderSource = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(file));
             String line;
             while((line = reader.readLine()) != null) {
                 shaderSource.append(line).append("\n");

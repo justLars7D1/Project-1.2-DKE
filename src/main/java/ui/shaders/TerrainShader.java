@@ -12,8 +12,8 @@ import java.util.List;
 
 public class TerrainShader extends ShaderProgram {
 
-    private static final String VERTEX_FILE = "./src/main/java/ui/shaders/terrainVertexShader.shader";
-    private static final String FRAGMENT_FILE = "./src/main/java/ui/shaders/terrainFragmentShader.shader";
+    private static final String VERTEX_FILE = "terrainVertexShader.shader";
+    private static final String FRAGMENT_FILE = "terrainFragmentShader.shader";
     private static final int MAX_LIGHTS = 4;
 
     private int locationTransformationMatrix;
@@ -37,7 +37,7 @@ public class TerrainShader extends ShaderProgram {
     private int locationBlendMap;
 
     public TerrainShader() {
-        super(VERTEX_FILE, FRAGMENT_FILE);
+        super(TerrainShader.class.getResourceAsStream(VERTEX_FILE), TerrainShader.class.getResourceAsStream(FRAGMENT_FILE));
     }
 
     @Override

@@ -24,22 +24,11 @@ public class Main {
         //Create the renderers that will render the models
         MasterRenderer renderer = new MasterRenderer(loader);
 
-//        text.setColour(0, 0, 0);
-
-//        GuiTexture refraction = new GuiTexture(fbos.getRefractionTexture(), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-//        GuiTexture reflection = new GuiTexture(fbos.getReflectionTexture(), new Vector2f(-0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
-//
-//        List<GuiTexture> ui.guis = new ArrayList<>();
-//        ui.guis.add(reflection);
-//        ui.guis.add(refraction);
-
-
         lwjgui.scene.Window guiWindow = LWJGUI.initialize(Window.getWindow());
 
         LoadingScreen loadingScreen = new LoadingScreen(loader);
         CourseDesignerScreen designerScreen = new CourseDesignerScreen();
         GameModeScreen gameModeScreen = new GameModeScreen();
-        MapEditorScreen mapEditorScreen = null;
         GameScreen gameScreen = null;
 
         PuttingSimulator puttingSimulator = null;
@@ -82,16 +71,6 @@ public class Main {
                 }
             }
 
-            /* Already a start on phase 3
-            //While loop for the terrain editor (sand banks, etc...)
-            while(!mapEditorScreen.isDoneEditing() && !Window.closed()) {
-                mapEditorScreen.render(renderer);
-
-                Window.update();
-                Window.swapBuffers();
-            }
-            */
-
             //Now, set up the game!
             gameScreen.setCallback();
             while (!((gameScreen != null && gameScreen.isGameOver()) || Window.closed())) {
@@ -112,7 +91,6 @@ public class Main {
             TextMaster.cleanUp();
             TextMaster.init(loader);
 
-            mapEditorScreen = null;
             puttingSimulator = null;
             gameScreen = null;
 

@@ -2,13 +2,8 @@ package gameelements;
 
 import org.joml.Vector3f;
 import physicsengine.PhysicsEngine;
-import physicsengine.Vector;
 import physicsengine.Vector3d;
-import physicsengine.engines.EulerSolver;
-import physicsengine.engines.RK3;
-import physicsengine.engines.RK4;
 import physicsengine.engines.RK5;
-import physicsengine.engines.VerletSolver;
 import physicsengine.functions.Function2d;
 import physicsengine.functions.FunctionParserRPN;
 import ui.entities.Obstacle;
@@ -39,6 +34,7 @@ public class PuttingSimulator {
 
     /**
      * Constructor
+     *
      * @param course The game course
      * @param engine The physics engine
      */
@@ -50,8 +46,9 @@ public class PuttingSimulator {
 
     /**
      * Constructor that loads the course from a file
+     *
      * @param filePath The course file
-     * @param engine The physics engine
+     * @param engine   The physics engine
      */
     public PuttingSimulator(String filePath, PhysicsEngine engine) {
         loadCourse(filePath);
@@ -59,26 +56,56 @@ public class PuttingSimulator {
         this.ballPosition = course.get_start_position();
     }
 
-    public PuttingSimulator() {}
+    public PuttingSimulator() {
+    }
 
     /**
      * Constructor with only the physics engine (course can later be loaded by loadCourse(path)
+     *
      * @param engine The physics engine
      */
     public PuttingSimulator(PhysicsEngine engine) {
         this.engine = engine;
     }
 
-    /**
-     * Sets the ball position
-     * @param p The position of the ball
-     */
-    public void set_ball_position(Vector3d p) {
-        this.ballPosition = p;
+    private static Vector3d reflectionVectorOnBounce(Vector3d velocityVector, Vector3d fieldGradient) {
+        Vector3d normalizedGradient = fieldGradient.getNormalized();
+        double dotResult = 2 * velocityVector.dot(normalizedGradient);
+        return velocityVector.minus(normalizedGradient.getScaled(dotResult)).getScaled(PuttingCourse.getBallBounciness());
+    }
+
+    private static Vector3d calculateSurfaceNormal(Vector3d ballPosition, Vector3f objectPosition) {
+        Vector3d obstaclePos = new Vector3d(objectPosition.x, objectPosition.y, objectPosition.z);
+        Vector3d resultVec = obstaclePos.minus(ballPosition);
+        Vector3d result;
+        double absX = Math.abs(resultVec.get_x()), absY = Math.abs(resultVec.get_y()), absZ = Math.abs(resultVec.get_z());
+        double largestAbs = Math.max(Math.max(absX, absY), absZ);
+        if (largestAbs == absX) {
+            result = new Vector3d((resultVec.get_x() < 0) ? 1 : -1, 0, 0);
+        } else if (largestAbs == absY) {
+            result = new Vector3d(0, (resultVec.get_y() < 0) ? 1 : -1, 0);
+        } else {
+            result = new Vector3d(0, 0, (resultVec.get_z() < 0) ? 1 : -1);
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("5*sin(0.1*x)*sin(0.1*y)+1"), new Vector3d(0, 10));
+        //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
+        //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK3(course.copy()));
+        // PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
+        PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK5(course.copy()));
+        sim3.take_shot(new Vector3d(20, 0, 20), 0.01); //(0.08833984711499843,0.0,2.684909583202568)
+        //System.out.println("Euler: " +sim3.get_ball_position());
+        //System.out.println("RK3: " +sim3.get_ball_position());
+        // System.out.println("RK4: " + sim3.get_ball_position());
+        System.out.println("RK5: " + sim3.get_ball_position());
     }
 
     /**
      * Gets the ball position
+     *
      * @return The ball position
      */
     public Vector3d get_ball_position() {
@@ -86,7 +113,17 @@ public class PuttingSimulator {
     }
 
     /**
+     * Sets the ball position
+     *
+     * @param p The position of the ball
+     */
+    public void set_ball_position(Vector3d p) {
+        this.ballPosition = p;
+    }
+
+    /**
      * Simulate taking a shot (used for the bot)
+     *
      * @param initial_ball_velocity The initial ball velocity of a shot
      */
     public void take_shot(Vector3d initial_ball_velocity, double deltaT) {
@@ -107,13 +144,13 @@ public class PuttingSimulator {
         boolean ballLastInAir;
         Vector3d lastBouncePosition = new Vector3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 
-        while(numTimesCloseToCurrent < 100 || ballHigherThanGround) {
+        while (numTimesCloseToCurrent < 100 || ballHigherThanGround) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1 && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT * 0.1 && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT * 0.1) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
@@ -143,32 +180,11 @@ public class PuttingSimulator {
 
     }
 
-    private static Vector3d reflectionVectorOnBounce(Vector3d velocityVector, Vector3d fieldGradient) {
-        Vector3d normalizedGradient = fieldGradient.getNormalized();
-        double dotResult = 2*velocityVector.dot(normalizedGradient);
-        return velocityVector.minus(normalizedGradient.getScaled(dotResult)).getScaled(PuttingCourse.getBallBounciness());
-    }
-
-    private static Vector3d calculateSurfaceNormal(Vector3d ballPosition, Vector3f objectPosition) {
-        Vector3d obstaclePos = new Vector3d(objectPosition.x, objectPosition.y, objectPosition.z);
-        Vector3d resultVec = obstaclePos.minus(ballPosition);
-        Vector3d result;
-        double absX = Math.abs(resultVec.get_x()), absY = Math.abs(resultVec.get_y()), absZ = Math.abs(resultVec.get_z());
-        double largestAbs = Math.max(Math.max(absX, absY), absZ);
-        if (largestAbs == absX) {
-            result = new Vector3d((resultVec.get_x() < 0) ? 1 : -1, 0, 0);
-        } else if (largestAbs == absY) {
-            result = new Vector3d(0, (resultVec.get_y() < 0) ? 1 : -1, 0);
-        } else {
-            result = new Vector3d(0, 0, (resultVec.get_z() < 0) ? 1 : -1);
-        }
-        return result;
-    }
-
     /**
      * Simulate taking a shot, updating the ball live
+     *
      * @param initial_ball_velocity The initial ball velocity of a shot
-     * @param player The player that takes the shot
+     * @param player                The player that takes the shot
      */
     public void take_shot(Vector3d initial_ball_velocity, UIPlayer player) {
 
@@ -190,15 +206,15 @@ public class PuttingSimulator {
         boolean ballLastInAir;
         Vector3d lastBouncePosition = new Vector3d(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
 
-        while(numTimesCloseToCurrent < 100) {
+        while (numTimesCloseToCurrent < 100) {
 
             engine.approximate();
             ballPosition = engine.getBallPosition();
             ballVelocity = engine.getBallVelocity();
 
-            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT*0.1
-                    && Math.abs(current.get_y() - ballPosition.get_y()) <= deltaT*0.1
-                    && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT*0.1) {
+            if (Math.abs(current.get_x() - ballPosition.get_x()) <= deltaT * 0.1
+                    && Math.abs(current.get_y() - ballPosition.get_y()) <= deltaT * 0.1
+                    && Math.abs(current.get_z() - ballPosition.get_z()) <= deltaT * 0.1) {
                 numTimesCloseToCurrent++;
             } else {
                 numTimesCloseToCurrent = 0;
@@ -218,11 +234,11 @@ public class PuttingSimulator {
 
             current = ballPosition.copy();
 
-            Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)ballPosition.get_y(), (float)ballPosition.get_z());
+            Vector3f newPos = new Vector3f((float) ballPosition.get_x(), (float) ballPosition.get_y(), (float) ballPosition.get_z());
             player.setPosition(newPos);
 
-            for(Obstacle obs : course.getObstacles()){
-                if(obs.isHit(ballPosition)){
+            for (Obstacle obs : course.getObstacles()) {
+                if (obs.isHit(ballPosition)) {
                     ballVelocity = reflectionVectorOnBounce(ballVelocity, calculateSurfaceNormal(ballPosition, obs.getPosition()));
                     engine.setBallVelocity(ballVelocity);
                     break;
@@ -242,25 +258,25 @@ public class PuttingSimulator {
 
         }
 
-        Vector3f newPos = new Vector3f((float)ballPosition.get_x(), (float)z.evaluate(ballPosition), (float)ballPosition.get_z());
+        Vector3f newPos = new Vector3f((float) ballPosition.get_x(), (float) z.evaluate(ballPosition), (float) ballPosition.get_z());
         player.setPosition(newPos);
 
         boolean inWater = isInWater();
         if (!inWater && isInHole()) {
             StatusMessage.setSTATUS("finished");
-        } else if(!inWater) {
+        } else if (!inWater) {
             StatusMessage.setSTATUS("success");
         }
 
     }
 
     public boolean isInHole() {
-        return  Math.sqrt(Math.pow(ballPosition.get_x() - course.get_flag_position().get_x(), 2) +
+        return Math.sqrt(Math.pow(ballPosition.get_x() - course.get_flag_position().get_x(), 2) +
                 Math.pow(ballPosition.get_z() - course.get_flag_position().get_z(), 2)) <= course.get_hole_tolerance();
     }
 
     public boolean isGoal(Vector3d goal) {
-        return  Math.sqrt(Math.pow(ballPosition.get_x() - goal.get_x(), 2) +
+        return Math.sqrt(Math.pow(ballPosition.get_x() - goal.get_x(), 2) +
                 Math.pow(ballPosition.get_z() - goal.get_z(), 2)) <= course.get_hole_tolerance();
     }
 
@@ -270,6 +286,7 @@ public class PuttingSimulator {
 
     /**
      * Saves the course to a file denoted by the specified filepath
+     *
      * @param filePath The filepath
      * @return Whether the operation was successfull or not
      */
@@ -287,6 +304,7 @@ public class PuttingSimulator {
 
     /**
      * Loads the course from a file denoted by the specified filepath
+     *
      * @param filePath The filepath
      * @return Whether the operation was successfull or not
      */
@@ -310,13 +328,13 @@ public class PuttingSimulator {
     }
 
     public boolean loadCourseByString(String filePath) {
-    	Input load = new Input(filePath);
-    	course = load.loadCourse(filePath);
-    	if (course != null) {
-    		this.ballPosition = course.get_start_position();
-    		return true;
-    	}
-    	return false;
+        Input load = new Input(filePath);
+        course = load.loadCourse(filePath);
+        if (course != null) {
+            this.ballPosition = course.get_start_position();
+            return true;
+        }
+        return false;
     }
 
     public PuttingCourse getCourse() {
@@ -328,19 +346,6 @@ public class PuttingSimulator {
         PuttingSimulator simulator = new PuttingSimulator(course, engine);
         simulator.set_ball_position(ballPosition.copy());
         return simulator;
-    }
-
-    public static void main(String[] args) {
-        PuttingCourse course = new PuttingCourse(new FunctionParserRPN("5*sin(0.1*x)*sin(0.1*y)+1"), new Vector3d(0, 10));
-        //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
-        //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK3(course.copy()));
-        // PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
-        PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK5(course.copy()));
-        sim3.take_shot(new Vector3d(20, 0, 20), 0.01); //(0.08833984711499843,0.0,2.684909583202568)
-        //System.out.println("Euler: " +sim3.get_ball_position());
-        //System.out.println("RK3: " +sim3.get_ball_position());
-        // System.out.println("RK4: " + sim3.get_ball_position());
-        System.out.println("RK5: " + sim3.get_ball_position());
     }
 
 

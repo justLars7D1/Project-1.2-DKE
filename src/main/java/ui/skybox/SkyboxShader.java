@@ -13,8 +13,8 @@ import ui.toolbox.Maths;
 
 public class SkyboxShader extends ShaderProgram{
 
-	private static final String VERTEX_FILE = "src/main/java/ui/skybox/skyboxVertexShader.shader";
-	private static final String FRAGMENT_FILE = "src/main/java/ui/skybox/skyboxFragmentShader.shader";
+	private static final String VERTEX_FILE = "skyboxVertexShader.shader";
+	private static final String FRAGMENT_FILE = "skyboxFragmentShader.shader";
 
 	public static final float ROTATE_SPEED = 0.5f;
 	private float curRotation;
@@ -24,7 +24,7 @@ public class SkyboxShader extends ShaderProgram{
 	private int location_fogColor;
 	
 	public SkyboxShader() {
-		super(VERTEX_FILE, FRAGMENT_FILE);
+		super(SkyboxShader.class.getResourceAsStream(VERTEX_FILE), SkyboxShader.class.getResourceAsStream(FRAGMENT_FILE));
 	}
 	
 	public void loadProjectionMatrix(Matrix4f matrix){

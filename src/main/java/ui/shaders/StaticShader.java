@@ -15,8 +15,8 @@ import java.util.List;
 public class StaticShader extends ShaderProgram {
 
     //Add on IntelIJ: ./src/main/java
-    private static final String VERTEX_FILE = "./src/main/java/ui/shaders/vertexShader.shader";
-    private static final String FRAGMENT_FILE = "./src/main/java/ui/shaders/fragmentShader.shader";
+    private static final String VERTEX_FILE = "vertexShader.shader";
+    private static final String FRAGMENT_FILE = "fragmentShader.shader";
     private static final int MAX_LIGHTS = 4;
 
     private int locationTransformationMatrix;
@@ -34,7 +34,7 @@ public class StaticShader extends ShaderProgram {
     private int locationPlane;
 
     public StaticShader() {
-        super(VERTEX_FILE, FRAGMENT_FILE);
+        super(StaticShader.class.getResourceAsStream(VERTEX_FILE), StaticShader.class.getResourceAsStream(FRAGMENT_FILE));
     }
 
     @Override
