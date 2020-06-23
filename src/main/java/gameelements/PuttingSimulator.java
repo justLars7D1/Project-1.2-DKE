@@ -333,12 +333,12 @@ public class PuttingSimulator {
     public static void main(String[] args) {
         PuttingCourse course = new PuttingCourse(new FunctionParserRPN("5*sin(0.1*x)*sin(0.1*y)+1"), new Vector3d(0, 10));
         //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new EulerSolver(course.copy()));
-         //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK3(course.copy()));
+        //PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK3(course.copy()));
         // PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK4(course.copy()));
         PuttingSimulator sim3 = new PuttingSimulator(course.copy(), new RK5(course.copy()));
         sim3.take_shot(new Vector3d(20, 0, 20), 0.01); //(0.08833984711499843,0.0,2.684909583202568)
-       // System.out.println("Euler: " +sim3.get_ball_position());
-         //System.out.println("RK3: " +sim3.get_ball_position());
+        //System.out.println("Euler: " +sim3.get_ball_position());
+        //System.out.println("RK3: " +sim3.get_ball_position());
         // System.out.println("RK4: " + sim3.get_ball_position());
         System.out.println("RK5: " + sim3.get_ball_position());
     }
