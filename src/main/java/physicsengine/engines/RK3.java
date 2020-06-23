@@ -36,8 +36,8 @@ public class RK3 implements PhysicsEngine {
         Vector3d[] ODEDerivativesK1 = RK3(pos, vel);
         Vector3d[] ODEDerivativesK2 = RK3(pos.add(ODEDerivativesK1[0].getScaled(stepSize / 2)),
                 vel.add(ODEDerivativesK1[1].getScaled(stepSize / 2)));
-        Vector3d[] ODEDerivativesK3 = RK3(pos.add(ODEDerivativesK2[0].getScaled(stepSize)),
-                vel.minus(ODEDerivativesK1[1].getScaled(stepSize)).add(ODEDerivativesK2[1].getScaled(2)));
+        Vector3d[] ODEDerivativesK3 = RK3(pos.minus(ODEDerivativesK1[0].getScaled(stepSize)).add(ODEDerivativesK2[0].getScaled(2)),
+                vel.add(ODEDerivativesK2[1].getScaled(stepSize)));
 
         Vector3d addToPosition = ODEDerivativesK1[0]
                 .add(ODEDerivativesK2[0].getScaled(4))
