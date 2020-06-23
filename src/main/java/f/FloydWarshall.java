@@ -49,7 +49,7 @@ public class FloydWarshall {
 
         double dist[][]= distTable(g);
 
-        if ((int)dist[source][dest] < (int) dist[source][])
+        //if ((int)dist[source][dest] < (int) dist[source][])
 
         return pathList;
     }
