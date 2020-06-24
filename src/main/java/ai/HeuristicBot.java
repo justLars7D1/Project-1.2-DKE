@@ -66,7 +66,9 @@ public class HeuristicBot implements PuttingBot {
             // Simulate the shot
             ShotData resultingPosition = simulateShot(ball_position, sim, shot, stepSize);
 
-            //if (!sim.isInWater()) {
+
+
+            //check if ball hit an obstacle, if it happens, change direction
             for(Obstacle obs : course.getObstacles()) {
                 if (obs.isHit(ballPosition)) {
 
@@ -115,6 +117,55 @@ public class HeuristicBot implements PuttingBot {
                         bestShot = resultingPosition;
                     }
 
+                }
+
+            }
+
+            //check if ball is in the water, if it happens, change direction
+            if (!sim.isInWater()) {
+                // Set the angle to rotate if it hits an obstacle back to it's original value divided by two (to not change too much)
+                angle = 5;
+                iteration = 0;
+
+                // Calculate the proportion of the start position and the flag to the ball position and the flag
+                double ballHoleDistFactor = ballFlagDistance / distanceBetween(ball_position, resultingPosition.getCalculatedPosition());
+
+                // Then we calculate the angle between the start and flag and the ball and flag
+                Vector3d startResultVector = resultingPosition.getCalculatedPosition().minus(ball_position);
+                Vector3d startFlagVector = flagPosition.minus(ball_position);
+                double ballHoleAngle = 180 / Math.PI * Math.acos(
+                        (startResultVector.dot(startFlagVector)) / (startResultVector.magnitude() * startFlagVector.magnitude())
+                );
+
+                // Calculate if the ball is on the left or the right of the flag using the cross product
+                Vector3d crossProductStartFlagAndStartSimulated = startFlagVector.cross(resultingPosition.getCalculatedPosition());
+
+                // We scale the shot by the factor we calculated
+                shot.scale(Math.pow(ballHoleDistFactor, 0.95 / scalingFactorShot));
+
+                // We rotate the shot, compensating for the old "final" position
+                shot.rotateYAxis(((crossProductStartFlagAndStartSimulated.get_y() > 0) ? -1 : 1) * (0.95 / scalingFactorShot) * ballHoleAngle);
+
+                // If it ends up with a better result, we store it
+                if (resultingPosition.getDistanceToTarget() < bestTargetDistance) {
+                    bestShot = resultingPosition;
+                }
+
+                isInHole = sim.isInHole();
+
+                scalingFactorShot += 0.5;
+
+            } else {
+
+                shot.rotateYAxis(Math.pow(-1, iteration) * angle);
+                if (iteration++ % 2 == 1) {
+                    angle *= angleMultiplcationFactor;
+                }
+
+                System.out.println(shot);
+
+                if (bestShot == null || bestShot.getDistanceToTarget() > resultingPosition.getDistanceToTarget()) {
+                    bestShot = resultingPosition;
                 }
 
             }
